@@ -1,0 +1,161 @@
+/* primary typeface */
+@font-face {
+    font-family: 'Poppins';
+    src: url('./../resources/fonts/Poppins/Poppins-Black.ttf') format('truetype');
+    font-weight: 900;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('./../resources/fonts/Poppins/Poppins-ExtraBold.ttf') format('truetype');
+    font-weight: 800;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('./../resources/fonts/Poppins/Poppins-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('./../resources/fonts/Poppins/Poppins-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('./../resources/fonts/Poppins/Poppins-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('./../resources/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('./../resources/fonts/Poppins/Poppins-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('./../resources/fonts/Poppins/Poppins-ExtraLight.ttf') format('truetype');
+    font-weight: 200;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Poppins';
+    src: url('./../resources/fonts/Poppins/Poppins-Thin.ttf') format('truetype');
+    font-weight: 100;
+    font-display: swap;
+}
+
+/* secondary typeface */
+@font-face {
+    font-family: 'Lato';
+    src: url('./../resources/fonts/Lato/Lato-Black.ttf') format('truetype');
+    font-weight: 900;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: url('./../resources/fonts/Lato/Lato-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: url('./../resources/fonts/Lato/Lato-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: url('./../resources/fonts/Lato/Lato-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Lato';
+    src: url('./../resources/fonts/Lato/Lato-Thin.ttf') format('truetype');
+    font-weight: 100;
+    font-display: swap;
+}
+
+/* monospace typeface */
+@font-face {
+    font-family: 'Azeret Mono';
+    src: url('./../resources/fonts/Azeret_Mono/static/AzeretMono-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-display: swap;
+}
+
+
+@font-face {
+    font-family: 'Azeret Mono';
+    src: url('./../resources/fonts/Azeret_Mono/static/AzeretMono-BoldItalic.ttf') format('truetype');
+    font-weight: 700;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Azeret Mono';
+    src: url('./../resources/fonts/Azeret_Mono/static/AzeretMono-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Azeret Mono';
+    src: url('./../resources/fonts/Azeret_Mono/static/AzeretMono-SemiBoldItalic.ttf') format('truetype');
+    font-weight: 600;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Azeret Mono';
+    src: url('./../resources/fonts/Azeret_Mono/static/AzeretMono-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Azeret Mono';
+    src: url('./../resources/fonts/Azeret_Mono/static/AzeretMono-Italic.ttf') format('truetype');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Azeret Mono';
+    src: url('./../resources/fonts/Azeret_Mono/static/AzeretMono-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Azeret Mono';
+    src: url('./../resources/fonts/Azeret_Mono/static/AzeretMono-LightItalic.ttf') format('truetype');
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
+}

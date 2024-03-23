@@ -1,0 +1,26 @@
+{
+    "name": "KimKim",
+    "short_name": "KimKim",
+    "icons": [
+      {
+        "src": "/icons/app_icon_192.png",
+        "sizes": "192x192",
+        "type": "image/png",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "/icons/app_icon_192.png",
+        "sizes": "384x384",
+        "type": "image/png"
+      },
+      {
+        "src": "/icons/app_icon_192.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ],
+    "theme_color": "#f5f5f5",
+    "background_color": "#f5f5f5",
+    "start_url": "/",
+    "display": "standalone"
+}

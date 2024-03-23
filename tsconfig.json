@@ -1,0 +1,81 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "downlevelIteration": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/analytics/*": [
+        "analytics/*"
+      ],
+      "@/components/*": [
+        "components/*"
+      ],
+      "@/connection/*": [
+        "connection/*"
+      ],
+      "@/connectors/*": [
+        "connectors/*"
+      ],
+      "@/constants/*": [
+        "constants/*"
+      ],
+      "@/data/*": [
+        "data/*"
+      ],
+      "@/hooks/*": [
+        "hooks/*"
+      ],
+      "@/pages/*": [
+        "pages/*"
+      ],
+      "@/providers/*": [
+        "providers/*"
+      ],
+      "@/store/*": [
+        "store/*"
+      ],
+      "@/struct/*": [
+        "struct/*"
+      ],
+      "@/styles/*": [
+        "styles/*"
+      ],
+      "@/types/*": [
+        "types/*"
+      ],
+      "@/utils/*": [
+        "utils/*"
+      ],
+      "@/resources/*": [
+        "resources/*"
+      ]
+    },
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "tailwind.config.js",
+    "next.config.js"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
