@@ -4,6 +4,9 @@ import CHAIN_LOGO_ARCHWAY from '@/resources/logos/chain_logo_archway.png';
 import CHAIN_LOGO_NIBIRU from '@/resources/logos/chain_logo_nibiru.png';
 import FLAG_KR from '@/resources/images/flag_kr.png';
 import FLAG_US from '@/resources/images/flag_us.png';
+import FLAG_AU from '@/resources/images/flag_au.png';
+import EXCHANGE_BINANCE_LOGO from '@/resources/images/exchange_logo_binance.svg';
+import EXCHANGE_UPBIT_LOGO from '@/resources/images/exchange_logo_upbit.svg';
 
 export const googleAnalytics = new GoogleAnalytics('google analytics');
 export const mixpanel = new Mixpanel('mixpanel');
@@ -53,6 +56,7 @@ export const CHAIN_METADATA_DICT: Record<AllChains, { explorerAddressURL: string
 export enum Fiats {
   KRW = 'KRW',
   USD = 'USD',
+  AUD = 'AUD',
 }
 
 export const FIATS_METADATA_DICT: Record<Fiats, { logoURL: string; }> = {
@@ -61,6 +65,23 @@ export const FIATS_METADATA_DICT: Record<Fiats, { logoURL: string; }> = {
   },
   [Fiats.USD]: {
     logoURL: FLAG_US.src,
+  },
+  [Fiats.AUD]: {
+    logoURL: FLAG_AU.src,
+  },
+};
+
+export enum Exchanges {
+  BINANCE = 'Binance',
+  UPBIT = 'Upbit',
+}
+
+export const EXCHANGES_METADATA_DICT: Record<Exchanges, { logoURL: string; }> = {
+  [Exchanges.BINANCE]: {
+    logoURL: EXCHANGE_BINANCE_LOGO.src,
+  },
+  [Exchanges.UPBIT]: {
+    logoURL: EXCHANGE_UPBIT_LOGO.src,
   },
 };
 

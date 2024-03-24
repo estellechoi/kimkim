@@ -3,7 +3,7 @@
 import '@/styles/globals.css';
 import type {AppProps} from 'next/app';
 import {DehydratedState, HydrationBoundary, QueryClient, QueryClientProvider, useQueryErrorResetBoundary} from '@tanstack/react-query';
-import {Suspense, useRef} from 'react';
+import {Suspense, useMemo, useRef} from 'react';
 import queryClient from '@/data/queryClient';
 import Fallback from '@/components/Fallback';
 import Head from 'next/head';
@@ -22,12 +22,16 @@ import MixPanelReporter from '@/analytics/mixpanel/MixPanelReporter';
 import GlowBackground from '@/components/GlowBackground';
 import useUpbitMarketUpdate from '@/hooks/useUpbitMarketUpdate';
 import useCoinMarketCapUpdate from '@/hooks/useCoinMarketCapUpdate';
+import useUsdBasedExchangeRateUpdate from '@/hooks/useUsdBasedExchangeRateUpdate';
 
 const UserAgentDetector = dynamic(() => import('@/components/UserAgentDetector'), {ssr: false});
 
 const MetaDataUpdater = () => {
+  useUsdBasedExchangeRateUpdate();
+
   useCoinMarketCapUpdate();
   useUpbitMarketUpdate();
+
   useSetupTokens();
   return null;
 };
@@ -49,6 +53,8 @@ function MyApp({Component, pageProps}: AppProps<{dehydratedState: DehydratedStat
       },
     });
   }
+
+
 
   return (
     <>

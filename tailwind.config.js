@@ -78,7 +78,7 @@ module.exports = {
         primary_variant_light: 'var(--color-primary-variant-light)',
         primary_line: 'var(--color-gray600)',
         primary_line_light: 'var(--color-gray400)',
-        primary_line_dark: 'var(--color-gray800)',
+        primary_line_dark: 'var(--color-gray700)',
         secondary: 'var(--color-secondary)',
         on_secondary: 'var(--color-on_secondary)',
         glass: 'var(--color-glass)',

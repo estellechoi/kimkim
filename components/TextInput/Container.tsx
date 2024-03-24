@@ -9,43 +9,53 @@ const getIcon = (children: ReactNode | undefined) => getReactElements(children, 
 
 export type TextInputProps = Omit<
   HTMLProps<HTMLInputElement>,
-  'type' | 'pattern' | 'value' | 'autocapitalize' | 'form' | 'className' | 'onChange' | 'label'
+  'type' | 'pattern' | 'value' | 'autocapitalize' | 'form' | 'className' | 'onChange' | 'onInput' | 'label'
 > & {
   children?: ReactNode;
   form: HTMLFormElement | null;
   type: TextInputType;
   label: string;
   getErrorMsg?: (value: string) => string | null;
-  initialValue?: string;
+  value?: string;
   className?: string;
   onChange?: (value: string, isValid: boolean) => void;
+  onInput?: (value: string) => void;
+  debounce?: boolean;
 };
 
 const Container = ({
   children,
   form,
   type,
-  initialValue,
+  value: injectedValue,
   className = '',
   onChange,
+  onInput,
+  debounce = false,
   label,
   getErrorMsg,
   ...args
 }: TextInputProps) => {
   const { required } = args;
 
-  const [value, setValue] = useState<string>(initialValue ?? '');
+  const [value, setValue] = useState<string>(injectedValue ?? '');
+
+  useEffect(() => {
+    if (!!injectedValue) setValue(injectedValue);
+  }, [injectedValue]);
+
   const debouncedValue = useDebounce(value, 500);
+  const finalValue = useMemo(() => debounce ? debouncedValue : value, [debouncedValue, value, debounce]);
 
   const [isValid, setIsValid] = useState<boolean>(true);
 
   useEffect(() => {
-    if (!required && debouncedValue === '') {
+    if (!required && finalValue === '') {
       setIsValid(true);
       return;
     }
 
-    const errorMsg = getErrorMsg?.(debouncedValue);
+    const errorMsg = getErrorMsg?.(finalValue);
     if (errorMsg === null) {
       setIsValid(true);
       return;
@@ -57,11 +67,11 @@ const Container = ({
     }
 
     setIsValid(false);
-  }, [form, getErrorMsg, debouncedValue]);
+  }, [form, getErrorMsg, finalValue]);
 
   useEffect(() => {
-    onChange?.(debouncedValue, isValid);
-  }, [onChange, debouncedValue, isValid]);
+    onChange?.(finalValue, isValid);
+  }, [onChange, finalValue, isValid]);
 
   const pattern = PATTERN_DICT[type];
   const errorBoxId = useMemo(() => `${label}-error-message`, [label]);
@@ -74,11 +84,11 @@ const Container = ({
   const bgClassName = `border border-solid ${
     disabled
       ? 'border-disabled bg-disabled'
-      : 'bg-ground transition-colors Transition_500 border-primary_line_light bg-glass focus-within:bg-white hover:bg-white'
+      : 'bg-on_primary transition-colors Transition_500 border-primary_line_dark'
   }`;
   const iconColorClassName = 'text-caption_on_primary';
-  const colorClassName = `placeholder:text-caption_on_primary text-black ${
-    disabled ? '' : 'transition-colors Transition_500 focus-within:text-black group-hover/text-input:text-black'
+  const colorClassName = `placeholder:text-caption_on_primary text-white ${
+    disabled ? '' : 'transition-colors Transition_500 focus-within:text-primary group-hover/text-input:text-white'
   }`;
   const fontClassName = 'placeholder:Font_caption_md Font_body_md';
   const cursorClassName = disabled ? 'cursor-not-allowed' : 'cursor-text';
@@ -102,8 +112,10 @@ const Container = ({
           autoCapitalize="none"
           autoComplete="none"
           aria-autocomplete="none"
-          className={`inline-block w-full h-full bg-transparent ${colorClassName} ${fontClassName} ${cursorClassName}`}
+          className={`inline-block w-full h-full bg-transparent Font_data_16px_num ${colorClassName} ${fontClassName} ${cursorClassName}`}
           onChange={(e) => setValue(e.target.value)}
+          // @ts-ignore
+          onInput={(e) => onInput?.(e.target.value)}
           aria-invalid={!isValid}
           aria-errormessage={errorBoxId}
           {...args}

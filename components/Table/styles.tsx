@@ -58,7 +58,7 @@ export const TABLE_CELL_ALIGN_DICT: Record<TableStyle, Record<TableCellAlign, st
 
 /** border */
 export const TABLE_FIELD_BORDER_DICT: Record<TableStyle, string> = {
-  primary: 'border-b border-solid border-primary_line_light',
+  primary: 'border-b border-solid border-primary_line_dark',
 };
 
 /** color */

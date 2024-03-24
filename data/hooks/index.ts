@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError, type AxiosResponse } from "axios";
 import { useQuery } from "@tanstack/react-query";
 import type { BinanceTickerApiData, ExchangeRateApiData } from "./types";
 import type { UpbitTickerApiData } from "@/pages/api/upbit/ticker";
@@ -6,20 +6,22 @@ import { UpbitMarketApiData } from "@/pages/api/upbit/market";
 import { CMCIdMapItemApiData } from "@/pages/api/cmc/idmap";
 import { CMCMetadataItemData } from "@/pages/api/cmc/metadata";
 import { CMCResponse } from "@/pages/api/cmc";
+import { Fiats } from "@/constants/app";
 
 
 /**
  * 
  * @description exchange rate api fetching
  */
-export const useFetchExchangeRate = (refetchInterval = 0, baseCurrency?: 'KRW' | 'USD') => {
-    const currency = baseCurrency ?? 'KRW';
+export const useFetchExchangeRate = (refetchInterval: number | null, baseCurrency?: Fiats.USD | Fiats.KRW) => {
+    const currency = baseCurrency ?? Fiats.USD;
     const queryKey = ['fetchExchangeRate', currency];
 
-    return useQuery({
+    return useQuery<AxiosResponse<ExchangeRateApiData>, AxiosError>({
         queryFn: () => axios.get<ExchangeRateApiData>(`https://v6.exchangerate-api.com/v6/${process.env.NEXT_PUBLIC_EXCHANGE_RATE_API_KEY}/latest/${currency}`),
         queryKey,
-        refetchInterval,
+        refetchInterval: refetchInterval ?? 0,
+        enabled: refetchInterval !== null,
     });
 }
 
@@ -27,25 +29,27 @@ export const useFetchExchangeRate = (refetchInterval = 0, baseCurrency?: 'KRW' |
  * 
  * @description coin market cap api fetching
  */
-export const useFetchCoinMarketCapIdMap = (refetchInterval = 0) => {
+export const useFetchCoinMarketCapIdMap = (refetchInterval: number | null) => {
     const queryKey = ['fetchCoinMarketCapIdMap'];
 
-    return useQuery({
+    return useQuery<AxiosResponse<CMCResponse<readonly CMCIdMapItemApiData[]>>, AxiosError>({
         queryFn: () => axios.get<CMCResponse<readonly CMCIdMapItemApiData[]>>('/api/cmc/idmap'),
         queryKey,
-        refetchInterval,
+        refetchInterval: refetchInterval ?? 0,
+        enabled: refetchInterval !== null,
     });
 };
 
-export const useFetchCoinMarketCapMetadata = (refetchInterval = 0, ids?: readonly number[]) => {
+export const useFetchCoinMarketCapMetadata = (refetchInterval: number | null, ids?: readonly number[]) => {
     const id = ids?.join(',');
     const options = id ? { params: { id } } : undefined;
     const queryKey = ['fetchCoinMarketCapListings', id];
 
-    return useQuery({
+    return useQuery<AxiosResponse<CMCResponse<{ [id: string]: CMCMetadataItemData }>>, AxiosError>({
         queryFn: () => axios.get<CMCResponse<{ [id: string]: CMCMetadataItemData }>>('/api/cmc/metadata', options),
         queryKey,
-        refetchInterval,
+        refetchInterval: refetchInterval ?? 0,
+        enabled: refetchInterval !== null,
     });
 };
 
@@ -53,23 +57,25 @@ export const useFetchCoinMarketCapMetadata = (refetchInterval = 0, ids?: readonl
  * 
  * @description upbit open api fetching
  */
-export const useFetchUpbitMarket = (refetchInterval = 0) => {
+export const useFetchUpbitMarket = (refetchInterval: number | null) => {
     const queryKey = ['fetchUpbitMarket'];
 
-    return useQuery({
+    return useQuery<AxiosResponse<readonly UpbitMarketApiData[]>, AxiosError>({
         queryFn: () => axios.get<readonly UpbitMarketApiData[]>('/api/upbit/market'),
         queryKey,
-        refetchInterval,
+        refetchInterval: refetchInterval ?? 0,
+        enabled: refetchInterval !== null,
     });
 };
 
-export const useFetchUpbitPrice = (refetchInterval = 0) => {
+export const useFetchUpbitPrice = (refetchInterval: number | null) => {
     const queryKey = ['fetchUpbitPrice'];
 
-    return useQuery({
+    return useQuery<AxiosResponse<readonly UpbitTickerApiData[]>, AxiosError>({
         queryFn: () => axios.get<readonly UpbitTickerApiData[]>('/api/upbit/ticker'),
         queryKey,
-        refetchInterval,
+        refetchInterval: refetchInterval ?? 0,
+        enabled: refetchInterval !== null,
     });
 };
 
@@ -80,12 +86,13 @@ export const useFetchUpbitPrice = (refetchInterval = 0) => {
 const binanceAxiosClient = axios.create({
     baseURL: 'https://api.binance.com',
 });
-export const useFetchBinacePrice = (refetchInterval = 0) => {
+export const useFetchBinacePrice = (refetchInterval: number | null) => {
     const queryKey = ['fetchBinancePrice'];
 
-    return useQuery({
+    return useQuery<AxiosResponse<readonly BinanceTickerApiData[]>, AxiosError>({
         queryFn: () => binanceAxiosClient.get<readonly BinanceTickerApiData[]>('/api/v3/ticker?symbols=["BTCUSDT","XRPUSDT"]'),
         queryKey,
-        refetchInterval,
+        refetchInterval: refetchInterval ?? 0,
+        enabled: refetchInterval !== null,
     });
 };

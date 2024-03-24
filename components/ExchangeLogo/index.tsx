@@ -1,24 +1,24 @@
 import Image from 'next/image';
 import { useCallback, useState } from 'react';
-import { FIATS_METADATA_DICT, Fiats } from '@/constants/app';
+import { EXCHANGES_METADATA_DICT, Exchanges, FIATS_METADATA_DICT, Fiats } from '@/constants/app';
 
-export type CurrencySize = 'sm' | 'md' | 'lg' | 'xl';
+export type ExchangeLogoSize = 'sm' | 'md' | 'lg' | 'xl';
 
-const Currency_SIZE_DICT: Record<CurrencySize, { px: number; className: string }> = {
+const ExchangeLogo_SIZE_DICT: Record<ExchangeLogoSize, { px: number; className: string }> = {
   sm: { px: 16, className: 'w-4 h-4' },
   md: { px: 20, className: 'w-5 h-5' },
   lg: { px: 24, className: 'w-6 h-6' },
   xl: { px: 32, className: 'w-8 h-8' },
 };
 
-type CurrencyProps = {
-  currency?: Fiats;
-  size?: CurrencySize;
+type ExchangeLogoProps = {
+  exchange: Exchanges;
+  size?: ExchangeLogoSize;
   logoURL?: string;
 };
 
-const Currency = ({ currency = Fiats.KRW, size = 'md', logoURL: injectedLogoURL }: CurrencyProps) => {
-  const logoURL = FIATS_METADATA_DICT[currency].logoURL;
+const ExchangeLogo = ({ exchange, size = 'md', logoURL: injectedLogoURL }: ExchangeLogoProps) => {
+  const logoURL = EXCHANGES_METADATA_DICT[exchange].logoURL;
   const renderingLogoURL = injectedLogoURL ?? logoURL;
 
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
@@ -32,14 +32,14 @@ const Currency = ({ currency = Fiats.KRW, size = 'md', logoURL: injectedLogoURL 
     setIsError(true);
   }, []);
 
-  const pxSizes = { width: Currency_SIZE_DICT[size].px, height: Currency_SIZE_DICT[size].px };
-  const sizeClassName = Currency_SIZE_DICT[size].className;
+  const pxSizes = { width: ExchangeLogo_SIZE_DICT[size].px, height: ExchangeLogo_SIZE_DICT[size].px };
+  const sizeClassName = ExchangeLogo_SIZE_DICT[size].className;
   const opacityClassName = `transition-opacity ${isLoaded ? 'opacity-100' : 'opacity-0'}`;
 
   return !isError && renderingLogoURL ? (
-    <div className="grow-0 shrink-0 relative">
+    <div className="relative">
       <Image
-        alt={`${currency} logo`}
+        alt={`${ExchangeLogo} logo`}
         src={renderingLogoURL}
         {...pxSizes}
         className={`rounded-full ${sizeClassName} ${opacityClassName}`}
@@ -48,8 +48,8 @@ const Currency = ({ currency = Fiats.KRW, size = 'md', logoURL: injectedLogoURL 
       />
     </div>
   ) : (
-    <div aria-hidden className={`grow-0 shrink-0 ${sizeClassName} rounded-full animate-pulse`}></div>
+    <div aria-hidden className={`${sizeClassName} rounded-full animate-pulse`}></div>
   );
 };
 
-export default Currency;
+export default ExchangeLogo;

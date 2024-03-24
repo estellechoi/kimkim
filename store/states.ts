@@ -49,3 +49,7 @@ export const userAgentAtom = atom<
 export const upbitMarketDataAtom = atom<Record<string, UpbitMarketApiData>>({});
 export const coinMarketCapIdMapAtom = atom<Record<string, CMCIdMapItemApiData>>({});
 export const coinMarketCapMetadataAtom = atom<Record<string, CMCMetadataItemData>>({});
+export const currencyExchangeRateAtom = atom<Record<Fiats, number | null>>({
+  [Fiats.KRW]: null,
+  [Fiats.USD]: null,
+});

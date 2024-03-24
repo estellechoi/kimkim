@@ -7,7 +7,7 @@ export type CardSize = 'sm' | 'md';
 const CARD_BG_COLOR_DICT: Record<CardColor, string> = {
   primary: 'bg-primary text-white',
   on_primary: 'bg-ground text-ground',
-  glass: 'Bg_glass border border-solid border-primary_line_light',
+  glass: 'Bg_glass border border-solid border-primary_line_dark',
   secondary: 'bg-secondary text-white',
   caption: 'bg-caption text-white',
 };

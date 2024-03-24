@@ -1,5 +1,5 @@
 import type {NextPage} from 'next';
-import {useEffect, useMemo, useState} from 'react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 import Main from '@/components/Main';
 import MobileAppLaunchSection from '@/components/home/MobileAppLaunchSection';
 import useUserAgent from '@/hooks/useUserAgent';
@@ -7,14 +7,17 @@ import Card from '@/components/Card';
 import { formatKRW, formatNumber } from '@/utils/number';
 import Table from '@/components/Table';
 import ErrorTag from '@/components/tags/ErrorTag';
-import { useFetchBinacePrice, useFetchCoinMarketCapMetadata, useFetchExchangeRate, useFetchUpbitPrice } from '@/data/hooks';
+import { useFetchBinacePrice, useFetchUpbitPrice } from '@/data/hooks';
 import { TableRowData } from '@/components/Table/types';
 import BigNumber from 'bignumber.js';
 import { useAtom } from 'jotai';
-import { coinMarketCapIdMapAtom, coinMarketCapMetadataAtom, upbitMarketDataAtom } from '@/store/states';
+import { coinMarketCapIdMapAtom, currencyExchangeRateAtom, upbitMarketDataAtom } from '@/store/states';
 import { CMCIdMapItemApiData } from './api/cmc/idmap';
 import Coin from '@/components/Coin';
 import useCoinMarketCapMetadataUpdate from '@/hooks/useCoinMarketCapMetadataUpdate';
+import { Fiats } from '@/constants/app';
+import ExchangeDropDownPair from '@/components/drop-downs/ExchangeDropDownPair';
+import CurrencyAmountInput from '@/components/text-inputs/CurrencyAmountInput';
 
 export interface KimchiPremiumTableRow extends TableRowData {
   symbol: string;
@@ -31,18 +34,40 @@ const Home: NextPage = () => {
   const { isMobile } = useUserAgent();
   const [isAppLaunched, setIsAppLaunched] = useState<boolean>(!isMobile);
 
-  const [upbitMarketData] = useAtom(upbitMarketDataAtom);
-  
   /**
    * 
-   * @description fetch data
+   * @description exchange rate
    */
-  const { data: krwExchangeRateData, error: krwExchangeRateError } = useFetchExchangeRate(3000);
-  const { data: usdExchangeRateData, error: usdExchangeRateError } = useFetchExchangeRate(3000, 'USD');
+  const [currencyExchangeRate] = useAtom(currencyExchangeRateAtom);
+  const krwByUsd = currencyExchangeRate[Fiats.KRW];
+  const audByUsd = currencyExchangeRate[Fiats.AUD];
+
+  /**
+   * 
+   * @description upbit data
+   */
+  const [upbitMarketData] = useAtom(upbitMarketDataAtom);
 
   const { data: upbitPriceData, error: upbitPriceError } = useFetchUpbitPrice(3000);
-  const { data: binancePriceData, error: binancePriceError } = useFetchBinacePrice(3000);
 
+  /**
+   * 
+   * @description binance data
+   */
+  const [binancePriceDataInterval, setBinancePriceInterval] = useState<number | null>(3000);
+  const { data: binancePriceData, error: binancePriceError } = useFetchBinacePrice(binancePriceDataInterval);
+
+  useEffect(() => {
+    let retryTimer: NodeJS.Timeout;
+
+    if (binancePriceError?.response?.status === 429 || binancePriceError?.response?.status === 418) {
+      setBinancePriceInterval(null);
+      const retryAfter = binancePriceError?.response?.headers['retry-after'];
+      retryTimer = setTimeout(() => setBinancePriceInterval(3000), parseInt(retryAfter) * 1000);
+    }
+
+    return () => clearTimeout(retryTimer);
+  }, [binancePriceError?.response]);
 
   /**
    * 
@@ -79,11 +104,7 @@ const Home: NextPage = () => {
 
       const upbitPrice = item.opening_price;
       const binancePrice = parseFloat(binanceData?.openPrice ?? '0');
-      const binancePriceKrw = BigNumber(binancePrice).multipliedBy(usdExchangeRateData?.data.conversion_rates.KRW ?? 0);
-
-      // console.log('binancePrice', binancePrice);
-      // console.log('usdExchangeRateData?.data.conversion_rates.KRW', usdExchangeRateData?.data.conversion_rates.KRW)
-      // console.log('binancePriceKrw', binancePriceKrw.toNumber());
+      const binancePriceKrw = BigNumber(binancePrice).multipliedBy(krwByUsd ?? 0);
 
       const priceLabel = (
         <div className="flex flex-col items-end gap-x-2 text-right Font_data_14px_num">
@@ -93,17 +114,13 @@ const Home: NextPage = () => {
       );
 
 
-      const usdExchangeRate = krwExchangeRateData?.data.conversion_rates.USD ?? 0;
-      const upbitPriceUsd = BigNumber(upbitPrice).multipliedBy(usdExchangeRate);
-
-
-      const premium = binancePrice > 0 ? upbitPriceUsd.minus(binancePrice).div(binancePrice).multipliedBy(100) : BigNumber(0);
-      const premiumLabel = <div className={`inline-flex items-baseline gap-x-0.5 Font_data_16px_num ${premium.gt(0) ? 'text-semantic_bull' : 'text-semantic_bear'}`}>{formatNumber(premium, 2)}<span className="Font_data_14px_unit">%</span></div>;
+      const premium = binancePriceKrw.gt(0) ? BigNumber(upbitPrice).minus(binancePriceKrw).div(binancePriceKrw).multipliedBy(100) : null;
+      const premiumLabel = <div className={`inline-flex items-baseline gap-x-0.5 Font_data_16px_num ${premium?.gt(0) ? 'text-semantic_bull' : 'text-semantic_bear'}`}>{formatNumber(premium, 2)}<span className="Font_data_14px_unit">%</span></div>;
 
       const upbitVolume = item.acc_trade_volume_24h;
       const upbitVolumeKrw = BigNumber(item.acc_trade_volume_24h).times(item.opening_price);
       const binanceVolumeUsd = parseFloat(binanceData?.quoteVolume ?? '0');
-      const binanceVolumeKrw = BigNumber(binanceVolumeUsd).multipliedBy(usdExchangeRateData?.data.conversion_rates.KRW ?? 0);
+      const binanceVolumeKrw = BigNumber(binanceVolumeUsd).multipliedBy(krwByUsd ?? 0);
       const volumeLabel = (
         <div className="flex flex-col items-end gap-x-2 text-right Font_data_14px_num">
           <div>{formatKRW(upbitVolumeKrw, { fixDp: true, compact: true })}</div>
@@ -117,14 +134,81 @@ const Home: NextPage = () => {
         symbolLabel,
         price: upbitPrice,
         priceLabel,
-        premium,
+        premium: premium ?? BigNumber(0),
         premiumLabel,
         volume: upbitVolume,
         volumeLabel,
       };
     
     }) ?? [];
-  }, [krwExchangeRateData, usdExchangeRateData, upbitPriceData, binancePriceData]);
+  }, [krwByUsd, upbitPriceData, binancePriceData]);
+
+  const isDataError = useMemo(() => krwByUsd === undefined || upbitPriceError || binancePriceError, [krwByUsd, upbitPriceError, binancePriceError]);
+
+  /**
+   * 
+   * @description exchange rate
+   */
+  const [usdInput, setUsdInput] = useState<string>('1');
+  const [audInput, setAudInput] = useState<string>();
+  const [krwInput, setKrwInput] = useState<string>(krwByUsd ? BigNumber(1).times(krwByUsd).dp(1).toString() :'');
+
+  const onChangeUsdInput = useCallback((value: string) => {
+    setUsdInput(value);
+
+    const parsedValue = parseFloat(value);
+    if (Number.isNaN(parsedValue)) return;
+    
+    if (audByUsd !== null) {
+      const audValue = BigNumber(parsedValue).times(audByUsd);
+      setAudInput(audValue.dp(2).toString());
+    }
+
+    if (krwByUsd !== null) {
+      const krwValue = BigNumber(parsedValue).times(krwByUsd);
+      setKrwInput(krwValue.dp(1).toString());  
+    }
+  }, [krwByUsd, audByUsd]);
+
+  const onChangeAudInput = useCallback((value: string) => {
+    setAudInput(value);
+
+    const parsedValue = parseFloat(value);
+    if (Number.isNaN(parsedValue)) return;
+
+    if (audByUsd !== null) {
+      const usdValue = BigNumber(parsedValue).div(audByUsd);
+      setUsdInput(usdValue.dp(2).toString());  
+
+      if (krwByUsd !== null) {
+        const krwValue = usdValue.times(krwByUsd);
+        setKrwInput(krwValue.dp(1).toString());  
+      }
+    }
+  }, [krwByUsd, audByUsd]);
+
+  const onChangeKrwInput = useCallback((value: string) => {
+    setKrwInput(value);
+
+    const parsedValue = parseFloat(value);
+    if (Number.isNaN(parsedValue)) return;
+
+    if (krwByUsd !== null) {
+      const usdValue = BigNumber(parsedValue).div(krwByUsd);
+      setUsdInput(usdValue.dp(2).toString());
+
+      if (audByUsd !== null) {
+        const audValue = usdValue.times(audByUsd);
+        setAudInput(audValue.dp(2).toString());  
+      }
+    }
+  }, [krwByUsd, audByUsd]);
+
+  useEffect(() => {
+    onChangeUsdInput(usdInput);
+    onChangeAudInput(audByUsd ? BigNumber(usdInput).times(audByUsd).dp(1).toString() :'');
+    onChangeKrwInput(krwByUsd ? BigNumber(usdInput).times(krwByUsd).dp(1).toString() :'');
+  }, [krwByUsd, audByUsd]);
 
   return (
     <>
@@ -132,8 +216,26 @@ const Home: NextPage = () => {
 
       {isAppLaunched && (
         <Main className="flex flex-col items-stretch gap-y-10 min-h-screen pt-app_header_height pb-page_bottom">
-          <section className="px-page_x">
-            <div className="text-caption Font_label_12px p-4" >김치 프리미엄 {(krwExchangeRateError || usdExchangeRateError || upbitPriceError || binancePriceError) && <ErrorTag className="ml-2" />}</div>
+          <section className="space-y-2 px-page_x">
+            <div className="flex justify-between items-center gap-x-10">
+              <div className="text-caption Font_label_12px p-4" >환율 {krwByUsd === undefined && <ErrorTag className="ml-2" />}</div>
+            </div>
+
+            <Card color="glass" className="w-full space-y-4 p-4">
+              <CurrencyAmountInput fiat={Fiats.USD} value={usdInput} onInput={onChangeUsdInput} />
+              <CurrencyAmountInput fiat={Fiats.AUD} value={audInput} onInput={onChangeAudInput} />
+              <CurrencyAmountInput fiat={Fiats.KRW} value={krwInput} onInput={onChangeKrwInput} />
+            </Card>
+          </section>
+
+          <section className="space-y-2 px-page_x">
+            <div className="flex justify-between items-center gap-x-10">
+              <div className="text-caption Font_label_12px p-4" >김치 프리미엄 {isDataError && <ErrorTag className="ml-2" />}</div>
+              
+              <div className="flex items-center gap-x-4">
+                <ExchangeDropDownPair />
+              </div>
+            </div>
 
             <Card color="glass" className="w-full space-y-4">
               <Table<KimchiPremiumTableRow>

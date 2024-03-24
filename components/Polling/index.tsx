@@ -4,7 +4,7 @@ import { ReactNode, useEffect, useState } from 'react'
 export default function Polling({
   formattedNumber,
   caption,
-  status = 'info',
+  status,
   className,
   onClick,
 }: {
@@ -41,7 +41,7 @@ export default function Polling({
   )
 }
 
-function PollingDot({ children, status }: { children: ReactNode; status: NotiStatus }) {
+function PollingDot({ children, status }: { children: ReactNode; status?: NotiStatus }) {
   return (
     <div
       className={`${bgCSSByStatus(status)} relative w-2 h-2 min-w-[0.5rem] min-h-[0.5rem] rounded-full`}
@@ -52,7 +52,7 @@ function PollingDot({ children, status }: { children: ReactNode; status: NotiSta
   )
 }
 
-function PollingSpinner({ status, isMounting = false }: { status: NotiStatus; isMounting?: boolean }) {
+function PollingSpinner({ status, isMounting = false }: { status?: NotiStatus; isMounting?: boolean }) {
   return (
     <div
       className={`border-solid ${
@@ -66,7 +66,7 @@ function PollingSpinner({ status, isMounting = false }: { status: NotiStatus; is
   )
 }
 
-function textCSSByStatus(status: NotiStatus) {
+function textCSSByStatus(status?: NotiStatus) {
   switch (status) {
     case 'info':
       return 'text-semantic_info'
@@ -77,11 +77,11 @@ function textCSSByStatus(status: NotiStatus) {
     case 'success':
       return 'text-semantic_success'
     default:
-      return 'text-neutral-400'
+      return 'text-primary'
   }
 }
 
-function bgCSSByStatus(status: NotiStatus) {
+function bgCSSByStatus(status?: NotiStatus) {
   switch (status) {
     case 'info':
       return 'bg-semantic_info'
@@ -92,11 +92,11 @@ function bgCSSByStatus(status: NotiStatus) {
     case 'success':
       return 'bg-semantic_success'
     default:
-      return 'bg-neutral-400'
+      return 'bg-primary'
   }
 }
 
-function borderCSSByStatus(status: NotiStatus) {
+function borderCSSByStatus(status?: NotiStatus) {
   switch (status) {
     case 'info':
       return 'border-semantic_info'
@@ -107,6 +107,6 @@ function borderCSSByStatus(status: NotiStatus) {
     case 'success':
       return 'border-semantic_success'
     default:
-      return 'border-neutral-400'
+      return 'border-primary'
   }
 }

@@ -8,6 +8,7 @@ import ChainLabel from '../ChainLabel';
 import { useAtom } from 'jotai';
 import {  selectedCurrencyAtom } from '@/store/states';
 import Currency from '../Currency';
+import ExchangeRatePolling from '../pollings/ExchangeRatePolling';
 
 // const AccountButton = dynamic(() => import('@/components/buttons/AccountButton'), {
 //   ssr: false,
@@ -26,16 +27,20 @@ const AppHeader = ({ className = '' }: AppHeaderProps) => {
         <AppLogo size="md" color="dark" />
       </Link>
 
-      <DropDown<Fiats>
-        placeholder="Select chain"
-        defaultKey={selectedCurrency}
-        disabledKeys={[Fiats.USD]}
-        options={[
-          { label: <div className="flex items-center gap-x-2 Font_label_14px"><Currency currency={Fiats.KRW} /><span>{Fiats.KRW}</span></div>, key: Fiats.KRW }, 
-          { label: <div className="flex items-center gap-x-2 Font_label_14px"><Currency currency={Fiats.USD} /><span>{Fiats.USD}</span></div>, key: Fiats.USD },
-        ]} 
-        onChange={setSelectedCurrency}
-      />
+      <div className="flex items-center gap-x-10">
+        <ExchangeRatePolling />
+
+        <DropDown<Fiats>
+          placeholder="Select chain"
+          defaultKey={selectedCurrency}
+          disabledKeys={[Fiats.USD, Fiats.AUD]}
+          options={[
+            { label: <div className="flex items-center gap-x-2 Font_label_14px"><Currency currency={Fiats.KRW} /><span>{Fiats.KRW}</span></div>, key: Fiats.KRW }, 
+            { label: <div className="flex items-center gap-x-2 Font_label_14px"><Currency currency={Fiats.USD} /><span>{Fiats.USD}</span></div>, key: Fiats.USD },
+          ]} 
+          onChange={setSelectedCurrency}
+        />
+      </div>
     </header>
   );
 };

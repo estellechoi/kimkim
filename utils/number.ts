@@ -53,11 +53,13 @@ export const formatNumber = (
   return `${semiequateSymbol}${directionSymbol}${currencySymbol}${formatter.format(amount.abs().toNumber()).toLocaleLowerCase()}`;
 };
 
-export const formatUSD = (value: BigNumber | number | undefined | null, options?: FormatAmountOptions): string => {
+export type FormatCurrencyFunction = (value: BigNumber | number | undefined | null, options?: FormatAmountOptions) => string;
+
+export const formatUSD: FormatCurrencyFunction = (value: BigNumber | number | undefined | null, options?: FormatAmountOptions): string => {
   return formatNumber(value, 2, {currencySymbol: '$', ...options});
 };
 
-export const formatKRW = (value: BigNumber | number | undefined | null, options?: FormatAmountOptions): string => {
+export const formatKRW: FormatCurrencyFunction = (value: BigNumber | number | undefined | null, options?: FormatAmountOptions): string => {
   return formatNumber(value, 1, {currencySymbol: '₩', ...options});
 };
 
