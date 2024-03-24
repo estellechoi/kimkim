@@ -52,4 +52,5 @@ export const coinMarketCapMetadataAtom = atom<Record<string, CMCMetadataItemData
 export const currencyExchangeRateAtom = atom<Record<Fiats, number | null>>({
   [Fiats.KRW]: null,
   [Fiats.USD]: null,
+  [Fiats.AUD]: null,
 });

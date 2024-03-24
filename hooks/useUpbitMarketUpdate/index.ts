@@ -5,7 +5,7 @@ import { useAtom } from "jotai";
 import { useEffect } from "react";
 
 const useUpbitMarketUpdate = () => {
-    const { data: upbitMarketData } = useFetchUpbitMarket();
+    const { data: upbitMarketData } = useFetchUpbitMarket(0);
 
     const [,setUpbitMarketData] = useAtom(upbitMarketDataAtom);
 

@@ -5,7 +5,7 @@ import { useAtom } from "jotai";
 import { useEffect } from "react";
 
 const useCoinMarketCapUpdate = () => {
-    const { data: idMapData } = useFetchCoinMarketCapIdMap();
+    const { data: idMapData } = useFetchCoinMarketCapIdMap(0);
 
     const [,setCoinMarketCapMetadata] = useAtom(coinMarketCapIdMapAtom);
 
