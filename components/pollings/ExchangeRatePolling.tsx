@@ -17,7 +17,7 @@ const TEXT_FORMATTER_DICT: Record<Fiats, FormatCurrencyFunction> = {
 const ExchangeRatePolling = ({ className = '' }: ExchangeRatePollingProps) => {
     const [currencyExchangeRate] = useAtom(currencyExchangeRateAtom);
     const [selectedCurrency] = useAtom(selectedCurrencyAtom);
-    const selectedCurrencyExchangeRate = currencyExchangeRate[selectedCurrency];
+    const selectedCurrencyExchangeRate = currencyExchangeRate.rates[selectedCurrency];
 
     const format = TEXT_FORMATTER_DICT[selectedCurrency];
 

@@ -79,14 +79,14 @@ const Container = ({
   // class names
   const { disabled } = args;
 
-  const heightClassName = 'h-[3.125rem] max-h-[3.125rem]';
+  const heightClassName = 'h-[2.75rem] max-h-[2.75rem]';
   const borderClassName = '';
   const bgClassName = `border border-solid ${
     disabled
       ? 'border-disabled bg-disabled'
       : 'bg-on_primary transition-colors Transition_500 border-primary_line_dark'
   }`;
-  const iconColorClassName = 'text-caption_on_primary';
+  const iconColorClassName = 'text-caption';
   const colorClassName = `placeholder:text-caption_on_primary text-white ${
     disabled ? '' : 'transition-colors Transition_500 focus-within:text-primary group-hover/text-input:text-white'
   }`;
@@ -100,7 +100,7 @@ const Container = ({
       </label>
 
       <div
-        className={`group/text-input relative flex items-center gap-x-card_padding_x px-card_padding_x py-card_padding_y rounded-card_sm Elevation_box_1 ${heightClassName} ${bgClassName} ${borderClassName} ${iconColorClassName}`}
+        className={`group/text-input relative flex items-center gap-x-card_padding_x px-card_padding_x py-1 rounded-card_sm Elevation_box_1 ${heightClassName} ${bgClassName} ${borderClassName} ${iconColorClassName}`}
       >
         {getIcon(children)}
 

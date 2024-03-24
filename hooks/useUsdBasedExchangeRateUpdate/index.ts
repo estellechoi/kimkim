@@ -10,6 +10,7 @@ const useUsdBasedExchangeRateUpdate = () => {
     const [usdBasedExchangeDataInterval, setUsdBasedExchangeInterval] = useState<number | null>(60000);
     const { data: usdBasedExchangeRateData, error: usdBasedExchangeRateError } = useFetchExchangeRate(usdBasedExchangeDataInterval, Fiats.USD);
   
+    
     useEffect(() => {
       if (usdBasedExchangeRateError?.response?.status === 429) {
         setUsdBasedExchangeInterval(null);
@@ -22,9 +23,12 @@ const useUsdBasedExchangeRateUpdate = () => {
           [currency]: usdBasedExchangeRateData?.data.conversion_rates[currency] ?? null
         };
         return { ...acc, ...item };
-      }, currencyExchangeRate);
+      }, currencyExchangeRate.rates);
 
-      setCurrencyExchangeRate(newCurrencyExchangeRate);
+      setCurrencyExchangeRate({
+        lastUpdatedTime: usdBasedExchangeRateData? usdBasedExchangeRateData.data.time_last_update_unix * 1000 : undefined,
+        rates: newCurrencyExchangeRate,
+      });
     }, [usdBasedExchangeRateData, currencyExchangeRate]);
 }
 

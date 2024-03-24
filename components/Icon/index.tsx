@@ -22,6 +22,7 @@ import {
   MdEmail,
   MdSearch,
   MdAdd,
+  MdLocalFireDepartment,
 } from 'react-icons/md';
 import { FaGithub } from 'react-icons/fa';
 
@@ -52,7 +53,8 @@ export type IconType =
   | 'email'
   | 'github'
   | 'search'
-  | 'add';
+  | 'add'
+  | 'fire';
 
 const ICON_SIZE_CLASS_DICT: Record<IconSize, string> = {
   xs: 'w-2 h-2',
@@ -89,6 +91,7 @@ const ICON_DICT: Record<IconType, React.ElementType> = {
   github: FaGithub,
   search: MdSearch,
   add: MdAdd,
+  fire: MdLocalFireDepartment,
 };
 
 type IconProps = {

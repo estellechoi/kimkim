@@ -77,7 +77,7 @@ function textCSSByStatus(status?: NotiStatus) {
     case 'success':
       return 'text-semantic_success'
     default:
-      return 'text-primary'
+      return 'text-body'
   }
 }
 
@@ -92,7 +92,7 @@ function bgCSSByStatus(status?: NotiStatus) {
     case 'success':
       return 'bg-semantic_success'
     default:
-      return 'bg-primary'
+      return 'bg-body'
   }
 }
 
@@ -107,6 +107,6 @@ function borderCSSByStatus(status?: NotiStatus) {
     case 'success':
       return 'border-semantic_success'
     default:
-      return 'border-primary'
+      return 'border-body'
   }
 }

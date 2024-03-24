@@ -35,7 +35,7 @@ const handler = async (
     res: NextApiResponse<any>
   ) => {
     const response = await axiosUpbitClient
-      .get<readonly UpbitTickerApiData[]>('/v1/ticker', { params: { markets: 'KRW-BTC, KRW-XRP' } });
+      .get<readonly UpbitTickerApiData[]>('/v1/ticker', { params: req.query });
 
     const status = response.status === 0 ? 200 : response.status;
     res.status(status).json(response.data);

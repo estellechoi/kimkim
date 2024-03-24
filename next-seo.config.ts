@@ -1,13 +1,13 @@
 import type { NextSeoProps } from 'next-seo';
 
 export const SEO: NextSeoProps = {
-  titleTemplate: '%s | Admin KimKim',
-  defaultTitle: 'Admin KimKim',
+  titleTemplate: '%s | KimKim 김치 프리미엄',
+  defaultTitle: 'KimKim 김치 프리미엄',
   description: 'TBD',
   themeColor: '#f5f5f5',
   // openGraph: {
   //   type: 'website',
-  //   title: 'Admin KimKim',
+  //   title: 'KimKim 김치 프리미엄',
   //   description: 'TBD',
   //   images: [{ url: 'TBD' }],
   // },

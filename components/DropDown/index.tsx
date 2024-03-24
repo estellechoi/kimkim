@@ -22,7 +22,7 @@ const DropDown = <T extends Key>({ options, disabledKeys, defaultKey, placeholde
     const { px: pxClassName, py: pyClassName, font: fontClassName } = DROP_DOWN_SIZE_CLASSNAMES_DICT[size];
 
     return (
-        <Select disabledKeys={disabledKeys} defaultSelectedKey={defaultKey} placeholder={placeholder} className={`Component flex flex-col items-end ${className}`} onSelectionChange={(key) => onChange?.(key as T)}>
+        <Select aria-label={placeholder} disabledKeys={disabledKeys} defaultSelectedKey={defaultKey} placeholder={placeholder} className={`Component flex flex-col items-end ${className}`} onSelectionChange={(key) => onChange?.(key as T)}>
             {({ isOpen }) => (
                 <>
                     <Button className={`group/select-button w-36 flex items-center justify-between gap-x-4 ${fontClassName} bg-body text-ground rounded-button ${pxClassName} ${pyClassName}`}>

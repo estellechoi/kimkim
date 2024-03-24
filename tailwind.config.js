@@ -25,6 +25,7 @@ module.exports = {
         screen_exept_app_header: 'calc(100vh - var(--size-app-header-height))',
         app_header_padding_x: '2rem',
         app_header_padding_y: '2.75rem',
+        app_container: '1440px',
         bottom_sheet_max_height: 'calc(100vh - var(--size-app-header-height) - 2.25rem)',
         page_bottom: '6rem',
         page_top: 'calc(var(--size-app-header-height) + 2.25rem)',

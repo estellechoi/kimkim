@@ -1,6 +1,10 @@
-# KimKim Dashboard
+# KimKim, Kimchi Premium Dashboard
 
-### Run locally
+## 1. Overview
+
+![Overview](./draft_overview.png "Overview")
+
+## 2. Run locally
 
 ```zsh
 yarn install

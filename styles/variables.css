@@ -112,6 +112,10 @@
     --color-red100: #FF8080;
     --color-red200: #FF6868;
     --color-red400: rgb(250, 43, 57);
+    --color-red400-o80: rgba(250, 43, 57, 0.8);
+    --color-red400-o35: rgba(250, 43, 57, 0.35);
+    --color-red400-o10: rgba(250, 43, 57, 0.10);
+    --color-red400-o0: rgba(250, 43, 57, 0.0);
     --color-red700: #7D0A0A;
     /* gree */
     --color-green400: #01BF08;
@@ -125,16 +129,16 @@
 }
 
 :root {
-    --color-primary: var(--color-neon400);
-    --color-primary-o80: var(--color-neon400-o80);
-    --color-primary-o35: var(--color-neon400-o35);
-    --color-primary-o10: var(--color-neon400-o10);
-    --color-primary-o0: var(--color-neon400-o0);
+    --color-primary: var(--color-red400);
+    --color-primary-o80: var(--color-red400-o80);
+    --color-primary-o35: var(--color-red400-o35);
+    --color-primary-o10: var(--color-red400-o10);
+    --color-primary-o0: var(--color-red400-o0);
     --color-primary-variant-dark: var(--color-black);
     --color-primary-variant-light: var(--color-gray300);
     --color-primary-variant-soft: var(--color-gray600);
     --color-on_primary: var(--color-black);
-    --color-glass: var(--color-white-o10);
+    --color-glass: var(--color-black-o10);
     --color-body: var(--color-white);
     --color-secondary: var(--color-white);
     --color-on_secondary: var(--color-black);

@@ -5,6 +5,7 @@ import apolloClients, { type AppApolloClients } from '@/data/graphql/apolloClien
 import { UpbitMarketApiData } from '@/pages/api/upbit/market';
 import { CMCIdMapItemApiData } from '@/pages/api/cmc/idmap';
 import { CMCMetadataItemData } from '@/pages/api/cmc/metadata';
+import { BinanceMarketSymbolDetailApiData } from '@/data/hooks/types';
 
 type TokenData = {
   logoURI: string;
@@ -44,13 +45,18 @@ export const userAgentAtom = atom<
 
 /**
  * 
- * @description upbit states
+ * @description exchange-wide market data
  */
 export const upbitMarketDataAtom = atom<Record<string, UpbitMarketApiData>>({});
+export const binanceMarketDataAtom = atom<Record<string, BinanceMarketSymbolDetailApiData>>({});
+
 export const coinMarketCapIdMapAtom = atom<Record<string, CMCIdMapItemApiData>>({});
 export const coinMarketCapMetadataAtom = atom<Record<string, CMCMetadataItemData>>({});
-export const currencyExchangeRateAtom = atom<Record<Fiats, number | null>>({
-  [Fiats.KRW]: null,
-  [Fiats.USD]: null,
-  [Fiats.AUD]: null,
+export const currencyExchangeRateAtom = atom<{ lastUpdatedTime: number | undefined, rates: Record<Fiats, number | null> }>({
+  lastUpdatedTime: undefined,
+  rates: {
+    [Fiats.KRW]: null,
+    [Fiats.USD]: null,
+    [Fiats.AUD]: null,
+  }
 });

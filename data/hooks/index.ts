@@ -1,6 +1,6 @@
 import axios, { AxiosError, type AxiosResponse } from "axios";
 import { useQuery } from "@tanstack/react-query";
-import type { BinanceTickerApiData, ExchangeRateApiData } from "./types";
+import type { BinanceMarketApiData, BinanceTickerApiData, ExchangeRateApiData } from "./types";
 import type { UpbitTickerApiData } from "@/pages/api/upbit/ticker";
 import { UpbitMarketApiData } from "@/pages/api/upbit/market";
 import { CMCIdMapItemApiData } from "@/pages/api/cmc/idmap";
@@ -68,11 +68,12 @@ export const useFetchUpbitMarket = (refetchInterval: number | null) => {
     });
 };
 
-export const useFetchUpbitPrice = (refetchInterval: number | null) => {
-    const queryKey = ['fetchUpbitPrice'];
+export const useFetchUpbitPrice = (refetchInterval: number | null, symbols: readonly string[]) => {
+    const marketsJoint = symbols.map(symbol => `KRW-${symbol}`).join(',');
+    const queryKey = ['fetchUpbitPrice', marketsJoint];
 
     return useQuery<AxiosResponse<readonly UpbitTickerApiData[]>, AxiosError>({
-        queryFn: () => axios.get<readonly UpbitTickerApiData[]>('/api/upbit/ticker'),
+        queryFn: () => axios.get<readonly UpbitTickerApiData[]>('/api/upbit/ticker', { params: { markets: marketsJoint } }),
         queryKey,
         refetchInterval: refetchInterval ?? 0,
         enabled: refetchInterval !== null,
@@ -86,11 +87,24 @@ export const useFetchUpbitPrice = (refetchInterval: number | null) => {
 const binanceAxiosClient = axios.create({
     baseURL: 'https://api.binance.com',
 });
-export const useFetchBinacePrice = (refetchInterval: number | null) => {
-    const queryKey = ['fetchBinancePrice'];
+
+export const useFetchBinaceMarket = (refetchInterval: number | null) => {
+    const queryKey = ['fetchBinanceMarket'];
+
+    return useQuery<AxiosResponse<BinanceMarketApiData>, AxiosError>({
+        queryFn: () => binanceAxiosClient.get<BinanceMarketApiData>(`/api/v3/exchangeInfo`),
+        queryKey,
+        refetchInterval: refetchInterval ?? 0,
+        enabled: refetchInterval !== null,
+    });
+};
+
+export const useFetchBinacePrice = (refetchInterval: number | null, symbols: readonly string[]) => {
+    const marketsJoint = symbols.map(symbol => `"${symbol}USDT"`).join(',');
+    const queryKey = ['fetchBinancePrice', marketsJoint];
 
     return useQuery<AxiosResponse<readonly BinanceTickerApiData[]>, AxiosError>({
-        queryFn: () => binanceAxiosClient.get<readonly BinanceTickerApiData[]>('/api/v3/ticker?symbols=["BTCUSDT","XRPUSDT"]'),
+        queryFn: () => binanceAxiosClient.get<readonly BinanceTickerApiData[]>(`/api/v3/ticker?symbols=[${marketsJoint}]`),
         queryKey,
         refetchInterval: refetchInterval ?? 0,
         enabled: refetchInterval !== null,

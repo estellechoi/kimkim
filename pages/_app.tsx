@@ -23,6 +23,7 @@ import GlowBackground from '@/components/GlowBackground';
 import useUpbitMarketUpdate from '@/hooks/useUpbitMarketUpdate';
 import useCoinMarketCapUpdate from '@/hooks/useCoinMarketCapUpdate';
 import useUsdBasedExchangeRateUpdate from '@/hooks/useUsdBasedExchangeRateUpdate';
+import useBinanceMarketUpdate from '@/hooks/useBinanceMarketUpdate';
 
 const UserAgentDetector = dynamic(() => import('@/components/UserAgentDetector'), {ssr: false});
 
@@ -31,6 +32,7 @@ const MetaDataUpdater = () => {
 
   useCoinMarketCapUpdate();
   useUpbitMarketUpdate();
+  useBinanceMarketUpdate();
 
   useSetupTokens();
   return null;
@@ -111,7 +113,7 @@ function MyApp({Component, pageProps}: AppProps<{dehydratedState: DehydratedStat
                 <UserAgentDetector />
                 <ModalProvider>
                   <GlowBackground
-                    color="secondary"
+                    color="primary"
                     style={{
                       transform: 'translateY(-120vh)',
                     }}

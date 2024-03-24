@@ -34,10 +34,7 @@ const AppHeader = ({ className = '' }: AppHeaderProps) => {
           placeholder="Select chain"
           defaultKey={selectedCurrency}
           disabledKeys={[Fiats.USD, Fiats.AUD]}
-          options={[
-            { label: <div className="flex items-center gap-x-2 Font_label_14px"><Currency currency={Fiats.KRW} /><span>{Fiats.KRW}</span></div>, key: Fiats.KRW }, 
-            { label: <div className="flex items-center gap-x-2 Font_label_14px"><Currency currency={Fiats.USD} /><span>{Fiats.USD}</span></div>, key: Fiats.USD },
-          ]} 
+          options={Object.values(Fiats).map(fiat => ({ label: <div className="flex items-center gap-x-2 Font_label_14px"><Currency currency={fiat} /><span>{fiat}</span></div>, key: fiat }))} 
           onChange={setSelectedCurrency}
         />
       </div>

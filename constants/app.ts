@@ -19,6 +19,7 @@ export const COMPACT_DECIMALS = 4;
 
 export const LOCAL_STORAGE_KEYS = {
   LAST_USED_WALLET: 'user_last_used_wallet',
+  WATCH_LIST_SYMBOLS: 'watch_list_symbols'
 };
 
 export const TEXTS = {
@@ -52,6 +53,11 @@ export const CHAIN_METADATA_DICT: Record<AllChains, { explorerAddressURL: string
     logoURL: CHAIN_LOGO_NIBIRU.src,
   },
 };
+
+export enum Languages {
+  KR = 'ko',
+  EN = 'en',
+}
 
 export enum Fiats {
   KRW = 'KRW',
