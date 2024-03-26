@@ -15,7 +15,7 @@ const useCoinMarketCapMetadataUpdate = (coinMarketCapIds: readonly number[]) => 
       }, {});
   
       setCoinMarketCapMetadata(metadataMap);
-    }, [coinMarketCapIds]);
+    }, [coinMarketCapIds, coinMarketCapMetaData]);
 }
 
 export default useCoinMarketCapMetadataUpdate;

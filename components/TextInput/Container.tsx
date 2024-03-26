@@ -90,7 +90,7 @@ const Container = ({
   const colorClassName = `placeholder:text-caption_on_primary text-white ${
     disabled ? '' : 'transition-colors Transition_500 focus-within:text-primary group-hover/text-input:text-white'
   }`;
-  const fontClassName = 'placeholder:Font_caption_md Font_body_md';
+  const fontClassName = type === 'number' ? 'placeholder:Font_caption_md_num Font_data_16px_num md:placeholder:Font_caption_sm_num md:Font_data_14px_num' : 'placeholder:Font_caption_md Font_data_16px md:placeholder:Font_caption_sm md:Font_data_14px';
   const cursorClassName = disabled ? 'cursor-not-allowed' : 'cursor-text';
 
   return (

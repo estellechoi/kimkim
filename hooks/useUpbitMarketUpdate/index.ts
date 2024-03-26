@@ -12,7 +12,7 @@ const useUpbitMarketUpdate = () => {
     useEffect(() => {
         const data = upbitMarketData?.data.reduce<Record<string, UpbitMarketApiData>>((acc, item) => {
             return { ...acc, [item.market]: item };
-        }, {}) ?? {};
+        }, {});
 
         setUpbitMarketData(data);
     }, [upbitMarketData]);

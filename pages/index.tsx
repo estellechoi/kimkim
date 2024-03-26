@@ -12,6 +12,7 @@ import { Fiats, Languages } from '@/constants/app';
 import CurrencyAmountInput from '@/components/text-inputs/CurrencyAmountInput';
 import { TimeTick, formatDate } from '@/utils/date';
 import dynamic from 'next/dynamic';
+import WaitingSymbol from '@/components/WaitingSymbol';
 
 const KimchiPremiumSection = dynamic(() => import('@/components/home/KimchiPremiumSection'), { ssr: false });
 
@@ -26,7 +27,6 @@ const Home: NextPage = () => {
   const [currencyExchangeRate] = useAtom(currencyExchangeRateAtom);
   const krwByUsd = currencyExchangeRate.rates[Fiats.KRW];
   const audByUsd = currencyExchangeRate.rates[Fiats.AUD];
-
 
   /**
    * 
@@ -102,7 +102,11 @@ const Home: NextPage = () => {
           <section className="w-full max-w-app_container space-y-2 px-page_x mt-20">
             <div className="flex justify-between items-center gap-x-10">
               <div className="text-caption Font_label_12px p-4" >환율 {krwByUsd === undefined && <ErrorTag className="ml-2" />}</div>
-              <div className="text-caption Font_caption_xs p-4" >{formatDate(currencyExchangeRate.lastUpdatedTime, TimeTick.TIME, Languages.KR)}</div>
+              {currencyExchangeRate.lastUpdatedTime ? (
+                <div className="text-caption Font_caption_xs p-4" >{formatDate(currencyExchangeRate.lastUpdatedTime, TimeTick.TIME, Languages.KR)}</div>
+              ) : (
+                <WaitingSymbol />
+              )}
             </div>
 
             <Card color="glass" className="w-full space-y-4 p-4">

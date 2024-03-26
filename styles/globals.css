@@ -13,7 +13,7 @@
 
     *::selection {
         background-color: var(--color-primary);
-        color: var(--color-on_primary);
+        color: var(--color-body);
     }
 
     /* ::-webkit-scrollbar {
@@ -133,6 +133,26 @@
     }
 
     /** typography - data */
+    .Font_data_12px {
+        @apply font-primary text-xs leading-5 font-normal tracking-tight;
+    }
+
+    .Font_data_14px {
+        @apply font-primary text-[0.875rem] leading-5 font-normal tracking-tight;
+    }
+
+    .Font_data_16px {
+        @apply font-primary text-base leading-5 font-normal tracking-tight;
+    }
+
+    .Font_data_20px {
+        @apply font-primary text-xl leading-6 font-normal tracking-tight;
+    }
+
+    .Font_data_32px {
+        @apply font-primary text-[2rem] leading-10 font-normal tracking-tight;
+    }
+    
     .Font_data_12px_num {
         @apply font-num text-xs leading-5 font-normal tracking-tight;
     }

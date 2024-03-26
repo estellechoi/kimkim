@@ -1,15 +1,14 @@
-import AppSymbolSVG from '@/components/svgs/AppSymbolSVG';
 import type { WaitingSymbolColor } from './types';
 
 const COLOR_CLASS_DICT: Record<WaitingSymbolColor, string> = {
-  white: 'text-white',
-  primary: 'text-primary',
-  secondary: 'text-secondary',
+  caption: 'bg-caption',
+  primary: 'bg-primary',
+  secondary: 'bg-secondary',
 };
 
 const WaitingSymbolUnit = ({ color, className }: { color: WaitingSymbolColor; className?: string }) => {
   const colorClassName = COLOR_CLASS_DICT[color];
-  return <AppSymbolSVG className={`w-3 h-3 ${colorClassName} ${className}`} />;
+  return <div className={`w-2 h-2 rounded-full ${colorClassName} ${className}`}></div>;
 };
 
 export default WaitingSymbolUnit;

@@ -47,12 +47,15 @@ export const userAgentAtom = atom<
  * 
  * @description exchange-wide market data
  */
-export const upbitMarketDataAtom = atom<Record<string, UpbitMarketApiData>>({});
-export const binanceMarketDataAtom = atom<Record<string, BinanceMarketSymbolDetailApiData>>({});
+export const upbitMarketDataAtom = atom<Record<string, UpbitMarketApiData> | undefined>(undefined);
+export const binanceMarketDataAtom = atom<Record<string, BinanceMarketSymbolDetailApiData> | undefined>(undefined);
 
-export const coinMarketCapIdMapAtom = atom<Record<string, CMCIdMapItemApiData>>({});
-export const coinMarketCapMetadataAtom = atom<Record<string, CMCMetadataItemData>>({});
-export const currencyExchangeRateAtom = atom<{ lastUpdatedTime: number | undefined, rates: Record<Fiats, number | null> }>({
+export const coinMarketCapIdMapAtom = atom<Record<string, CMCIdMapItemApiData> | undefined>(undefined);
+export const coinMarketCapMetadataAtom = atom<Record<string, CMCMetadataItemData> | undefined>(undefined);
+export const currencyExchangeRateAtom = atom<{ 
+  lastUpdatedTime: number | undefined, 
+  rates: Record<Fiats, number | null> 
+}>({
   lastUpdatedTime: undefined,
   rates: {
     [Fiats.KRW]: null,

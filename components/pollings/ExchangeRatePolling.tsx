@@ -23,7 +23,8 @@ const ExchangeRatePolling = ({ className = '' }: ExchangeRatePollingProps) => {
 
     return (
         <Polling
-            formattedNumber={`${formatUSD(1)} ≈ ${format(selectedCurrencyExchangeRate)}`}
+            formattedNumber={`${formatUSD(1)} ≈ ${selectedCurrencyExchangeRate ? format(selectedCurrencyExchangeRate) : '?'}`}
+            isLoading={!selectedCurrencyExchangeRate}
             className={className}
         />
     )

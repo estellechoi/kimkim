@@ -5,9 +5,9 @@ type WaitingSymbolProps = {
   color?: WaitingSymbolColor;
 };
 
-const WaitingSymbol = ({ color = 'white' }: WaitingSymbolProps) => {
+const WaitingSymbol = ({ color = 'caption' }: WaitingSymbolProps) => {
   return (
-    <div className="flex justify-center items-center gap-x-0">
+    <div className="flex justify-center items-center gap-x-1">
       <WaitingSymbolUnit color={color} className="animate-bouncing" />
       <WaitingSymbolUnit color={color} className="animate-bouncing_delayed_1" />
       <WaitingSymbolUnit color={color} className="animate-bouncing_delayed_2" />

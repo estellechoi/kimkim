@@ -12,7 +12,7 @@ const useCoinMarketCapUpdate = () => {
     useEffect(() => {
         const data = idMapData?.data.data?.reduce<Record<string, CMCIdMapItemApiData>>((acc, item) => {
             return { ...acc, [item.symbol]: item };
-        }, {}) ?? {};
+        }, {});
 
         setCoinMarketCapMetadata(data);
     }, [idMapData]);

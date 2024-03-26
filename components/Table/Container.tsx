@@ -8,6 +8,7 @@ import FieldRowPseudo from './FieldRow/Pseudo';
 import TableFieldRow from './FieldRow/FieldRow';
 import useSortedRows from './hooks/useSortedRows';
 import type { TooltipLayer } from '@/components/Tooltip/styles';
+import WaitingSymbol from '../WaitingSymbol';
 
 const getFieldRows = (children: ReactNode) => getReactElements(children, FieldRowPseudo);
 
@@ -132,9 +133,9 @@ const TableContainer = <T extends TableRowData>({
         {sortedRows.length === 0 && (
           <div
             role="row"
-            className={`relative w-full h-[240px] flex items-center justify-center text-center px-3 py-5 md:px-4 hover:!bg-none font_body_m text-body ${TABLE_ROW_BG_DICT[type]}`}
+            className={`relative w-full h-[240px] flex items-center justify-center text-center px-3 py-5 md:px-4 hover:!bg-none ${TABLE_ROW_BG_DICT[type]}`}
           >
-            <span className="opacity-70">{noDataLabel}</span>
+            {isLoading ? <WaitingSymbol color="caption" /> : <span className="Font_caption_sm text-caption">No data found</span>}
           </div>
         )}
       </div>

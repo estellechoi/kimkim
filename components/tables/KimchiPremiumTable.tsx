@@ -18,15 +18,17 @@ export interface KimchiPremiumTableRow extends TableRowData {
   
 type KimchiPremiumTableProps = {
     rows: readonly KimchiPremiumTableRow[];
+    isLoading?: boolean;
 };
 
-const KimchiPremiumTable = ({ rows }: KimchiPremiumTableProps) => {
+const KimchiPremiumTable = ({ rows, isLoading }: KimchiPremiumTableProps) => {
     return (
-        <Table<KimchiPremiumTableRow>
+      <Table<KimchiPremiumTableRow>
         // hasMouseEffect={true}
         tooltipContext="base"
         dSortValue="premium"
         rows={rows}
+        isLoading={isLoading}
         fields={[
           {
             label: '코인',

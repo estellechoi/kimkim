@@ -12,7 +12,7 @@ const useBinanceMarketUpdate = () => {
     useEffect(() => {
         const data = binanceMarketData?.data.symbols.reduce<Record<string, BinanceMarketSymbolDetailApiData>>((acc, item) => {
             return { ...acc, [item.symbol]: item };
-        }, {}) ?? {};
+        }, {});
 
         setBinanceMarketData(data);
     }, [binanceMarketData]);

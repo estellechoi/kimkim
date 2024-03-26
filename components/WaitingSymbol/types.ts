@@ -1,1 +1,1 @@
-export type WaitingSymbolColor = 'white' | 'primary' | 'secondary';
+export type WaitingSymbolColor = 'caption' | 'primary' | 'secondary';

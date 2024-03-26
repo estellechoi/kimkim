@@ -210,7 +210,7 @@ module.exports = {
             transform: 'translateY(0)',
           },
           '100%': {
-            transform: 'translateY(-0.125rem)',
+            transform: 'translateY(-0.2rem)',
           },
         },
         rotate360: {
