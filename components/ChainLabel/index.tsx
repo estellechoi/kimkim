@@ -62,7 +62,7 @@ const ChainLabel = ({ chain, color = 'body', size = 'md', logoURL: injectedLogoU
         src={renderingLogoURL}
         {...pxSizes}
         className={`rounded-full ${sizeClassName} ${opacityClassName}`}
-        onLoadingComplete={onLoaded}
+        onLoad={onLoaded}
         onError={onError}
       />
     ) : (

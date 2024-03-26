@@ -43,7 +43,7 @@ const Currency = ({ currency = Fiats.KRW, size = 'md', logoURL: injectedLogoURL 
         src={renderingLogoURL}
         {...pxSizes}
         className={`rounded-full ${sizeClassName} ${opacityClassName}`}
-        onLoadingComplete={onLoaded}
+        onLoad={onLoaded}
         onError={onError}
       />
     </div>

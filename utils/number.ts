@@ -60,7 +60,7 @@ export const formatUSD: FormatCurrencyFunction = (value: BigNumber | number | un
 };
 
 export const formatKRW: FormatCurrencyFunction = (value: BigNumber | number | undefined | null, options?: FormatAmountOptions): string => {
-  return formatNumber(value, 1, {currencySymbol: '₩', ...options});
+  return formatNumber(value, 0, {currencySymbol: '₩', ...options});
 };
 
 export const getDecimalSeperator = (locale: string): string => {

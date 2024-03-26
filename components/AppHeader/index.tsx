@@ -9,6 +9,8 @@ import { useAtom } from 'jotai';
 import {  selectedCurrencyAtom } from '@/store/states';
 import Currency from '../Currency';
 import ExchangeRatePolling from '../pollings/ExchangeRatePolling';
+import USDTPricePolling from '../pollings/USDTPricePolling';
+import Coin from '../Coin';
 
 // const AccountButton = dynamic(() => import('@/components/buttons/AccountButton'), {
 //   ssr: false,
@@ -28,6 +30,11 @@ const AppHeader = ({ className = '' }: AppHeaderProps) => {
       </Link>
 
       <div className="flex items-center gap-x-10">
+        <div className="flex items-center gap-x-2">
+          <Coin size="sm" symbol="USDT" />
+          <USDTPricePolling />
+        </div>
+
         <ExchangeRatePolling />
 
         <DropDown<Fiats>

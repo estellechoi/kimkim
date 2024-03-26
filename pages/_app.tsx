@@ -21,16 +21,20 @@ import GoogleAnalyticsReporter from '@/analytics/googleAnalytics/GoogleAnalytics
 import MixPanelReporter from '@/analytics/mixpanel/MixPanelReporter';
 import GlowBackground from '@/components/GlowBackground';
 import useUpbitMarketUpdate from '@/hooks/useUpbitMarketUpdate';
-import useCoinMarketCapUpdate from '@/hooks/useCoinMarketCapUpdate';
 import useUsdBasedExchangeRateUpdate from '@/hooks/useUsdBasedExchangeRateUpdate';
 import useBinanceMarketUpdate from '@/hooks/useBinanceMarketUpdate';
+import useCoinGeckoUpdate from '@/hooks/useCoinGeckoUpdate';
+import useCoinGeckoPriceUpdate from '@/hooks/useCoinGeckoPriceUpdate';
 
 const UserAgentDetector = dynamic(() => import('@/components/UserAgentDetector'), {ssr: false});
 
 const MetaDataUpdater = () => {
   useUsdBasedExchangeRateUpdate();
 
-  useCoinMarketCapUpdate();
+  // only fetch tether price by default
+  useCoinGeckoPriceUpdate([]);
+  useCoinGeckoUpdate();
+
   useUpbitMarketUpdate();
   useBinanceMarketUpdate();
 

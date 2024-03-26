@@ -23,7 +23,8 @@ const ExchangeRatePolling = ({ className = '' }: ExchangeRatePollingProps) => {
 
     return (
         <Polling
-            formattedNumber={`${formatUSD(1)} ≈ ${selectedCurrencyExchangeRate ? format(selectedCurrencyExchangeRate) : '?'}`}
+            caption="USD 환율"
+            formattedNumber={`${selectedCurrencyExchangeRate ? format(selectedCurrencyExchangeRate, { semiequate: true }) : '?'}`}
             isLoading={!selectedCurrencyExchangeRate}
             className={className}
         />

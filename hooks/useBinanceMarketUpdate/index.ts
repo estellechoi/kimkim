@@ -7,7 +7,7 @@ import { useEffect } from "react";
 const useBinanceMarketUpdate = () => {
     const { data: binanceMarketData } = useFetchBinaceMarket(0);
 
-    const [,setBinanceMarketData] = useAtom(binanceMarketDataAtom);
+    const [, setBinanceMarketData] = useAtom(binanceMarketDataAtom);
 
     useEffect(() => {
         const data = binanceMarketData?.data.symbols.reduce<Record<string, BinanceMarketSymbolDetailApiData>>((acc, item) => {

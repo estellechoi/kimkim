@@ -1,11 +1,13 @@
 import { atom } from 'jotai';
-import { AllChains, Fiats, LOCAL_STORAGE_KEYS, TokenSymbols } from '@/constants/app';
+import { Fiats, LOCAL_STORAGE_KEYS, TokenSymbols } from '@/constants/app';
 import type { ConnectedWallet } from '@/types/wallet';
 import apolloClients, { type AppApolloClients } from '@/data/graphql/apolloClients';
 import { UpbitMarketApiData } from '@/pages/api/upbit/market';
 import { CMCIdMapItemApiData } from '@/pages/api/cmc/idmap';
 import { CMCMetadataItemData } from '@/pages/api/cmc/metadata';
 import { BinanceMarketSymbolDetailApiData } from '@/data/hooks/types';
+import { CoinGeckoCoinPriceApiData } from '@/pages/api/coingecko/prices';
+import { CoinGeckoCoinApiData } from '@/pages/api/coingecko/coins';
 
 type TokenData = {
   logoURI: string;
@@ -52,6 +54,10 @@ export const binanceMarketDataAtom = atom<Record<string, BinanceMarketSymbolDeta
 
 export const coinMarketCapIdMapAtom = atom<Record<string, CMCIdMapItemApiData> | undefined>(undefined);
 export const coinMarketCapMetadataAtom = atom<Record<string, CMCMetadataItemData> | undefined>(undefined);
+
+export const coinGeckoCoinIdMapAtom = atom<Record<string, CoinGeckoCoinApiData> | undefined>(undefined);
+export const coinGeckoCoinMapAtom = atom<Record<string, CoinGeckoCoinPriceApiData> | undefined>(undefined);
+
 export const currencyExchangeRateAtom = atom<{ 
   lastUpdatedTime: number | undefined, 
   rates: Record<Fiats, number | null> 

@@ -5,18 +5,20 @@ import Icon from '@/components/Icon';
 import AppSymbolSVG from '@/components/svgs/AppSymbolSVG';
 import KimchiPremiumTable, { KimchiPremiumTableRow } from '@/components/tables/KimchiPremiumTable';
 import useWatchListSymbols from '@/hooks/useWatchListSymbols';
-import ExchangeDropDownPair from '@/components/drop-downs/ExchangeDropDownPair';
-import { CMCIdMapItemApiData } from '@/pages/api/cmc/idmap';
+import ExchangeDropDownPair, { BaseExchange, QuoteExchnage } from '@/components/drop-downs/ExchangeDropDownPair';
 import Coin from '@/components/Coin';
-import useCoinMarketCapMetadataUpdate from '@/hooks/useCoinMarketCapMetadataUpdate';
-import { binanceMarketDataAtom, coinMarketCapIdMapAtom, upbitMarketDataAtom } from '@/store/states';
-import { useFetchBinacePrice, useFetchUpbitPrice } from '@/data/hooks';
+import { binanceMarketDataAtom, coinGeckoCoinIdMapAtom, coinGeckoCoinMapAtom, coinMarketCapIdMapAtom, upbitMarketDataAtom } from '@/store/states';
+import { useFetcHtxPrice, useFetchBinacePrice, useFetchUpbitPrice } from '@/data/hooks';
 import { formatKRW, formatNumber } from '@/utils/number';
 import { useAtom } from 'jotai';
 import { useEffect, useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import Card from '@/components/Card';
 import ErrorTag from '@/components/tags/ErrorTag';
+import { CoinGeckoCoinApiData } from '@/pages/api/coingecko/coins';
+import useCoinGeckoPriceUpdate from '@/hooks/useCoinGeckoPriceUpdate';
+import Button from '@/components/Button';
+import { Exchanges } from '@/constants/app';
 
 type KimchiPremiumSectionProps = {
     krwByUsd: number | null;
@@ -52,28 +54,38 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps)
 
     if (binancePriceError?.response?.status === 429 || binancePriceError?.response?.status === 418) {
       setBinancePriceInterval(null);
-      const retryAfter = binancePriceError?.response?.headers['retry-after'];
+      const retryAfter = binancePriceError?.response?.headers['Retry-After'];
       retryTimer = setTimeout(() => setBinancePriceInterval(3000), parseInt(retryAfter) * 1000);
     }
 
     return () => clearTimeout(retryTimer);
   }, [binancePriceError?.response]);
 
+
+  /**
+   * @description htx data 
+   * 
+   */
+  const { data: htxPriceData } = useFetcHtxPrice(0);
+  useEffect(() => {
+    console.log('htxPriceData', htxPriceData);
+  }, [htxPriceData])
+
   /**
    * 
    * @description setup coin metadata
    */
-  const [coinMarketCapIdMap] = useAtom(coinMarketCapIdMapAtom);
+  const [coinGeckoCoinIdMap] = useAtom(coinGeckoCoinIdMapAtom);
   
-  const coinMarketCapIds = useMemo<readonly number[]>(() => {
-    return upbitPriceData?.data.reduce<readonly number[]>((acc, item) => {
+  const coinGeckoCoinIds = useMemo<readonly string[]>(() => {
+    return upbitPriceData?.data.reduce<readonly string[]>((acc, item) => {
       const symbol = item.market.replace('KRW-', '');
-      const coinMarketCapIdData: CMCIdMapItemApiData | undefined = coinMarketCapIdMap?.[symbol];
-      return coinMarketCapIdData ? [...acc, coinMarketCapIdData.id] : acc;
+      const coinGeckoCoinIdData: CoinGeckoCoinApiData | undefined = coinGeckoCoinIdMap?.[symbol];
+      return coinGeckoCoinIdData ? [...acc, coinGeckoCoinIdData.id] : acc;
     }, []) ?? [];
-  }, [upbitPriceData, coinMarketCapIdMap]);
+  }, [upbitPriceData, coinGeckoCoinIdMap]);
 
-  useCoinMarketCapMetadataUpdate(coinMarketCapIds);
+  useCoinGeckoPriceUpdate(coinGeckoCoinIds);
 
   const isDataError = useMemo(() => krwByUsd === undefined || upbitPriceError || binancePriceError, [krwByUsd, upbitPriceError, binancePriceError]);
 
@@ -161,15 +173,25 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps)
     }) ?? [];
   }, [krwByUsd, upbitPriceData, binancePriceData, onToggleWatchList, watchListSymbols]);
 
+  const [showAllPremiumRows, setShowAllPremiumRows] = useState<boolean>(false);
+
+  const usingPremiumRows = useMemo<readonly KimchiPremiumTableRow[]>(() => {
+    const premiumBasedSortedRows = [...premiumTableRows].sort((a, b) => a.premium.gt(b.premium) ? -1 : 1);
+    return showAllPremiumRows ? premiumBasedSortedRows : premiumBasedSortedRows.slice(0, 15);
+  }, [premiumTableRows, showAllPremiumRows]);
+
+  const hiddenRowsLength = useMemo<number>(() => premiumTableRows.length - usingPremiumRows.length, [premiumTableRows.length, usingPremiumRows.length]);
+
   const [premiumSearchKeyword, setPremiumSearchKeyword] = useState<string>('');
 
   const premiumFilteredRows = useMemo<readonly KimchiPremiumTableRow[]>(() => {
-    if (premiumSearchKeyword === '') return premiumTableRows;
 
-    return premiumTableRows.filter(row => {
+    if (premiumSearchKeyword === '') return usingPremiumRows;
+
+    return usingPremiumRows.filter(row => {
       return row.symbol.toLowerCase().includes(premiumSearchKeyword.toLowerCase()) || row.koreanName.toLowerCase().includes(premiumSearchKeyword.toLowerCase());
     });
-  }, [premiumTableRows, premiumSearchKeyword]);
+  }, [showAllPremiumRows, usingPremiumRows, premiumSearchKeyword]);
 
   /**
    * 
@@ -193,14 +215,18 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps)
    */
   const isTableLoading = useMemo(() => !upbitMarketData || !binanceMarketData || isUpbitPriceLoading || isBinancePriceLoading, [upbitMarketData, binanceMarketData, isUpbitPriceLoading, isBinancePriceLoading]);
 
+    const [baseExchange, setBaseExchange] = useState<BaseExchange>(Exchanges.UPBIT);
+    const [quoteExchange, setQuoteExchange] = useState<QuoteExchnage>(Exchanges.BINANCE);
+
+
     return (
         <div className="w-full flex flex-col items-center gap-y-20">
-          <section className="w-full max-w-app_container space-y-2 px-page_x">
+          {watchListTableRows.length > 0 && <section className="w-full max-w-app_container space-y-2 px-page_x">
             <div className="flex justify-between items-center gap-x-10">
               <div className="text-caption Font_label_12px p-4" >내 즐겨찾기 {isDataError && <ErrorTag className="ml-2" />}</div>
               
               <div className="flex items-center gap-x-4">
-                <ExchangeDropDownPair />
+                <ExchangeDropDownPair baseExchange={baseExchange} onBaseExchangeChange={setBaseExchange} quoteExchange={quoteExchange} onQuoteExchangeChange={setQuoteExchange} />
                 <TextInput form={null} label="코인 검색" type="search" className="w-80" value={watchListSearchKeyword} onChange={(value, isValid) => setWatchListSearchKeyword(value)}>
                   <TextInput.Icon type="search" />
                 </TextInput>
@@ -210,14 +236,14 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps)
             <Card color="glass" className="w-full space-y-4">
               <KimchiPremiumTable rows={watchListFilteredRows} isLoading={isTableLoading} />
             </Card>
-          </section>
+          </section>}
 
           <section className="w-full max-w-app_container space-y-2 px-page_x">
             <div className="flex justify-between items-center gap-x-10">
               <div className="text-caption Font_label_12px p-4" >김치 프리미엄 {isDataError && <ErrorTag className="ml-2" />}</div>
               
               <div className="flex items-center gap-x-4">
-                <ExchangeDropDownPair />
+                <ExchangeDropDownPair baseExchange={baseExchange} onBaseExchangeChange={setBaseExchange} quoteExchange={quoteExchange} onQuoteExchangeChange={setQuoteExchange} />
                 <TextInput form={null} label="코인 검색" type="search" className="w-80" value={premiumSearchKeyword} onChange={(value, isValid) => setPremiumSearchKeyword(value)}>
                   <TextInput.Icon type="search" />
                 </TextInput>
@@ -227,6 +253,10 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps)
             <Card color="glass" className="w-full space-y-4">
               <KimchiPremiumTable rows={premiumFilteredRows} isLoading={isTableLoading} />
             </Card>
+
+            {hiddenRowsLength > 0 && <div className="flex justify-center">
+              <Button color="secondary" size="sm" iconType={showAllPremiumRows ? 'expand_less' : 'expand_more'} label={`${hiddenRowsLength}개 더보기`} onClick={() => setShowAllPremiumRows(!showAllPremiumRows)} />
+            </div>}
           </section>
         </div>
     )

@@ -43,7 +43,7 @@ const ExchangeLogo = ({ exchange, size = 'md', logoURL: injectedLogoURL }: Excha
         src={renderingLogoURL}
         {...pxSizes}
         className={`rounded-full ${sizeClassName} ${opacityClassName}`}
-        onLoadingComplete={onLoaded}
+        onLoad={onLoaded}
         onError={onError}
       />
     </div>

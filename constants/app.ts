@@ -80,6 +80,7 @@ export const FIATS_METADATA_DICT: Record<Fiats, { logoURL: string; }> = {
 export enum Exchanges {
   BINANCE = 'Binance',
   UPBIT = 'Upbit',
+  HTX = 'HTX',
 }
 
 export const EXCHANGES_METADATA_DICT: Record<Exchanges, { logoURL: string; }> = {
@@ -88,6 +89,9 @@ export const EXCHANGES_METADATA_DICT: Record<Exchanges, { logoURL: string; }> = 
   },
   [Exchanges.UPBIT]: {
     logoURL: EXCHANGE_UPBIT_LOGO.src,
+  },
+  [Exchanges.HTX]: {
+    logoURL: '',
   },
 };
 

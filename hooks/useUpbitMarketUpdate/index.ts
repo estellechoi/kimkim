@@ -7,7 +7,7 @@ import { useEffect } from "react";
 const useUpbitMarketUpdate = () => {
     const { data: upbitMarketData } = useFetchUpbitMarket(0);
 
-    const [,setUpbitMarketData] = useAtom(upbitMarketDataAtom);
+    const [, setUpbitMarketData] = useAtom(upbitMarketDataAtom);
 
     useEffect(() => {
         const data = upbitMarketData?.data.reduce<Record<string, UpbitMarketApiData>>((acc, item) => {

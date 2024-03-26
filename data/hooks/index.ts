@@ -7,6 +7,9 @@ import { CMCIdMapItemApiData } from "@/pages/api/cmc/idmap";
 import { CMCMetadataItemData } from "@/pages/api/cmc/metadata";
 import { CMCResponse } from "@/pages/api/cmc";
 import { Fiats } from "@/constants/app";
+import { CoinGeckoCoinApiData } from "@/pages/api/coingecko/coins";
+import { CoinGeckoCoinPriceApiData } from "@/pages/api/coingecko/prices";
+import { HtxMarketApiData } from "@/pages/api/htx/ticker";
 
 
 /**
@@ -47,6 +50,34 @@ export const useFetchCoinMarketCapMetadata = (refetchInterval: number | null, id
 
     return useQuery<AxiosResponse<CMCResponse<{ [id: string]: CMCMetadataItemData }>>, AxiosError>({
         queryFn: () => axios.get<CMCResponse<{ [id: string]: CMCMetadataItemData }>>('/api/cmc/metadata', options),
+        queryKey,
+        refetchInterval: refetchInterval ?? 0,
+        enabled: refetchInterval !== null,
+    });
+};
+
+/**
+ * 
+ * @description coingecko api fetching
+ */
+export const useFetchCoinGeckoCoinIds = (refetchInterval: number | null) => {
+    const queryKey = ['fetchCoinGeckoCoinIds'];
+
+    return useQuery<AxiosResponse<readonly CoinGeckoCoinApiData[]>, AxiosError>({
+        queryFn: () => axios.get<readonly CoinGeckoCoinApiData[]>('/api/coingecko/coins'),
+        queryKey,
+        refetchInterval: refetchInterval ?? 0,
+        enabled: refetchInterval !== null,
+    });
+};
+
+export const useFetchCoinGeckoCoins = (refetchInterval: number | null, ids?: readonly string[]) => {
+    const idsJoint = ids?.join(',');
+    const options = { params: { ids: idsJoint ? `${idsJoint},tether` : 'tether' } };
+    const queryKey = ['fetchCoinGeckoCoins', idsJoint];
+
+    return useQuery<AxiosResponse<readonly CoinGeckoCoinPriceApiData[]>, AxiosError>({
+        queryFn: () => axios.get<readonly CoinGeckoCoinPriceApiData[]>('/api/coingecko/prices', options),
         queryKey,
         refetchInterval: refetchInterval ?? 0,
         enabled: refetchInterval !== null,
@@ -105,6 +136,22 @@ export const useFetchBinacePrice = (refetchInterval: number | null, symbols: rea
 
     return useQuery<AxiosResponse<readonly BinanceTickerApiData[]>, AxiosError>({
         queryFn: () => binanceAxiosClient.get<readonly BinanceTickerApiData[]>(`/api/v3/ticker?symbols=[${marketsJoint}]`),
+        queryKey,
+        refetchInterval: refetchInterval ?? 0,
+        enabled: refetchInterval !== null,
+    });
+};
+
+/**
+ * 
+ * @description htx api fetching
+ */
+
+export const useFetcHtxPrice = (refetchInterval: number | null) => {
+    const queryKey = ['fetcHtxPrice'];
+
+    return useQuery<AxiosResponse<readonly HtxMarketApiData[]>, AxiosError>({
+        queryFn: () => axios.get<readonly HtxMarketApiData[]>('/api/htx/ticker'),
         queryKey,
         refetchInterval: refetchInterval ?? 0,
         enabled: refetchInterval !== null,

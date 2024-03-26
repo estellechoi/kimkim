@@ -1,4 +1,4 @@
-import { useFetchCoinMarketCapIdMap, useFetchUpbitMarket } from "@/data/hooks";
+import { useFetchCoinMarketCapIdMap } from "@/data/hooks";
 import { CMCIdMapItemApiData } from "@/pages/api/cmc/idmap";
 import { coinMarketCapIdMapAtom } from "@/store/states";
 import { useAtom } from "jotai";
