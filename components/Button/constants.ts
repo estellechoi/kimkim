@@ -27,22 +27,22 @@ export const BUTTON_COLOR_CLASS_DICT: Record<ButtonType, Record<ButtonColor | 'd
 
 export const BUTTON_WAITING_SYMBOL_COLOR_DICT: Record<ButtonType, Record<ButtonColor, WaitingSymbolColor>> = {
   fill: {
-    primary: 'white',
+    primary: 'caption',
     on_primary: 'primary',
-    secondary: 'white',
+    secondary: 'caption',
     on_secondary: 'secondary',
   },
   outline: {
     primary: 'primary',
-    on_primary: 'white',
+    on_primary: 'caption',
     secondary: 'secondary',
-    on_secondary: 'white',
+    on_secondary: 'caption',
   },
   text: {
     primary: 'primary',
-    on_primary: 'white',
+    on_primary: 'caption',
     secondary: 'secondary',
-    on_secondary: 'white',
+    on_secondary: 'caption',
   },
 };
 
