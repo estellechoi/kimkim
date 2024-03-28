@@ -8,6 +8,7 @@ import { CMCMetadataItemData } from '@/pages/api/cmc/metadata';
 import { BinanceMarketSymbolDetailApiData } from '@/data/hooks/types';
 import { CoinGeckoCoinPriceApiData } from '@/pages/api/coingecko/prices';
 import { CoinGeckoCoinApiData } from '@/pages/api/coingecko/coins';
+import { UpbitWalletStatusApiData } from '@/pages/api/upbit/wallet';
 
 type TokenData = {
   logoURI: string;
@@ -49,7 +50,11 @@ export const userAgentAtom = atom<
  * 
  * @description exchange-wide market data
  */
+export const tokenKoreanNameMapAtom = atom<Record<string, string> | undefined>(undefined);
+
 export const upbitMarketDataAtom = atom<Record<string, UpbitMarketApiData> | undefined>(undefined);
+export const upbitWalletStatusAtom = atom<Record<string, UpbitWalletStatusApiData> | undefined>(undefined);
+
 export const binanceMarketDataAtom = atom<Record<string, BinanceMarketSymbolDetailApiData> | undefined>(undefined);
 
 export const coinMarketCapIdMapAtom = atom<Record<string, CMCIdMapItemApiData> | undefined>(undefined);

@@ -45,15 +45,21 @@ export interface BinanceTickerApiData {
     priceChange: string;
     priceChangePercent: string;
     weightedAvgPrice: string;
+    prevClosePrice: string;
+    lastPrice: string;
+    lastQty: string;
+    bidPrice: string;
+    bidQty: string;
+    askPrice: string;
+    askQty: string;
     openPrice: string;
     highPrice: string;
     lowPrice: string;
-    lastPrice: string;
     volume: string;
     quoteVolume: string;
     openTime: number;
     closeTime: number;
-    firstId: number;
-    lastId: number;
+    firstId: number; // First tradeId
+    lastId: number;  // Last tradeId
     count: number;
 }

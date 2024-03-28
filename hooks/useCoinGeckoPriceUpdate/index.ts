@@ -10,7 +10,7 @@ const useCoinGeckoPriceUpdate = (ids: readonly string[]) => {
   const [coinGeckoCoinMap, setCoinGeckoCoinMap] = useAtom(coinGeckoCoinMapAtom);
 
   useEffect(() => {
-      const data = coinsData?.data.reduce<Record<string, CoinGeckoCoinPriceApiData>>((acc, item) => {
+      const data = coinsData?.data?.reduce<Record<string, CoinGeckoCoinPriceApiData>>((acc, item) => {
           return { ...acc, [item.symbol.toUpperCase()]: item };
       }, {});
 

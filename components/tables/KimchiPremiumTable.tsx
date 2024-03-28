@@ -47,7 +47,7 @@ const KimchiPremiumTable = ({ rows, isLoading }: KimchiPremiumTableProps) => {
             widthRatio: 20,
           },
           {
-            label: '김프',
+            label: '프리미엄',
             value: 'premiumLabel',
             type: 'jsx',
             sortType: 'bignumber',
@@ -56,7 +56,7 @@ const KimchiPremiumTable = ({ rows, isLoading }: KimchiPremiumTableProps) => {
             widthRatio: 20,
           },
           {
-            label: '거래량',
+            label: '24시간 거래량',
             value: 'volumeLabel',
             type: 'jsx',
             sortType: 'number',

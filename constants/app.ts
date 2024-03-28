@@ -7,6 +7,7 @@ import FLAG_US from '@/resources/images/flag_us.png';
 import FLAG_AU from '@/resources/images/flag_au.png';
 import EXCHANGE_BINANCE_LOGO from '@/resources/images/exchange_logo_binance.svg';
 import EXCHANGE_UPBIT_LOGO from '@/resources/images/exchange_logo_upbit.svg';
+import EXCHANGE_HTX_LOGO from '@/resources/images/exchange_logo_htx.svg';
 
 export const googleAnalytics = new GoogleAnalytics('google analytics');
 export const mixpanel = new Mixpanel('mixpanel');
@@ -91,9 +92,16 @@ export const EXCHANGES_METADATA_DICT: Record<Exchanges, { logoURL: string; }> = 
     logoURL: EXCHANGE_UPBIT_LOGO.src,
   },
   [Exchanges.HTX]: {
-    logoURL: '',
+    logoURL: EXCHANGE_HTX_LOGO.src,
   },
 };
+
+export type BaseExchange = Exchanges.UPBIT;
+export type QuoteExchange = Exchanges.BINANCE | Exchanges.HTX;
+
+export const BASE_EXCHANGES: readonly BaseExchange[] = [Exchanges.UPBIT];
+export const QUOTE_EXCHANGES: readonly QuoteExchange[] = [Exchanges.BINANCE, Exchanges.HTX];
+
 
 /**
  *

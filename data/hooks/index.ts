@@ -9,7 +9,8 @@ import { CMCResponse } from "@/pages/api/cmc";
 import { Fiats } from "@/constants/app";
 import { CoinGeckoCoinApiData } from "@/pages/api/coingecko/coins";
 import { CoinGeckoCoinPriceApiData } from "@/pages/api/coingecko/prices";
-import { HtxMarketApiData } from "@/pages/api/htx/ticker";
+import { HtxApiResponse, HtxMarketApiData } from "@/pages/api/htx/ticker";
+import { UpbitWalletStatusApiData } from "@/pages/api/upbit/wallet";
 
 
 /**
@@ -20,8 +21,8 @@ export const useFetchExchangeRate = (refetchInterval: number | null, baseCurrenc
     const currency = baseCurrency ?? Fiats.USD;
     const queryKey = ['fetchExchangeRate', currency];
 
-    return useQuery<AxiosResponse<ExchangeRateApiData>, AxiosError>({
-        queryFn: () => axios.get<ExchangeRateApiData>(`https://v6.exchangerate-api.com/v6/${process.env.NEXT_PUBLIC_EXCHANGE_RATE_API_KEY}/latest/${currency}`),
+    return useQuery<AxiosResponse<ExchangeRateApiData | undefined>, AxiosError>({
+        queryFn: () => axios.get<ExchangeRateApiData | undefined>(`https://v6.exchangerate-api.com/v6/${process.env.NEXT_PUBLIC_EXCHANGE_RATE_API_KEY}/latest/${currency}`),
         queryKey,
         refetchInterval: refetchInterval ?? 0,
         enabled: refetchInterval !== null,
@@ -63,8 +64,8 @@ export const useFetchCoinMarketCapMetadata = (refetchInterval: number | null, id
 export const useFetchCoinGeckoCoinIds = (refetchInterval: number | null) => {
     const queryKey = ['fetchCoinGeckoCoinIds'];
 
-    return useQuery<AxiosResponse<readonly CoinGeckoCoinApiData[]>, AxiosError>({
-        queryFn: () => axios.get<readonly CoinGeckoCoinApiData[]>('/api/coingecko/coins'),
+    return useQuery<AxiosResponse<readonly CoinGeckoCoinApiData[] | undefined>, AxiosError>({
+        queryFn: () => axios.get<readonly CoinGeckoCoinApiData[] | undefined>('/api/coingecko/coins'),
         queryKey,
         refetchInterval: refetchInterval ?? 0,
         enabled: refetchInterval !== null,
@@ -76,8 +77,8 @@ export const useFetchCoinGeckoCoins = (refetchInterval: number | null, ids?: rea
     const options = { params: { ids: idsJoint ? `${idsJoint},tether` : 'tether' } };
     const queryKey = ['fetchCoinGeckoCoins', idsJoint];
 
-    return useQuery<AxiosResponse<readonly CoinGeckoCoinPriceApiData[]>, AxiosError>({
-        queryFn: () => axios.get<readonly CoinGeckoCoinPriceApiData[]>('/api/coingecko/prices', options),
+    return useQuery<AxiosResponse<readonly CoinGeckoCoinPriceApiData[] | undefined>, AxiosError>({
+        queryFn: () => axios.get<readonly CoinGeckoCoinPriceApiData[] | undefined>('/api/coingecko/prices', options),
         queryKey,
         refetchInterval: refetchInterval ?? 0,
         enabled: refetchInterval !== null,
@@ -91,8 +92,19 @@ export const useFetchCoinGeckoCoins = (refetchInterval: number | null, ids?: rea
 export const useFetchUpbitMarket = (refetchInterval: number | null) => {
     const queryKey = ['fetchUpbitMarket'];
 
-    return useQuery<AxiosResponse<readonly UpbitMarketApiData[]>, AxiosError>({
-        queryFn: () => axios.get<readonly UpbitMarketApiData[]>('/api/upbit/market'),
+    return useQuery<AxiosResponse<readonly UpbitMarketApiData[] | undefined>, AxiosError>({
+        queryFn: () => axios.get<readonly UpbitMarketApiData[] | undefined>('/api/upbit/market'),
+        queryKey,
+        refetchInterval: refetchInterval ?? 0,
+        enabled: refetchInterval !== null,
+    });
+};
+
+export const useFetchUpbitWalletStatus = (refetchInterval: number | null) => {
+    const queryKey = ['fetchUpbitWalletStatus'];
+
+    return useQuery<AxiosResponse<readonly UpbitWalletStatusApiData[] | undefined>, AxiosError>({
+        queryFn: () => axios.get<readonly UpbitWalletStatusApiData[] | undefined>('/api/upbit/wallet'),
         queryKey,
         refetchInterval: refetchInterval ?? 0,
         enabled: refetchInterval !== null,
@@ -103,8 +115,8 @@ export const useFetchUpbitPrice = (refetchInterval: number | null, symbols: read
     const marketsJoint = symbols.map(symbol => `KRW-${symbol}`).join(',');
     const queryKey = ['fetchUpbitPrice', marketsJoint];
 
-    return useQuery<AxiosResponse<readonly UpbitTickerApiData[]>, AxiosError>({
-        queryFn: () => axios.get<readonly UpbitTickerApiData[]>('/api/upbit/ticker', { params: { markets: marketsJoint } }),
+    return useQuery<AxiosResponse<readonly UpbitTickerApiData[] | undefined>, AxiosError>({
+        queryFn: () => axios.get<readonly UpbitTickerApiData[] | undefined>('/api/upbit/ticker', { params: { markets: marketsJoint } }),
         queryKey,
         refetchInterval: refetchInterval ?? 0,
         enabled: refetchInterval !== null,
@@ -122,8 +134,8 @@ const binanceAxiosClient = axios.create({
 export const useFetchBinaceMarket = (refetchInterval: number | null) => {
     const queryKey = ['fetchBinanceMarket'];
 
-    return useQuery<AxiosResponse<BinanceMarketApiData>, AxiosError>({
-        queryFn: () => binanceAxiosClient.get<BinanceMarketApiData>(`/api/v3/exchangeInfo`),
+    return useQuery<AxiosResponse<BinanceMarketApiData | undefined>, AxiosError>({
+        queryFn: () => binanceAxiosClient.get<BinanceMarketApiData | undefined>(`/api/v3/exchangeInfo`),
         queryKey,
         refetchInterval: refetchInterval ?? 0,
         enabled: refetchInterval !== null,
@@ -134,8 +146,8 @@ export const useFetchBinacePrice = (refetchInterval: number | null, symbols: rea
     const marketsJoint = symbols.map(symbol => `"${symbol}USDT"`).join(',');
     const queryKey = ['fetchBinancePrice', marketsJoint];
 
-    return useQuery<AxiosResponse<readonly BinanceTickerApiData[]>, AxiosError>({
-        queryFn: () => binanceAxiosClient.get<readonly BinanceTickerApiData[]>(`/api/v3/ticker?symbols=[${marketsJoint}]`),
+    return useQuery<AxiosResponse<readonly BinanceTickerApiData[] | undefined>, AxiosError>({
+        queryFn: () => binanceAxiosClient.get<readonly BinanceTickerApiData[] | undefined>(`/api/v3/ticker/24hr?symbols=[${marketsJoint}]`),
         queryKey,
         refetchInterval: refetchInterval ?? 0,
         enabled: refetchInterval !== null,
@@ -150,8 +162,8 @@ export const useFetchBinacePrice = (refetchInterval: number | null, symbols: rea
 export const useFetcHtxPrice = (refetchInterval: number | null) => {
     const queryKey = ['fetcHtxPrice'];
 
-    return useQuery<AxiosResponse<readonly HtxMarketApiData[]>, AxiosError>({
-        queryFn: () => axios.get<readonly HtxMarketApiData[]>('/api/htx/ticker'),
+    return useQuery<AxiosResponse<HtxApiResponse<readonly HtxMarketApiData[]> | undefined>, AxiosError>({
+        queryFn: () => axios.get<HtxApiResponse<readonly HtxMarketApiData[]> | undefined>('/api/htx/ticker'),
         queryKey,
         refetchInterval: refetchInterval ?? 0,
         enabled: refetchInterval !== null,

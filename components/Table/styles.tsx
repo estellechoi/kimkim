@@ -85,7 +85,7 @@ export const TABLE_ROW_HOVER_LAYER_BG_DICT: Record<TableStyle, string> = {
 
 /** text */
 export const TABLE_FIELD_TYPO_DICT: Record<TableStyle, string> = {
-  primary: 'Font_caption_sm',
+  primary: 'Font_caption_xs',
 };
 
 export const CELL_FONT_CLASS_GETTER: Record<TableStyle, (dataType: 'number' | 'jsx') => string> = {

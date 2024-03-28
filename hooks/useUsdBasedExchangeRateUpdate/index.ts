@@ -20,13 +20,13 @@ const useUsdBasedExchangeRateUpdate = () => {
     useEffect(() => {
       const newCurrencyExchangeRate = Object.values(Fiats).reduce<Record<Fiats, number | null>>((acc, currency) => {
         const item = {
-          [currency]: usdBasedExchangeRateData?.data.conversion_rates[currency] ?? null
+          [currency]: usdBasedExchangeRateData?.data?.conversion_rates[currency] ?? null
         };
         return { ...acc, ...item };
       }, currencyExchangeRate.rates);
 
       setCurrencyExchangeRate({
-        lastUpdatedTime: usdBasedExchangeRateData? usdBasedExchangeRateData.data.time_last_update_unix * 1000 : undefined,
+        lastUpdatedTime: usdBasedExchangeRateData?.data? usdBasedExchangeRateData.data.time_last_update_unix * 1000 : undefined,
         rates: newCurrencyExchangeRate,
       });
     }, [usdBasedExchangeRateData, currencyExchangeRate]);

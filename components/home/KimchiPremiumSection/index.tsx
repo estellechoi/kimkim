@@ -1,24 +1,22 @@
 'use client';
 
 import TextInput from '@/components/TextInput';
-import Icon from '@/components/Icon';
-import AppSymbolSVG from '@/components/svgs/AppSymbolSVG';
 import KimchiPremiumTable, { KimchiPremiumTableRow } from '@/components/tables/KimchiPremiumTable';
 import useWatchListSymbols from '@/hooks/useWatchListSymbols';
-import ExchangeDropDownPair, { BaseExchange, QuoteExchnage } from '@/components/drop-downs/ExchangeDropDownPair';
-import Coin from '@/components/Coin';
-import { binanceMarketDataAtom, coinGeckoCoinIdMapAtom, coinGeckoCoinMapAtom, coinMarketCapIdMapAtom, upbitMarketDataAtom } from '@/store/states';
+import ExchangeDropDownPair from '@/components/drop-downs/ExchangeDropDownPair';
+import { binanceMarketDataAtom, coinGeckoCoinIdMapAtom, upbitMarketDataAtom } from '@/store/states';
 import { useFetcHtxPrice, useFetchBinacePrice, useFetchUpbitPrice } from '@/data/hooks';
-import { formatKRW, formatNumber } from '@/utils/number';
 import { useAtom } from 'jotai';
 import { useEffect, useMemo, useState } from 'react';
-import BigNumber from 'bignumber.js';
 import Card from '@/components/Card';
 import ErrorTag from '@/components/tags/ErrorTag';
 import { CoinGeckoCoinApiData } from '@/pages/api/coingecko/coins';
 import useCoinGeckoPriceUpdate from '@/hooks/useCoinGeckoPriceUpdate';
 import Button from '@/components/Button';
-import { Exchanges } from '@/constants/app';
+import { BaseExchange, Exchanges, QuoteExchange } from '@/constants/app';
+import useGetPremiumTableRows from '@/hooks/useGetPremiumTableRows';
+import { BaseExchangePriceData, QuoteExchangePriceData, reduceBaseExchangePriceDataFromUpbit, reduceQuoteExchangePriceDataFromBinance, reduceQuoteExchangePriceDataFromHtx } from '@/utils/exchange';
+import { AxiosError } from 'axios';
 
 type KimchiPremiumSectionProps = {
     krwByUsd: number | null;
@@ -26,28 +24,32 @@ type KimchiPremiumSectionProps = {
 }
 
 const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps) => {
+  const [baseExchange, setBaseExchange] = useState<BaseExchange>(Exchanges.UPBIT);
+  const [quoteExchange, setQuoteExchange] = useState<QuoteExchange>(Exchanges.BINANCE);
+
   /**
    * 
    * @description upbit data
    */
   const [upbitMarketData] = useAtom(upbitMarketDataAtom);
-
   const upbitSymbols = useMemo(() => 
-    upbitMarketData ? Object.values(upbitMarketData).filter(item => item.market.includes('KRW-')).map(item => item.market.replaceAll('KRW-', '')) : []
+    upbitMarketData ? Object.keys(upbitMarketData) : []
   , [upbitMarketData]);
 
-  const { data: upbitPriceData, error: upbitPriceError, isLoading: isUpbitPriceLoading } = useFetchUpbitPrice(upbitSymbols.length > 0 ? 3000 : null, upbitSymbols);
+  const fetchUpbitPriceData = baseExchange === Exchanges.UPBIT && upbitSymbols.length > 0;
+  const { data: upbitPriceData, error: upbitPriceError, isLoading: isUpbitPriceLoading } = useFetchUpbitPrice(fetchUpbitPriceData ? 3000 : null, upbitSymbols);
 
   /**
    * 
    * @description binance data
    */
   const [binanceMarketData] = useAtom(binanceMarketDataAtom);
-
-  const binanceSymbols = upbitSymbols.filter(symbol => binanceMarketData?.[`${symbol}USDT`]);
+  const binanceSymbols = upbitSymbols.filter(symbol => binanceMarketData?.[symbol]);
 
   const [binancePriceDataInterval, setBinancePriceInterval] = useState<number | null>(3000);
-  const { data: binancePriceData, error: binancePriceError, isLoading: isBinancePriceLoading } = useFetchBinacePrice(binanceSymbols.length > 0 ? binancePriceDataInterval : null, binanceSymbols);
+
+  const fetchBinancePriceData = quoteExchange === Exchanges.BINANCE && binanceSymbols.length > 0;
+  const { data: binancePriceData, error: binancePriceError, isLoading: isBinancePriceLoading } = useFetchBinacePrice(fetchBinancePriceData ? binancePriceDataInterval : null, binanceSymbols);
 
   useEffect(() => {
     let retryTimer: NodeJS.Timeout;
@@ -61,14 +63,16 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps)
     return () => clearTimeout(retryTimer);
   }, [binancePriceError?.response]);
 
-
   /**
    * @description htx data 
    * 
    */
-  const { data: htxPriceData } = useFetcHtxPrice(0);
+  const fetchHtxPriceData = quoteExchange === Exchanges.HTX;
+  const { data: htxPriceData, error: htxPriceError } = useFetcHtxPrice(fetchHtxPriceData ? 3000 : null);
   useEffect(() => {
     console.log('htxPriceData', htxPriceData);
+    const ont = htxPriceData?.data?.data?.find(item => item.symbol === 'ontusdt');
+    console.log('ont', ont);
   }, [htxPriceData])
 
   /**
@@ -77,17 +81,37 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps)
    */
   const [coinGeckoCoinIdMap] = useAtom(coinGeckoCoinIdMapAtom);
   
+  const baseExchangeSymbols = upbitSymbols;
+
   const coinGeckoCoinIds = useMemo<readonly string[]>(() => {
-    return upbitPriceData?.data.reduce<readonly string[]>((acc, item) => {
-      const symbol = item.market.replace('KRW-', '');
+    return baseExchangeSymbols.reduce<readonly string[]>((acc, symbol) => {
       const coinGeckoCoinIdData: CoinGeckoCoinApiData | undefined = coinGeckoCoinIdMap?.[symbol];
       return coinGeckoCoinIdData ? [...acc, coinGeckoCoinIdData.id] : acc;
     }, []) ?? [];
-  }, [upbitPriceData, coinGeckoCoinIdMap]);
+  }, [baseExchangeSymbols, coinGeckoCoinIdMap]);
 
   useCoinGeckoPriceUpdate(coinGeckoCoinIds);
 
-  const isDataError = useMemo(() => krwByUsd === undefined || upbitPriceError || binancePriceError, [krwByUsd, upbitPriceError, binancePriceError]);
+  /**
+   * 
+   * @description track exchange data error
+   */
+  const { baseExchangePriceErrorMap, quoteExchangePriceErrorMap } = useMemo(() => {
+    const baseExchangePriceErrorMap: Record<BaseExchange, AxiosError | null> = {
+      [Exchanges.UPBIT]: upbitPriceError,
+    }
+
+    const quoteExchangePriceErrorMap: Record<QuoteExchange, AxiosError | null> = {
+      [Exchanges.BINANCE]: binancePriceError,
+      [Exchanges.HTX]: htxPriceError,
+    }
+
+    return { baseExchangePriceErrorMap, quoteExchangePriceErrorMap };
+  }, [upbitPriceError, binancePriceError, htxPriceError]);
+
+  const isDataError = useMemo(() => {
+    return krwByUsd === undefined || baseExchangePriceErrorMap[baseExchange] || quoteExchangePriceErrorMap[quoteExchange];
+  }, [krwByUsd, baseExchange, quoteExchange, baseExchangePriceErrorMap, quoteExchangePriceErrorMap]);
 
   /**
    * 
@@ -99,80 +123,29 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps)
    * 
    * @description build table rows
    */
-  const premiumTableRows = useMemo<readonly KimchiPremiumTableRow[]>(() => {
-    return upbitPriceData?.data.map(item => {
-      const symbol = item.market.replace('KRW-', '');
-      const koreanName = upbitMarketData?.[item.market]?.korean_name ?? symbol;
-      const symbolLabel = (
-        <div className="flex items-center gap-x-2">
-          <Coin symbol={symbol} size="sm" />
-          <div className="inline-flex items-center gap-x-2 Font_label_14px">{koreanName}<span className="Font_caption_xs text-caption">{symbol}</span></div>
-        </div>
-      );
+  const { getPremiumTableRows } = useGetPremiumTableRows({ watchListSymbols, onToggleWatchList, krwByUsd, audByUsd });
 
-      const binanceData = binancePriceData?.data.find(({ symbol: binanceSymbol }) => binanceSymbol.includes(symbol));
+  const mappedBaseExchangePriceData = useMemo<readonly BaseExchangePriceData[]>(() => {
+    switch (baseExchange) {
+      case Exchanges.UPBIT: return upbitPriceData?.data?.reduce(reduceBaseExchangePriceDataFromUpbit, []) ?? [];
+    }
+  }, [baseExchange, upbitPriceData]);
 
-      const upbitPrice = item.opening_price;
-      const binancePrice = binanceData ? parseFloat(binanceData.openPrice) : undefined;
-      const binancePriceKrw = binancePrice ? BigNumber(binancePrice).multipliedBy(krwByUsd ?? 0) : undefined;
+  const mappedQuoteExchangePriceData = useMemo<readonly QuoteExchangePriceData[]>(() => {
+    switch (quoteExchange) {
+      case Exchanges.BINANCE: return binancePriceData?.data?.reduce(reduceQuoteExchangePriceDataFromBinance, []) ?? [];
+      case Exchanges.HTX: return htxPriceData?.data?.data?.reduce(reduceQuoteExchangePriceDataFromHtx, []) ?? [];
+    }
+  }, [quoteExchange, binancePriceData, htxPriceData?.data]);
 
-      const priceLabel = (
-        <div className="flex flex-col items-end gap-x-2 text-right Font_data_14px_num">
-          <div>{formatKRW(upbitPrice, { fixDp: true })}</div>
-          <div className="text-caption">{formatKRW(binancePriceKrw, { fixDp: true })}</div>
-        </div>
-      );
+  const premiumTableRows = useMemo<readonly KimchiPremiumTableRow[]>(() => 
+    getPremiumTableRows(mappedBaseExchangePriceData, mappedQuoteExchangePriceData)
+  , [mappedBaseExchangePriceData, mappedQuoteExchangePriceData, getPremiumTableRows]);
 
-
-      const premium = binancePriceKrw?.gt(0) ? BigNumber(upbitPrice).minus(binancePriceKrw).div(binancePriceKrw).multipliedBy(100) : null;
-      const premiumLabel = (
-        <div className="flex items-center gap-x-1">
-          {premium?.gte(10) && <Icon type="fire" size="md" className="text-semantic_danger" />}
-
-          <div className={`inline-flex items-baseline gap-x-0.5 Font_data_16px_num ${premium === null ? 'text-caption' : premium.gt(0) ? 'text-semantic_bull' : 'text-semantic_bear'}`}>
-            <span>{formatNumber(premium, 2)}</span>
-            {premium !== null && <span className="Font_data_14px_unit">%</span>}
-          </div>
-        </div>
-      );
-
-      const upbitVolume = item.acc_trade_volume_24h;
-      const upbitVolumeKrw = BigNumber(item.acc_trade_volume_24h).times(item.opening_price);
-      const binanceVolumeUsd = binanceData ? parseFloat(binanceData.quoteVolume) : undefined;
-      const binanceVolumeKrw = binanceVolumeUsd ? BigNumber(binanceVolumeUsd).multipliedBy(krwByUsd ?? 0) : undefined;
-      const volumeLabel = (
-        <div className="flex flex-col items-end gap-x-2 text-right Font_data_14px_num">
-          <div>{formatKRW(upbitVolumeKrw, { fixDp: true, compact: true })}</div>
-          <div className="text-caption">{formatKRW(binanceVolumeKrw, { fixDp: true, compact: true })}</div>
-        </div>
-      );
-
-      const isWatchList = watchListSymbols.has(symbol);
-      const updateWatchListButton = (
-        <button type="button" onClick={() => onToggleWatchList(symbol)}>
-          <AppSymbolSVG className={`w-4 h-4 ${isWatchList ? 'text-primary' : 'text-caption'}`} />
-          <span className="sr-only">즐겨찾기 {isWatchList ? '해제' : '추가'}</span>
-        </button>
-      )
-
-      return {
-        id: item.market,
-        symbol: symbol,
-        koreanName,
-        symbolLabel,
-        price: upbitPrice,
-        priceLabel,
-        premium: premium ?? BigNumber(0),
-        premiumLabel,
-        volume: upbitVolume,
-        volumeLabel,
-        isWatchList,
-        updateWatchListButton,
-      };
-    
-    }) ?? [];
-  }, [krwByUsd, upbitPriceData, binancePriceData, onToggleWatchList, watchListSymbols]);
-
+  /**
+   * 
+   * @description filter table rows
+   */
   const [showAllPremiumRows, setShowAllPremiumRows] = useState<boolean>(false);
 
   const usingPremiumRows = useMemo<readonly KimchiPremiumTableRow[]>(() => {
@@ -214,10 +187,6 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps)
    * @description loading
    */
   const isTableLoading = useMemo(() => !upbitMarketData || !binanceMarketData || isUpbitPriceLoading || isBinancePriceLoading, [upbitMarketData, binanceMarketData, isUpbitPriceLoading, isBinancePriceLoading]);
-
-    const [baseExchange, setBaseExchange] = useState<BaseExchange>(Exchanges.UPBIT);
-    const [quoteExchange, setQuoteExchange] = useState<QuoteExchnage>(Exchanges.BINANCE);
-
 
     return (
         <div className="w-full flex flex-col items-center gap-y-20">

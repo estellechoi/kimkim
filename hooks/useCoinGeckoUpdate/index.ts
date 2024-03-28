@@ -10,7 +10,7 @@ const useCoinGeckoUpdate = () => {
     const { data: coinIdsData } = useFetchCoinGeckoCoinIds(0);
 
     useEffect(() => {
-        const data = coinIdsData?.data.reduce<Record<string, CoinGeckoCoinApiData>>((acc, item) => {
+        const data = coinIdsData?.data?.reduce<Record<string, CoinGeckoCoinApiData>>((acc, item) => {
             return { ...acc, [item.symbol.toUpperCase()]: item };
         }, {});
 
