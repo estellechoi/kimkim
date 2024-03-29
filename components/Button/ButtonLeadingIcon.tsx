@@ -8,6 +8,7 @@ const ICON_COLOR_CLASS_DICT: Record<ButtonType, Record<ButtonColor | 'disabled',
     secondary: 'bg-white text-secondary',
     on_secondary: 'bg-secondary text-white',
     disabled: 'bg-white text-disabled',
+    body: 'bg-ground text-body',
   },
   outline: {
     primary: 'text-primary border border-solid border-primary',
@@ -15,6 +16,7 @@ const ICON_COLOR_CLASS_DICT: Record<ButtonType, Record<ButtonColor | 'disabled',
     secondary: 'text-secondary border border-solid border-secondary',
     on_secondary: 'text-white border border-solid border-secondary',
     disabled: 'text-disabled',
+    body: 'text-body border border-solid border-primary',
   },
   text: {
     primary: 'text-primary',
@@ -22,6 +24,7 @@ const ICON_COLOR_CLASS_DICT: Record<ButtonType, Record<ButtonColor | 'disabled',
     secondary: 'text-secondary',
     on_secondary: 'text-white',
     disabled: 'text-disabled',
+    body: 'text-body',
   },
 };
 
@@ -31,18 +34,21 @@ const ICON_INVERT_COLOR_CLASS_DICT: Record<ButtonType, Record<ButtonColor, strin
     on_primary: 'bg-white text-primary',
     secondary: 'bg-secondary text-white',
     on_secondary: 'bg-white text-secondary',
+    body: 'bg-body text-ground',
   },
   outline: {
     primary: 'text-primary border border-solid border-primary',
     on_primary: 'text-white border border-solid border-white',
     secondary: 'text-secondary border border-solid border-secondary',
     on_secondary: 'text-white border border-solid border-secondary',
+    body: 'text-body border border-solid border-body'
   },
   text: {
     primary: 'text-primary',
     on_primary: 'text-white',
     secondary: 'text-secondary',
     on_secondary: 'text-white',
+    body: 'text-body',
   },
 };
 

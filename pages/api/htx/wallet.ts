@@ -23,7 +23,7 @@ export interface HtxNetworkApiData {
   minWithdrawAmt: string;
   numOfConfirmations: number;
   numOfFastConfirmations: number;
-  withdrawFeeType: string;
+  withdrawFeeType: 'fixed' | 'circulated' | 'ratio';
   withdrawPrecision: number;
   withdrawQuotaPerDay: string;
   withdrawQuotaPerYear: string;

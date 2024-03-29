@@ -1,6 +1,7 @@
 import Table from "@/components/Table";
 import BigNumber from "bignumber.js";
 import { TableRowData } from "../Table/types";
+import StatusDot from "../StatusDot";
 
 export interface KimchiPremiumTableRow extends TableRowData {
     symbol: string;
@@ -40,12 +41,24 @@ const KimchiPremiumTable = ({ rows, isLoading }: KimchiPremiumTableProps) => {
             widthRatio: 14,
           },
           {
-            label: '입출금 네트워크',
+            label: '네트워크 수수료',
             value: 'walletLabel',
             type: 'jsx',
             sortType: 'string',
             sortValue: 'koreanName',
-            widthRatio: 20,
+            widthRatio: 32,
+            tooltipContent: (
+              <div className="flex flex-col gap-y-1 Font_body_xs">
+                <div className="flex items-center gap-x-2">
+                  <StatusDot status="success" />
+                  <span>입/출금 가능</span>
+                </div>
+                <div className="flex items-center gap-x-2">
+                  <StatusDot status="neutral" />
+                  <span>입/출금 불가</span>
+                </div>
+              </div>
+            )
           },
           {
             label: '가격',

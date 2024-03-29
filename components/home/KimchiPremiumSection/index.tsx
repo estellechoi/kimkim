@@ -9,7 +9,7 @@ import { useFetcHtxPrice, useFetcHtxWalletStatus, useFetchBinacePrice, useFetchB
 import { useAtom } from 'jotai';
 import { useEffect, useMemo, useState } from 'react';
 import Card from '@/components/Card';
-import ErrorTag from '@/components/tags/ErrorTag';
+import ExchangeDataWarningTag from '@/components/tags/ExchangeDataWarningTag';
 import { CoinGeckoCoinApiData } from '@/pages/api/coingecko/coins';
 import useCoinGeckoPriceUpdate from '@/hooks/useCoinGeckoPriceUpdate';
 import Button from '@/components/Button';
@@ -226,7 +226,7 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps)
         <div className="w-full flex flex-col items-center gap-y-20">
           {watchListTableRows.length > 0 && <section className="w-full max-w-app_container space-y-2 px-page_x">
             <div className="flex justify-between items-center gap-x-10">
-              <div className="text-caption Font_label_12px p-4" >내 즐겨찾기 {isDataError && <ErrorTag className="ml-2" />}</div>
+              <div className="text-caption Font_label_12px p-4" >내 즐겨찾기 {isDataError && <ExchangeDataWarningTag className="ml-2" />}</div>
               
               <div className="flex items-center gap-x-4">
                 <ExchangeDropDownPair baseExchange={baseExchange} onBaseExchangeChange={setBaseExchange} quoteExchange={quoteExchange} onQuoteExchangeChange={setQuoteExchange} />
@@ -243,7 +243,7 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps)
 
           <section className="w-full max-w-app_container space-y-2 px-page_x">
             <div className="flex justify-between items-center gap-x-10">
-              <div className="text-caption Font_label_12px p-4" >김치 프리미엄 {isDataError && <ErrorTag className="ml-2" />}</div>
+              <div className="text-caption Font_label_12px p-4" >김치 프리미엄 {isDataError && <ExchangeDataWarningTag className="ml-2" />}</div>
               
               <div className="flex items-center gap-x-4">
                 <ExchangeDropDownPair baseExchange={baseExchange} onBaseExchangeChange={setBaseExchange} quoteExchange={quoteExchange} onQuoteExchangeChange={setQuoteExchange} />
@@ -258,7 +258,7 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps)
             </Card>
 
             {hiddenRowsLength > 0 && <div className="flex justify-center">
-              <Button color="secondary" size="sm" iconType={showAllPremiumRows ? 'expand_less' : 'expand_more'} label={`${hiddenRowsLength}개 더보기`} onClick={() => setShowAllPremiumRows(!showAllPremiumRows)} />
+              <Button color="body" size="sm" iconType={showAllPremiumRows ? 'expand_less' : 'expand_more'} label={`${hiddenRowsLength}개 더보기`} onClick={() => setShowAllPremiumRows(!showAllPremiumRows)} />
             </div>}
           </section>
         </div>

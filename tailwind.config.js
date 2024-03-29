@@ -90,7 +90,7 @@ module.exports = {
         ground_effected: 'var(--color-sky400)',
         body: 'var(--color-body)',
         caption: 'var(--color-gray500)',
-        caption_on_primary: 'var(--color-gray300)',
+        caption_on_primary: 'var(--color-gray400)',
         effected: 'var(--color-blue400)',
         effected_varient_light: 'var(--color-blue200)',
         effected_whitened: 'var(--color-sky400)',

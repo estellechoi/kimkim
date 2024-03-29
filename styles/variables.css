@@ -140,8 +140,8 @@
     --color-on_primary: var(--color-black);
     --color-glass: var(--color-black-o10);
     --color-body: var(--color-white);
-    --color-secondary: var(--color-black);
-    --color-on_secondary: var(--color-white);
+    --color-secondary: var(--color-neon400);
+    --color-on_secondary: var(--color-black);
 }
 
 :root {

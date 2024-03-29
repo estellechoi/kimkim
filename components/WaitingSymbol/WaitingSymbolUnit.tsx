@@ -4,6 +4,7 @@ const COLOR_CLASS_DICT: Record<WaitingSymbolColor, string> = {
   caption: 'bg-caption',
   primary: 'bg-primary',
   secondary: 'bg-secondary',
+  body: 'bg-body',
 };
 
 const WaitingSymbolUnit = ({ color, className }: { color: WaitingSymbolColor; className?: string }) => {

@@ -4,7 +4,7 @@ import Main from '@/components/Main';
 import MobileAppLaunchSection from '@/components/home/MobileAppLaunchSection';
 import useUserAgent from '@/hooks/useUserAgent';
 import Card from '@/components/Card';
-import ErrorTag from '@/components/tags/ErrorTag';
+import ExchangeDataWarningTag from '@/components/tags/ExchangeDataWarningTag';
 import BigNumber from 'bignumber.js';
 import { useAtom } from 'jotai';
 import { currencyExchangeRateAtom } from '@/store/states';
@@ -101,7 +101,7 @@ const Home: NextPage = () => {
         <Main className="flex flex-col items-center gap-y-20 min-h-screen pt-app_header_height pb-page_bottom">
           <section className="w-full max-w-app_container space-y-2 px-page_x mt-20">
             <div className="flex justify-between items-center gap-x-10">
-              <div className="text-caption Font_label_12px p-4" >환율 {krwByUsd === undefined && <ErrorTag className="ml-2" />}</div>
+              <div className="text-caption Font_label_12px p-4" >환율 {krwByUsd === undefined && <ExchangeDataWarningTag className="ml-2" />}</div>
               {currencyExchangeRate.lastUpdatedTime ? (
                 <div className="text-caption Font_caption_xs p-4" >{formatDate(currencyExchangeRate.lastUpdatedTime, TimeTick.TIME, Languages.KR)}</div>
               ) : (

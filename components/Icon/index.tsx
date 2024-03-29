@@ -23,6 +23,7 @@ import {
   MdSearch,
   MdAdd,
   MdLocalFireDepartment,
+  MdCoffee,
 } from 'react-icons/md';
 import { FaGithub } from 'react-icons/fa';
 
@@ -54,7 +55,8 @@ export type IconType =
   | 'github'
   | 'search'
   | 'add'
-  | 'fire';
+  | 'fire'
+  | 'coffee';
 
 const ICON_SIZE_CLASS_DICT: Record<IconSize, string> = {
   xs: 'w-2 h-2',
@@ -92,6 +94,7 @@ const ICON_DICT: Record<IconType, React.ElementType> = {
   search: MdSearch,
   add: MdAdd,
   fire: MdLocalFireDepartment,
+  coffee: MdCoffee,
 };
 
 type IconProps = {

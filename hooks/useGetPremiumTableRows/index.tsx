@@ -41,7 +41,7 @@ const useGetPremiumTableRows = ({ watchListSymbols, onToggleWatchList, krwByUsd,
           const walletLabel = (
             <div className="flex flex-col gap-y-1">
               <ExchangeNetworkLabel exchange={baseExchange} networks={baseExchangeNetworks} fundType="deposit" />
-              <ExchangeNetworkLabel exchange={quoteExchange} networks={quoteExchangeNetworks} fundType="withdraw" />
+              <ExchangeNetworkLabel exchange={quoteExchange} networks={quoteExchangeNetworks} fundType="withdraw" feeCurrencyPriceKrw={baseExchangePrice} />
             </div>
           );
 

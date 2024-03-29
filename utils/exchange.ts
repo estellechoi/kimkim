@@ -10,7 +10,13 @@ import BigNumber from "bignumber.js";
 export type BaseExchangePriceData = { symbol: string; price: number; volume: number };
 export type QuoteExchangePriceData = { symbol: string; price: number; volume: number };
 
-export type ExchangeWalletData = { networkType: string; status: ExchangeWalletStatus };
+export type ExchangeWalletData = { 
+    networkType: string; 
+    status: ExchangeWalletStatus; 
+    withdrawFeeType: 'fixed' | 'ratio'; 
+    withdrawFee: number | undefined;
+    withdrawFeeCurrency: string;
+};
 
 /**
  * 
@@ -59,6 +65,7 @@ export const reduceQuoteExchangePriceDataFromHtx = (acc: readonly QuoteExchangeP
  */
 export const getExchangeWalletDataFromUpbit = (data: UpbitWalletStatusApiData): readonly ExchangeWalletData[] => {
     const networkType = data.network_name;
+    const withdrawFeeCurrency = data.currency;
 
     let status: ExchangeWalletStatus;
 
@@ -70,7 +77,7 @@ export const getExchangeWalletDataFromUpbit = (data: UpbitWalletStatusApiData): 
         case ('unsupported'): status = ExchangeWalletStatus.UNSUPPORTED;
     }
 
-    return [{ networkType, status }];
+    return [{ networkType, status, withdrawFeeType: 'fixed', withdrawFee: undefined, withdrawFeeCurrency }];
 }
 
 export const getExchangeWalletDataMapFromUpbit = (data: readonly UpbitWalletStatusApiData[]): Record<string, readonly ExchangeWalletData[]> => {
@@ -82,6 +89,8 @@ export const getExchangeWalletDataMapFromUpbit = (data: readonly UpbitWalletStat
 export const getExchangeWalletDataFromBinance = (data: BinanceWalletStatusApiData): readonly ExchangeWalletData[] => {
     return data.networkList.map(network => {
         const networkType = network.network;
+        const withdrawFee = parseFloat(network.withdrawFee);
+        const withdrawFeeCurrency = data.coin;
 
         let status: ExchangeWalletStatus;
 
@@ -95,7 +104,7 @@ export const getExchangeWalletDataFromBinance = (data: BinanceWalletStatusApiDat
             status = ExchangeWalletStatus.PAUSED;
         }
     
-        return { networkType, status };
+        return { networkType, status, withdrawFeeType: 'fixed', withdrawFee, withdrawFeeCurrency };
     });
 }
 
@@ -109,6 +118,11 @@ export const getExchangeWalletDataFromHtx = (data: HtxWalletStatusApiData): read
     return data.chains.map(chain => {
         const networkType = chain.fullName?.length ? chain.fullName : chain.displayName?.length ? chain.displayName : chain.baseChain?.length ? chain.baseChain : chain.baseChainProtocol?.length ? chain.baseChainProtocol : chain.chain.length ? chain.chain : 'Unknown chain';
 
+        const withdrawFeeType = chain.withdrawFeeType === 'ratio' ? 'ratio' : 'fixed';
+        const appliedWithrawFee = chain.withdrawFeeType === 'fixed' ? chain.transactFeeWithdraw : chain.withdrawFeeType === 'circulated' ? chain.maxTransactFeeWithdraw : chain.transactFeeRateWithdraw;
+        const withdrawFee = appliedWithrawFee ? parseFloat(appliedWithrawFee) : undefined;
+        const withdrawFeeCurrency = data.currency.toUpperCase();
+
         let status: ExchangeWalletStatus;
 
         if (chain.depositStatus === 'allowed' && chain.withdrawStatus === 'allowed') {
@@ -121,7 +135,7 @@ export const getExchangeWalletDataFromHtx = (data: HtxWalletStatusApiData): read
             status = ExchangeWalletStatus.PAUSED;
         }
     
-        return { networkType, status };
+        return { networkType, status, withdrawFeeType, withdrawFee, withdrawFeeCurrency };
     });
 }
 

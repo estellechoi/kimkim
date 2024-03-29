@@ -8,6 +8,7 @@ export const BUTTON_COLOR_CLASS_DICT: Record<ButtonType, Record<ButtonColor | 'd
     secondary: 'bg-secondary text-white',
     on_secondary: 'bg-white text-secondary',
     disabled: 'bg-disabled text-white',
+    body: 'bg-body text-ground',
   },
   outline: {
     primary: 'bg-transparent text-primary border border-solid border-primary',
@@ -15,6 +16,7 @@ export const BUTTON_COLOR_CLASS_DICT: Record<ButtonType, Record<ButtonColor | 'd
     secondary: 'bg-transparent text-secondary border border-solid border-secondary',
     on_secondary: 'bg-transparent text-white border border-solid border-white',
     disabled: 'bg-transparent text-disabled border border-solid border-disabled',
+    body: 'bg-transparent text-body border border-solid border-body',
   },
   text: {
     primary: 'bg-transparent text-primary',
@@ -22,6 +24,7 @@ export const BUTTON_COLOR_CLASS_DICT: Record<ButtonType, Record<ButtonColor | 'd
     secondary: 'bg-transparent text-secondary',
     on_secondary: 'bg-transparent text-white',
     disabled: 'bg-transparent text-disabled',
+    body: 'bg-transparent text-body'
   },
 };
 
@@ -31,18 +34,21 @@ export const BUTTON_WAITING_SYMBOL_COLOR_DICT: Record<ButtonType, Record<ButtonC
     on_primary: 'primary',
     secondary: 'caption',
     on_secondary: 'secondary',
+    body: 'caption',
   },
   outline: {
     primary: 'primary',
     on_primary: 'caption',
     secondary: 'secondary',
     on_secondary: 'caption',
+    body: 'body',
   },
   text: {
     primary: 'primary',
     on_primary: 'caption',
     secondary: 'secondary',
     on_secondary: 'caption',
+    body: 'body',
   },
 };
 

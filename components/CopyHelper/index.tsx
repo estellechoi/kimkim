@@ -13,7 +13,8 @@ const CopyHelper = ({ children, toCopy, iconPosition = 'right', className = '' }
   const [isCopied, copy] = useCopyClipboard();
 
   const CopiedIcon = <Icon type="success" />;
-  const CopyIcon = <Icon type="copy" className="Transition_500 transition-opacity opacity-0 group-hover/copy:opacity-80" />;
+  // Transition_500 transition-opacity opacity-0 group-hover/copy:opacity-80
+  const CopyIcon = <Icon type="copy" className="" />;
 
   return (
     <button
