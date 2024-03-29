@@ -5,9 +5,11 @@ import { KimchiPremiumTableRow } from "@/components/tables/KimchiPremiumTable";
 import { formatKRW, formatNumber } from "@/utils/number";
 import BigNumber from "bignumber.js";
 import { useCallback } from "react";
-import { BaseExchangePriceData, QuoteExchangePriceData } from "@/utils/exchange";
+import { BaseExchangePriceData, ExchangeWalletData, QuoteExchangePriceData } from "@/utils/exchange";
 import { useAtom } from "jotai";
 import { tokenKoreanNameMapAtom } from "@/store/states";
+import { BaseExchange, QuoteExchange } from "@/constants/app";
+import ExchangeNetworkLabel from "@/components/labels/ExchangeNetworkLabel";
 
 type UseGetPremiumTableRowsProps = {
     watchListSymbols: Set<string>;
@@ -19,12 +21,29 @@ type UseGetPremiumTableRowsProps = {
 const useGetPremiumTableRows = ({ watchListSymbols, onToggleWatchList, krwByUsd, audByUsd }: UseGetPremiumTableRowsProps) => {
     const [tokenKoreanNameMap] = useAtom(tokenKoreanNameMapAtom);
 
-    const getPremiumTableRows = useCallback((baseExchangeData: readonly BaseExchangePriceData[], quoteExchangeData: readonly QuoteExchangePriceData[]): readonly KimchiPremiumTableRow[] => {
+    const getPremiumTableRows = useCallback((
+      baseExchange: BaseExchange,
+      quoteExchange: QuoteExchange,
+      baseExchangeData: readonly BaseExchangePriceData[], 
+      quoteExchangeData: readonly QuoteExchangePriceData[], 
+      baseExchangeWalletData: Record<string, readonly ExchangeWalletData[]>,
+      quoteExchangeWalletData: Record<string, readonly ExchangeWalletData[]>,
+    ): readonly KimchiPremiumTableRow[] => {
         // map table rows
         return baseExchangeData.map(item => {
           const { symbol, price: baseExchangePrice, volume: baseExchangeVolume } = item;
 
           const koreanName = tokenKoreanNameMap?.[symbol] ?? symbol;
+
+          const baseExchangeNetworks: readonly ExchangeWalletData[] | undefined  = baseExchangeWalletData[symbol];
+          const quoteExchangeNetworks: readonly ExchangeWalletData[] | undefined  = quoteExchangeWalletData[symbol];
+
+          const walletLabel = (
+            <div className="flex flex-col gap-y-1">
+              <ExchangeNetworkLabel exchange={baseExchange} networks={baseExchangeNetworks} fundType="deposit" />
+              <ExchangeNetworkLabel exchange={quoteExchange} networks={quoteExchangeNetworks} fundType="withdraw" />
+            </div>
+          );
 
           const symbolLabel = (
             <div className="flex items-center gap-x-2">
@@ -41,7 +60,7 @@ const useGetPremiumTableRows = ({ watchListSymbols, onToggleWatchList, krwByUsd,
           const quoteExchangePriceKrw = quoteExchangePrice ? BigNumber(quoteExchangePrice).multipliedBy(krwByUsd ?? 0) : undefined;
     
           const priceLabel = (
-            <div className="flex flex-col items-end gap-x-2 text-right Font_data_14px_num">
+            <div className="flex flex-col items-end gap-y-0.5 text-right Font_data_14px_num">
               <div>{formatKRW(baseExchangePrice, { fixDp: true })}</div>
               <div className="text-caption">{formatKRW(quoteExchangePriceKrw, { fixDp: true })}</div>
             </div>
@@ -62,7 +81,7 @@ const useGetPremiumTableRows = ({ watchListSymbols, onToggleWatchList, krwByUsd,
     
           const quoteExchangeVolumeKrw = quoteExchangeVolume ? BigNumber(quoteExchangeVolume).multipliedBy(krwByUsd ?? 0) : undefined;
           const volumeLabel = (
-            <div className="flex flex-col items-end gap-x-2 text-right Font_data_14px_num">
+            <div className="flex flex-col items-end gap-y-0.5 text-right Font_data_14px_num">
               <div>{formatKRW(baseExchangeVolume, { fixDp: true, compact: true })}</div>
               <div className="text-caption">{formatKRW(quoteExchangeVolumeKrw, { fixDp: true, compact: true })}</div>
             </div>
@@ -80,6 +99,7 @@ const useGetPremiumTableRows = ({ watchListSymbols, onToggleWatchList, krwByUsd,
             id: symbol,
             symbol: symbol,
             koreanName,
+            walletLabel,
             symbolLabel,
             price: baseExchangePrice,
             priceLabel,

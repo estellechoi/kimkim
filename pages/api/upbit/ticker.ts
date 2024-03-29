@@ -35,10 +35,11 @@ const handler = async (
     res: NextApiResponse<any>
   ) => {
     const response = await axiosUpbitClient
-      .get<readonly UpbitTickerApiData[]>('/v1/ticker', { params: req.query });
+      .get<readonly UpbitTickerApiData[]>('/v1/ticker', { params: req.query }).catch(err => {
+        return { status: err.response?.status, data: err.response?.data };
+      });
 
-    const status = response.status === 0 ? 200 : response.status;
-    res.status(status).json(response.data);
+    res.status(response.status ?? 500).json(response.data);
   };
   
   export default handler;

@@ -2,7 +2,7 @@
 
 ## 1. Overview
 
-![Overview](./draft_overview.png "Overview")
+![Overview](./kimkim_overview.png "Overview")
 
 ## 2. Run locally
 

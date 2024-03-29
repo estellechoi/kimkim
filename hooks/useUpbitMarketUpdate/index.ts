@@ -1,13 +1,11 @@
 import { useFetchUpbitMarket, useFetchUpbitWalletStatus } from "@/data/hooks";
 import { UpbitMarketApiData } from "@/pages/api/upbit/market";
-import { UpbitWalletStatusApiData } from "@/pages/api/upbit/wallet";
-import { tokenKoreanNameMapAtom, upbitMarketDataAtom, upbitWalletStatusAtom } from "@/store/states";
+import { tokenKoreanNameMapAtom, upbitMarketDataAtom } from "@/store/states";
 import { useAtom } from "jotai";
 import { useEffect } from "react";
 
 const useUpbitMarketUpdate = () => {
     const { data: upbitMarketData } = useFetchUpbitMarket(0);
-    const { data: upbitWalletStatus } = useFetchUpbitWalletStatus(0);
 
     const [, setUpbitMarketData] = useAtom(upbitMarketDataAtom);
     const [tokenKoreanNameMap, setTokenKoreanNameMap] = useAtom(tokenKoreanNameMapAtom);
@@ -28,14 +26,15 @@ const useUpbitMarketUpdate = () => {
         setUpbitMarketData(data);
     }, [upbitMarketData]);
 
-    const [, setUpbitWalletStatus] = useAtom(upbitWalletStatusAtom);
+    // const [, setUpbitWalletStatus] = useAtom(upbitWalletStatusAtom);
 
-    useEffect(() => {
-        const data = upbitWalletStatus?.data?.reduce<Record<string, UpbitWalletStatusApiData>>((acc, item) => {
-            return { ...acc, [item.currency]: item };
-        }, {});
-        setUpbitWalletStatus(data);
-    }, [upbitWalletStatus]);
+    // useEffect(() => {
+    //     const data = upbitWalletStatus?.data?.reduce<Record<string, { networkType: string; status: ExchangeWalletStatus }>>((acc, item) => {
+    //         return { ...acc, [item.currency]: getExchangeWalletDataFromUpbit(item) };
+    //     }, {});
+
+    //     setUpbitWalletStatus(data);
+    // }, [upbitWalletStatus]);
 }
 
 export default useUpbitMarketUpdate;

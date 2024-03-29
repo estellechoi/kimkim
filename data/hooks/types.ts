@@ -63,3 +63,49 @@ export interface BinanceTickerApiData {
     lastId: number;  // Last tradeId
     count: number;
 }
+
+export interface BinanceNetworkApiData {
+    addressRegex: string;
+    coin: string;
+    depositDesc?: string;
+    depositEnable?: boolean;
+    isDefault: boolean;
+    memoRegex: string;
+    minConfirm: number;
+    name: string;
+    network: string;
+    resetAddressStatus: boolean;
+    specialTips: string;
+    unLockConfirm: number;
+    withdrawDesc?: string;
+    withdrawEnable: boolean;
+    withdrawFee: string;
+    withdrawIntegerMultiple: string;
+    withdrawMax: string;
+    withdrawMin: string;
+    sameAddress: boolean;
+    estimatedArrivalTime: number;
+    busy: boolean;
+  };
+  
+  export interface BinanceWalletStatusApiData {
+    coin: string;
+    depositAllEnable: boolean;
+    free: string;
+    freeze: string;
+    ipoable: string;
+    ipoing: string;
+    isLegalMoney: boolean;
+    locked: string;
+    name: string;
+    networkList: readonly BinanceNetworkApiData[];
+    storage: string;
+    trading: boolean;
+    withdrawAllEnable: boolean;
+    withdrawing: string;
+  };
+
+  export interface BinanceSystemStatusApiData {
+    status: 0 | 1; // 0: normal，1：system maintenance
+    msg: 'normal' | 'system_maintenance';
+  };

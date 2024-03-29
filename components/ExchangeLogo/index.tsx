@@ -37,7 +37,7 @@ const ExchangeLogo = ({ exchange, size = 'md', logoURL: injectedLogoURL }: Excha
   const opacityClassName = `transition-opacity ${isLoaded ? 'opacity-100' : 'opacity-0'}`;
 
   return !isError && renderingLogoURL ? (
-    <div className="relative">
+    <div className="Component grow-0 shrink-0 relative">
       <Image
         alt={`${ExchangeLogo} logo`}
         src={renderingLogoURL}

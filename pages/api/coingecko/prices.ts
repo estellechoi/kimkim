@@ -33,9 +33,11 @@ export interface CoinGeckoCoinPriceApiData {
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const response = await coingeckoAxiosClient
-    .get<readonly CoinGeckoCoinPriceApiData[]>('/coins/markets', { params: { ...req.query, vs_currency: 'USD' } });
+    .get<readonly CoinGeckoCoinPriceApiData[]>('/coins/markets', { params: { ...req.query, vs_currency: 'USD' } }).catch(err => {
+      return { status: err.response?.status, data: err.response?.data };
+    });
 
-    res.status(response.status).json(response.data);
+    res.status(response.status ?? 500).json(response.data);
 };
 
 export default handler;

@@ -1,11 +1,11 @@
 import { NotiStatus } from "@/types/noti";
 import { ReactNode } from "react";
-import { COLOR_CLASSNAMES_DICT } from "./constants";
+import { NOTI_COLOR_CLASSNAMES_DICT } from "@/components/styles";
 
 type PollingDotProps = { children: ReactNode; status?: NotiStatus };
 
 const PollingDot = ({ children, status = 'neutral' }: PollingDotProps) => {
-    const { background: backgroundClassName } = COLOR_CLASSNAMES_DICT[status];
+    const { background: backgroundClassName } = NOTI_COLOR_CLASSNAMES_DICT[status];
     
     return (
         <div

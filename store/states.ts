@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { Fiats, LOCAL_STORAGE_KEYS, TokenSymbols } from '@/constants/app';
+import { ExchangeWalletStatus, Fiats, LOCAL_STORAGE_KEYS, TokenSymbols } from '@/constants/app';
 import type { ConnectedWallet } from '@/types/wallet';
 import apolloClients, { type AppApolloClients } from '@/data/graphql/apolloClients';
 import { UpbitMarketApiData } from '@/pages/api/upbit/market';
@@ -53,7 +53,7 @@ export const userAgentAtom = atom<
 export const tokenKoreanNameMapAtom = atom<Record<string, string> | undefined>(undefined);
 
 export const upbitMarketDataAtom = atom<Record<string, UpbitMarketApiData> | undefined>(undefined);
-export const upbitWalletStatusAtom = atom<Record<string, UpbitWalletStatusApiData> | undefined>(undefined);
+export const upbitWalletStatusAtom = atom<Record<string, { networkType: string; status: ExchangeWalletStatus }> | undefined>(undefined);
 
 export const binanceMarketDataAtom = atom<Record<string, BinanceMarketSymbolDetailApiData> | undefined>(undefined);
 

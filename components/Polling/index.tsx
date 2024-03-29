@@ -2,7 +2,7 @@ import { NotiStatus } from '@/types/noti'
 import { useEffect, useState } from 'react'
 import PollingDot from './PollingDot'
 import PollingSpinner from './PollingSpinner'
-import { COLOR_CLASSNAMES_DICT } from './constants'
+import { NOTI_COLOR_CLASSNAMES_DICT } from '@/components/styles';
 
 type PollingProps = {
   formattedNumber?: string
@@ -30,7 +30,7 @@ const Polling = ({
     return () => clearTimeout(mountingTimer)
   }, [formattedNumber])
 
-  const { text: textClassName } = COLOR_CLASSNAMES_DICT[status];
+  const { text: textClassName } = NOTI_COLOR_CLASSNAMES_DICT[status];
 
   return (
     <div

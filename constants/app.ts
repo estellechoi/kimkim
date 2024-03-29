@@ -102,6 +102,17 @@ export type QuoteExchange = Exchanges.BINANCE | Exchanges.HTX;
 export const BASE_EXCHANGES: readonly BaseExchange[] = [Exchanges.UPBIT];
 export const QUOTE_EXCHANGES: readonly QuoteExchange[] = [Exchanges.BINANCE, Exchanges.HTX];
 
+/**
+ * 
+ * @description exchange wallet status
+ */
+export enum ExchangeWalletStatus {
+  WORKING = '가능',
+  WITHDRAW_ONLY = '출금만',
+  DEPOSIT_ONLY = '입금만',
+  PAUSED = '정지',
+  UNSUPPORTED = '미지원',
+}
 
 /**
  *

@@ -13,8 +13,11 @@ const handler = async (
       ...authHeaders,
     };
 
-    const response = await axiosBithumbClient.get<any>(endpoint);
-    res.status(response.status).json(response.data);
+    const response = await axiosBithumbClient.get<any>(endpoint).catch(err => {
+      return { status: err.response?.status, data: err.response?.data };
+    });
+
+    res.status(response.status ?? 500).json(response.data);
   };
   
   export default handler;

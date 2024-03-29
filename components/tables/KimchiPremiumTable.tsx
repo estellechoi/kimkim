@@ -6,6 +6,7 @@ export interface KimchiPremiumTableRow extends TableRowData {
     symbol: string;
     symbolLabel: JSX.Element | string;
     koreanName: string;
+    walletLabel: JSX.Element;
     price: number;
     priceLabel: JSX.Element | string;
     premium: BigNumber;
@@ -36,6 +37,15 @@ const KimchiPremiumTable = ({ rows, isLoading }: KimchiPremiumTableProps) => {
             type: 'jsx',
             sortType: 'string',
             sortValue: 'koreanName',
+            widthRatio: 14,
+          },
+          {
+            label: '입출금 네트워크',
+            value: 'walletLabel',
+            type: 'jsx',
+            sortType: 'string',
+            sortValue: 'koreanName',
+            widthRatio: 20,
           },
           {
             label: '가격',
@@ -44,7 +54,6 @@ const KimchiPremiumTable = ({ rows, isLoading }: KimchiPremiumTableProps) => {
             sortType: 'number',
             sortValue: 'price',
             align: 'right',
-            widthRatio: 20,
           },
           {
             label: '프리미엄',
@@ -53,7 +62,7 @@ const KimchiPremiumTable = ({ rows, isLoading }: KimchiPremiumTableProps) => {
             sortType: 'bignumber',
             sortValue: 'premium',
             align: 'right',
-            widthRatio: 20,
+            widthRatio: 14,
           },
           {
             label: '24시간 거래량',
@@ -62,7 +71,7 @@ const KimchiPremiumTable = ({ rows, isLoading }: KimchiPremiumTableProps) => {
             sortType: 'number',
             sortValue: 'volume',
             align: 'right',
-            widthRatio: 30,
+            widthRatio: 20,
           },
           {
             label: '',

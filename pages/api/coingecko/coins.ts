@@ -9,9 +9,11 @@ export interface CoinGeckoCoinApiData {
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const response = await coingeckoAxiosClient
-    .get<readonly CoinGeckoCoinApiData[]>('/coins/list', { params: req.query });
+    .get<readonly CoinGeckoCoinApiData[]>('/coins/list', { params: req.query }).catch(err => {
+      return { status: err.response?.status, data: err.response?.data };
+    });
 
-    res.status(response.status).json(response.data);
+    res.status(response.status ?? 500).json(response.data);
 };
 
 export default handler;

@@ -1,6 +1,6 @@
 import axios, { AxiosError, type AxiosResponse } from "axios";
 import { useQuery } from "@tanstack/react-query";
-import type { BinanceMarketApiData, BinanceTickerApiData, ExchangeRateApiData } from "./types";
+import type { BinanceMarketApiData, BinanceSystemStatusApiData, BinanceTickerApiData, BinanceWalletStatusApiData, ExchangeRateApiData } from "./types";
 import type { UpbitTickerApiData } from "@/pages/api/upbit/ticker";
 import { UpbitMarketApiData } from "@/pages/api/upbit/market";
 import { CMCIdMapItemApiData } from "@/pages/api/cmc/idmap";
@@ -11,7 +11,8 @@ import { CoinGeckoCoinApiData } from "@/pages/api/coingecko/coins";
 import { CoinGeckoCoinPriceApiData } from "@/pages/api/coingecko/prices";
 import { HtxApiResponse, HtxMarketApiData } from "@/pages/api/htx/ticker";
 import { UpbitWalletStatusApiData } from "@/pages/api/upbit/wallet";
-
+import { HmacSHA256 } from 'crypto-js';
+import { HtxWalletStatusApiData } from "@/pages/api/htx/wallet";
 
 /**
  * 
@@ -154,16 +155,74 @@ export const useFetchBinacePrice = (refetchInterval: number | null, symbols: rea
     });
 };
 
+export const useFetchBinaceSystemStatus = (refetchInterval: number | null) => {
+    const queryKey = ['fetchBinaceSystemStatus'];
+
+    return useQuery<AxiosResponse<BinanceSystemStatusApiData | undefined>, AxiosError>({
+        queryFn: () => binanceAxiosClient.get<BinanceSystemStatusApiData | undefined>('/sapi/v1/system/status'),
+        queryKey,
+        refetchInterval: refetchInterval ?? 0,
+        enabled: refetchInterval !== null,
+    });
+};
+
+
+const getBinanceAuthorizedHeaders = (): Record<string, string> => {
+    const binanceApiKey = process.env.NEXT_PUBLIC_BINANCE_API_ACCESS_KEY ?? '';
+    return {
+        'X-MBX-APIKEY': binanceApiKey,
+    };
+}
+
+const getBinanceSignaturedParams = (params: Record<string, string>): { signature: string; [key: string]: string } => {
+    const binanceSecretKey = process.env.NEXT_PUBLIC_BINANCE_API_SECRET_KEY ?? '';
+    const paramsJoint = Object.keys(params).sort().map(key => `${key}=${params[key]}`).join('&');
+    const payload = Buffer.from(paramsJoint).toString('ascii');
+    const signature = HmacSHA256(payload, binanceSecretKey).toString();
+    const encodedSignature = Buffer.from(signature).toString('base64');
+
+    return { ...params, signature: encodedSignature };
+}
+
+export const useFetchBinaceWalletStatus = (refetchInterval: number | null) => {
+    const queryKey = ['fetchBinaceWalletStatus'];
+
+    const timestamp = new Date().getTime().toString();
+    const signaturedParams = getBinanceSignaturedParams({ timestamp });
+
+    const authorizedHeaders = getBinanceAuthorizedHeaders();
+    Object.keys(authorizedHeaders).forEach(key => {
+        binanceAxiosClient.defaults.headers[key] = authorizedHeaders[key];
+    });
+
+    return useQuery<AxiosResponse<readonly BinanceWalletStatusApiData[] | undefined>, AxiosError>({
+        queryFn: () => binanceAxiosClient.get<readonly BinanceWalletStatusApiData[] | undefined>('/sapi/v1/capital/config/getall', { params: signaturedParams }),
+        queryKey,
+        refetchInterval: refetchInterval ?? 0,
+        enabled: refetchInterval !== null,
+    });
+};
+
 /**
  * 
  * @description htx api fetching
  */
-
 export const useFetcHtxPrice = (refetchInterval: number | null) => {
     const queryKey = ['fetcHtxPrice'];
 
     return useQuery<AxiosResponse<HtxApiResponse<readonly HtxMarketApiData[]> | undefined>, AxiosError>({
         queryFn: () => axios.get<HtxApiResponse<readonly HtxMarketApiData[]> | undefined>('/api/htx/ticker'),
+        queryKey,
+        refetchInterval: refetchInterval ?? 0,
+        enabled: refetchInterval !== null,
+    });
+};
+
+export const useFetcHtxWalletStatus = (refetchInterval: number | null) => {
+    const queryKey = ['fetcHtxWalletStatus'];
+
+    return useQuery<AxiosResponse<HtxApiResponse<readonly HtxWalletStatusApiData[]> | undefined>, AxiosError>({
+        queryFn: () => axios.get<HtxApiResponse<readonly HtxWalletStatusApiData[]> | undefined>('/api/htx/wallet'),
         queryKey,
         refetchInterval: refetchInterval ?? 0,
         enabled: refetchInterval !== null,

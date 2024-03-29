@@ -5,7 +5,7 @@ import KimchiPremiumTable, { KimchiPremiumTableRow } from '@/components/tables/K
 import useWatchListSymbols from '@/hooks/useWatchListSymbols';
 import ExchangeDropDownPair from '@/components/drop-downs/ExchangeDropDownPair';
 import { binanceMarketDataAtom, coinGeckoCoinIdMapAtom, upbitMarketDataAtom } from '@/store/states';
-import { useFetcHtxPrice, useFetchBinacePrice, useFetchUpbitPrice } from '@/data/hooks';
+import { useFetcHtxPrice, useFetcHtxWalletStatus, useFetchBinacePrice, useFetchBinaceSystemStatus, useFetchBinaceWalletStatus, useFetchUpbitPrice, useFetchUpbitWalletStatus } from '@/data/hooks';
 import { useAtom } from 'jotai';
 import { useEffect, useMemo, useState } from 'react';
 import Card from '@/components/Card';
@@ -15,7 +15,7 @@ import useCoinGeckoPriceUpdate from '@/hooks/useCoinGeckoPriceUpdate';
 import Button from '@/components/Button';
 import { BaseExchange, Exchanges, QuoteExchange } from '@/constants/app';
 import useGetPremiumTableRows from '@/hooks/useGetPremiumTableRows';
-import { BaseExchangePriceData, QuoteExchangePriceData, reduceBaseExchangePriceDataFromUpbit, reduceQuoteExchangePriceDataFromBinance, reduceQuoteExchangePriceDataFromHtx } from '@/utils/exchange';
+import { BaseExchangePriceData, ExchangeWalletData, QuoteExchangePriceData, getExchangeWalletDataMapFromBinance, getExchangeWalletDataMapFromHtx, getExchangeWalletDataMapFromUpbit, reduceBaseExchangePriceDataFromUpbit, reduceQuoteExchangePriceDataFromBinance, reduceQuoteExchangePriceDataFromHtx } from '@/utils/exchange';
 import { AxiosError } from 'axios';
 
 type KimchiPremiumSectionProps = {
@@ -25,7 +25,7 @@ type KimchiPremiumSectionProps = {
 
 const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps) => {
   const [baseExchange, setBaseExchange] = useState<BaseExchange>(Exchanges.UPBIT);
-  const [quoteExchange, setQuoteExchange] = useState<QuoteExchange>(Exchanges.BINANCE);
+  const [quoteExchange, setQuoteExchange] = useState<QuoteExchange>(Exchanges.HTX);
 
   /**
    * 
@@ -39,6 +39,8 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps)
   const fetchUpbitPriceData = baseExchange === Exchanges.UPBIT && upbitSymbols.length > 0;
   const { data: upbitPriceData, error: upbitPriceError, isLoading: isUpbitPriceLoading } = useFetchUpbitPrice(fetchUpbitPriceData ? 3000 : null, upbitSymbols);
 
+  const { data: upbitWalletStatusData, error: upbitWalletStatusError } = useFetchUpbitWalletStatus(fetchUpbitPriceData ? 0 : null);
+
   /**
    * 
    * @description binance data
@@ -51,29 +53,34 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps)
   const fetchBinancePriceData = quoteExchange === Exchanges.BINANCE && binanceSymbols.length > 0;
   const { data: binancePriceData, error: binancePriceError, isLoading: isBinancePriceLoading } = useFetchBinacePrice(fetchBinancePriceData ? binancePriceDataInterval : null, binanceSymbols);
 
+  // const { data: binanceSystemStatusData } = useFetchBinaceSystemStatus(0);
+  const { data: binanceWalletStatusData, error: binanceWalletStatusError } = useFetchBinaceWalletStatus(fetchBinancePriceData ? 0 : null);
+
   useEffect(() => {
     let retryTimer: NodeJS.Timeout;
 
-    if (binancePriceError?.response?.status === 429 || binancePriceError?.response?.status === 418) {
+    if (binancePriceError?.response?.status === 429 || binancePriceError?.response?.status === 418 || binanceWalletStatusError?.response?.status === 429 || binanceWalletStatusError?.response?.status === 418) {
       setBinancePriceInterval(null);
       const retryAfter = binancePriceError?.response?.headers['Retry-After'];
       retryTimer = setTimeout(() => setBinancePriceInterval(3000), parseInt(retryAfter) * 1000);
     }
 
     return () => clearTimeout(retryTimer);
-  }, [binancePriceError?.response]);
+  }, [binancePriceError?.response, binanceWalletStatusError?.response]);
 
   /**
    * @description htx data 
    * 
    */
   const fetchHtxPriceData = quoteExchange === Exchanges.HTX;
-  const { data: htxPriceData, error: htxPriceError } = useFetcHtxPrice(fetchHtxPriceData ? 3000 : null);
-  useEffect(() => {
-    console.log('htxPriceData', htxPriceData);
-    const ont = htxPriceData?.data?.data?.find(item => item.symbol === 'ontusdt');
-    console.log('ont', ont);
-  }, [htxPriceData])
+  const { data: htxPriceData, error: htxPriceError, isLoading: isHtxPriceLoading } = useFetcHtxPrice(fetchHtxPriceData ? 3000 : null);
+
+  const { data: htxWalletStatusData, error: HtxWalletStatusError } = useFetcHtxWalletStatus(fetchHtxPriceData ? 0 : null);
+
+  // useEffect(() => {
+  //   const ardr = htxPriceData?.data?.data?.find(item => item.symbol === 'ardrusdt');
+  //   console.log('ardr', ardr);
+  // }, [htxPriceData])
 
   /**
    * 
@@ -138,9 +145,23 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps)
     }
   }, [quoteExchange, binancePriceData, htxPriceData?.data]);
 
+
+  const mappedBaseExchangeWalletData = useMemo<Record<string, readonly ExchangeWalletData[]>>(() => {
+    switch (baseExchange) {
+      case Exchanges.UPBIT: return upbitWalletStatusData?.data ? getExchangeWalletDataMapFromUpbit(upbitWalletStatusData.data) : {};
+    }
+  }, [baseExchange, upbitWalletStatusData]);
+
+  const mappedQuoteExchangeWalletData = useMemo<Record<string, readonly ExchangeWalletData[]>>(() => {
+    switch (quoteExchange) {
+      case Exchanges.BINANCE: return binanceWalletStatusData?.data ? getExchangeWalletDataMapFromBinance(binanceWalletStatusData.data) : {};
+      case Exchanges.HTX: return htxWalletStatusData?.data?.data ? getExchangeWalletDataMapFromHtx(htxWalletStatusData.data.data) : {};
+    }
+  }, [quoteExchange, binanceWalletStatusData, htxWalletStatusData]);
+
   const premiumTableRows = useMemo<readonly KimchiPremiumTableRow[]>(() => 
-    getPremiumTableRows(mappedBaseExchangePriceData, mappedQuoteExchangePriceData)
-  , [mappedBaseExchangePriceData, mappedQuoteExchangePriceData, getPremiumTableRows]);
+    getPremiumTableRows(baseExchange, quoteExchange, mappedBaseExchangePriceData, mappedQuoteExchangePriceData, mappedBaseExchangeWalletData, mappedQuoteExchangeWalletData)
+  , [baseExchange, quoteExchange, mappedBaseExchangePriceData, mappedQuoteExchangePriceData, mappedBaseExchangeWalletData, mappedQuoteExchangeWalletData, getPremiumTableRows]);
 
   /**
    * 
@@ -186,7 +207,20 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps)
    * 
    * @description loading
    */
-  const isTableLoading = useMemo(() => !upbitMarketData || !binanceMarketData || isUpbitPriceLoading || isBinancePriceLoading, [upbitMarketData, binanceMarketData, isUpbitPriceLoading, isBinancePriceLoading]);
+  const isBaseExchangeDataLoading = useMemo<boolean>(() => {
+    switch (baseExchange) {
+      case Exchanges.UPBIT: return !upbitPriceData || isUpbitPriceLoading;
+    }
+  }, [baseExchange, upbitPriceData, isUpbitPriceLoading]);
+
+  const isQuoteExchangeDataLoading = useMemo<boolean>(() => {
+    switch (quoteExchange) {
+      case Exchanges.BINANCE: return !binanceMarketData || isBinancePriceLoading;
+      case Exchanges.HTX: return isHtxPriceLoading;
+    }
+  }, [quoteExchange, binanceMarketData, isBinancePriceLoading, isHtxPriceLoading]);
+
+  const isTableLoading = useMemo<boolean>(() => isBaseExchangeDataLoading || isQuoteExchangeDataLoading, [isBaseExchangeDataLoading, isQuoteExchangeDataLoading]);
 
     return (
         <div className="w-full flex flex-col items-center gap-y-20">

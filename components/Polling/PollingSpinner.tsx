@@ -1,10 +1,10 @@
 import { NotiStatus } from "@/types/noti";
-import { COLOR_CLASSNAMES_DICT } from "./constants";
+import { NOTI_COLOR_CLASSNAMES_DICT } from "@/components/styles";
 
 type PollingSpinnerProps = { status?: NotiStatus; isMounting?: boolean };
 
 const PollingSpinner = ({ status = 'neutral', isMounting = false }: PollingSpinnerProps) => {
-    const { border: borderClassName } = COLOR_CLASSNAMES_DICT[status];
+    const { border: borderClassName } = NOTI_COLOR_CLASSNAMES_DICT[status];
 
     return (
       <div
