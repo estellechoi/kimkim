@@ -1,6 +1,6 @@
 import axios, { AxiosError, type AxiosResponse } from "axios";
 import { useQuery } from "@tanstack/react-query";
-import type { BinanceMarketApiData, BinanceSystemStatusApiData, BinanceTickerApiData, BinanceWalletStatusApiData, ExchangeRateApiData } from "./types";
+import type { BinanceMarketApiData, BinanceSystemStatusApiData, BinanceTickerApiData, BinanceWalletStatusApiData, BybitApiResponse, BybitTickerApiData, BybitWalletStatusApiData, ExchangeRateApiData } from "./types";
 import type { UpbitTickerApiData } from "@/pages/api/upbit/ticker";
 import { UpbitMarketApiData } from "@/pages/api/upbit/market";
 import { CMCIdMapItemApiData } from "@/pages/api/cmc/idmap";
@@ -13,6 +13,7 @@ import { HtxApiResponse, HtxMarketApiData } from "@/pages/api/htx/ticker";
 import { UpbitWalletStatusApiData } from "@/pages/api/upbit/wallet";
 import { HmacSHA256 } from 'crypto-js';
 import { HtxWalletStatusApiData } from "@/pages/api/htx/wallet";
+import * as crypto from 'crypto';
 
 /**
  * 
@@ -166,34 +167,35 @@ export const useFetchBinaceSystemStatus = (refetchInterval: number | null) => {
     });
 };
 
+const binanceApiKey = process.env.NEXT_PUBLIC_BINANCE_API_ACCESS_KEY ?? '';
+const binanceSecretKey = process.env.NEXT_PUBLIC_BINANCE_API_SECRET_KEY ?? '';
 
-const getBinanceAuthorizedHeaders = (): Record<string, string> => {
-    const binanceApiKey = process.env.NEXT_PUBLIC_BINANCE_API_ACCESS_KEY ?? '';
+const getBinanceAuthorizedHeaders = (apiKey: string): Record<string, string> => {
     return {
-        'X-MBX-APIKEY': binanceApiKey,
+        'X-MBX-APIKEY': apiKey,
     };
 }
 
-const getBinanceSignaturedParams = (params: Record<string, string>): { signature: string; [key: string]: string } => {
-    const binanceSecretKey = process.env.NEXT_PUBLIC_BINANCE_API_SECRET_KEY ?? '';
-    const paramsJoint = Object.keys(params).sort().map(key => `${key}=${params[key]}`).join('&');
-    const payload = Buffer.from(paramsJoint).toString('ascii');
-    const signature = HmacSHA256(payload, binanceSecretKey).toString();
-    const encodedSignature = Buffer.from(signature).toString('base64');
+const getBinanceSignaturedParams = (secretKey: string, params: Record<string, string>): { signature: string; [key: string]: string } => {
+    const payload = Object.keys(params).sort().map(key => `${key}=${params[key]}`).join('&');
+    // const payload = Buffer.from(paramsJoint).toString('ascii');
+    const signature = crypto.createHmac('sha256', secretKey).update(payload).digest('base64');
+    // const signature = HmacSHA256(payload, binanceSecretKey).toString();
+    // const encodedSignature = Buffer.from(signature).toString('base64');
 
-    return { ...params, signature: encodedSignature };
+    return { ...params, signature: signature };
 }
 
 export const useFetchBinaceWalletStatus = (refetchInterval: number | null) => {
     const queryKey = ['fetchBinaceWalletStatus'];
 
-    const timestamp = new Date().getTime().toString();
-    const signaturedParams = getBinanceSignaturedParams({ timestamp });
-
-    const authorizedHeaders = getBinanceAuthorizedHeaders();
+    const authorizedHeaders = getBinanceAuthorizedHeaders(binanceApiKey);
     Object.keys(authorizedHeaders).forEach(key => {
         binanceAxiosClient.defaults.headers[key] = authorizedHeaders[key];
     });
+
+    const timestamp = new Date().getTime().toString();
+    const signaturedParams = getBinanceSignaturedParams(binanceSecretKey, { timestamp });
 
     return useQuery<AxiosResponse<readonly BinanceWalletStatusApiData[] | undefined>, AxiosError>({
         queryFn: () => binanceAxiosClient.get<readonly BinanceWalletStatusApiData[] | undefined>('/sapi/v1/capital/config/getall', { params: signaturedParams }),
@@ -223,6 +225,66 @@ export const useFetcHtxWalletStatus = (refetchInterval: number | null) => {
 
     return useQuery<AxiosResponse<HtxApiResponse<readonly HtxWalletStatusApiData[]> | undefined>, AxiosError>({
         queryFn: () => axios.get<HtxApiResponse<readonly HtxWalletStatusApiData[]> | undefined>('/api/htx/wallet'),
+        queryKey,
+        refetchInterval: refetchInterval ?? 0,
+        enabled: refetchInterval !== null,
+    });
+};
+
+/**
+ * 
+ * @description bybit api fetching
+ */
+const bybitApiKey = process.env.NEXT_PUBLIC_BYBIT_API_ACCESS_KEY ?? '';
+const bybitSecretKey = process.env.NEXT_PUBLIC_BYBIT_API_SECRET_KEY ?? '';
+
+const bybitAxiosClient = axios.create({
+    baseURL: 'https://api.bybit.com',
+});
+
+const getBybitSignature = (apiKey: string, secretKey: string, timestamp: string, recvWindow: string, params: Record<string, string>): string => {
+    const paramsJoint = Object.keys(params).map(key => `${key}=${params[key]}`).join('&');
+    const payload = `${timestamp}${apiKey}${recvWindow}${paramsJoint}`;
+
+    const signature = crypto.createHmac('sha256', secretKey).update(payload).digest('hex');
+    return signature;
+}
+
+const getBybitAuthorizedHeaders = (apiKey: string, secretKey: string, params: Record<string, string>): Record<string, string> => {
+    const timestamp = new Date().getTime().toString();
+    const recvWindow = '5000';
+    const signature = getBybitSignature(apiKey, secretKey, timestamp, recvWindow, params);
+
+    return {
+        'X-BAPI-SIGN-TYPE': '2',
+        'X-BAPI-API-KEY': apiKey,
+        'X-BAPI-TIMESTAMP': timestamp,
+        'X-BAPI-RECV-WINDOW': recvWindow,
+        'X-BAPI-SIGN': signature,
+    };
+}
+
+export const useFetchBybitPrice = (refetchInterval: number | null) => {
+    const queryKey = ['fetchBybitPrice'];
+
+    return useQuery<AxiosResponse<BybitApiResponse<BybitTickerApiData> | undefined>, AxiosError>({
+        queryFn: () => bybitAxiosClient.get<BybitApiResponse<BybitTickerApiData> | undefined>('/v5/market/tickers?category=spot'),
+        queryKey,
+        refetchInterval: refetchInterval ?? 0,
+        enabled: refetchInterval !== null,
+    });
+};
+
+export const useFetchBybitWalletStatus = (refetchInterval: number | null) => {
+    const queryKey = ['fetchBybitWalletStatus'];
+
+    const authorizedHeaders = getBybitAuthorizedHeaders(bybitApiKey, bybitSecretKey, {});
+    Object.keys(authorizedHeaders).forEach(key => {
+        bybitAxiosClient.defaults.headers[key] = authorizedHeaders[key];
+    });
+
+    return useQuery<AxiosResponse<BybitApiResponse<BybitWalletStatusApiData> | undefined>, AxiosError>({
+        queryFn: () => bybitAxiosClient.get<BybitApiResponse<BybitWalletStatusApiData> | undefined>('/v5/asset/coin/query-info'),
         queryKey,
         refetchInterval: refetchInterval ?? 0,
         enabled: refetchInterval !== null,

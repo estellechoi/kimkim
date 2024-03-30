@@ -52,11 +52,14 @@ const ExchangeNetworkLabel = ({ exchange, networks, fundType, feeCurrencyPriceKr
                             // label={networks?.status}
                         />
 
-                        {workingStatuses.includes(network.status) && network?.withdrawFeeType === 'fixed' && network.withdrawFee !== undefined && (
+                        {workingStatuses.includes(network.status) && network.withdrawFee !== undefined && (
                             <span className="flex items-baseline gap-x-0.5 Font_caption_xs_num text-semantic_success">
                                 {/* <span>{formatNumber(network.withdrawFee)}</span> */}
                                 {/* <span className="Font_caption_xs">{network.withdrawFeeCurrency}</span> */}
-                                <span>{formatKRW(getWithdrawFeeKrw(network.withdrawFee), { semiequate: true })}</span>
+                                <span>{network?.withdrawFeeType === 'fixed'
+                                    ? formatKRW(getWithdrawFeeKrw(network.withdrawFee), { semiequate: true }) 
+                                    : `${formatNumber(network.withdrawFee)}%`}
+                                </span>
                             </span>
                         )}
                     </div>
