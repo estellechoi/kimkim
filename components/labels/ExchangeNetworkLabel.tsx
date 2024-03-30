@@ -97,7 +97,7 @@ const ExchangeNetworkLabel = ({ exchange, networks, fundType, feeCurrencyPriceKr
                             <Tooltip layer="base" placement="bottom-end" content={(
                                 <div className="flex flex-col">
                                     {sortedNetworks?.map(network => (
-                                        <ExchangeNetworkFeeLabel network={network} fundType={fundType} feeCurrencyPriceKrw={feeCurrencyPriceKrw} />
+                                        <ExchangeNetworkFeeLabel key={network.networkType} network={network} fundType={fundType} feeCurrencyPriceKrw={feeCurrencyPriceKrw} />
                                     ))}
                                 </div>
                             )}>

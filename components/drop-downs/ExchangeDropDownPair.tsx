@@ -10,8 +10,8 @@ const ExchangeDropDownLabel = ({ exchange }: { exchange: Exchanges }) => {
 type ExchangeDropDownPairProps = {
     baseExchange?: BaseExchange;
     quoteExchange?: QuoteExchange;
-    onBaseExchangeChange?: (exchange: Exchanges.UPBIT) => void;
-    onQuoteExchangeChange?: (exchange: Exchanges.BINANCE | Exchanges.HTX) => void;
+    onBaseExchangeChange?: (exchange: BaseExchange) => void;
+    onQuoteExchangeChange?: (exchange: QuoteExchange) => void;
     className?: string;
 };
 
