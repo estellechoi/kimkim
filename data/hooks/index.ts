@@ -1,6 +1,6 @@
 import axios, { AxiosError, type AxiosResponse } from "axios";
 import { useQuery } from "@tanstack/react-query";
-import type { BinanceMarketApiData, BinanceSystemStatusApiData, BinanceTickerApiData, BinanceWalletStatusApiData, BybitApiResponse, BybitTickerApiData, BybitWalletStatusApiData, ExchangeRateApiData } from "./types";
+import type { BinanceMarketApiData, BinanceSystemStatusApiData, BinanceTickerApiData, BinanceWalletStatusApiData, BitgetApiResponse, BitgetWalletStatusApiData, BitgetWalletTickerApiData, BybitApiResponse, BybitTickerApiData, BybitWalletStatusApiData, ExchangeRateApiData } from "./types";
 import type { UpbitTickerApiData } from "@/pages/api/upbit/ticker";
 import { UpbitMarketApiData } from "@/pages/api/upbit/market";
 import { CMCIdMapItemApiData } from "@/pages/api/cmc/idmap";
@@ -285,6 +285,78 @@ export const useFetchBybitWalletStatus = (refetchInterval: number | null) => {
 
     return useQuery<AxiosResponse<BybitApiResponse<BybitWalletStatusApiData> | undefined>, AxiosError>({
         queryFn: () => bybitAxiosClient.get<BybitApiResponse<BybitWalletStatusApiData> | undefined>('/v5/asset/coin/query-info'),
+        queryKey,
+        refetchInterval: refetchInterval ?? 0,
+        enabled: refetchInterval !== null,
+    });
+};
+
+/**
+ * 
+ * @description bybit api fetching
+ */
+const bitgetApiKey = process.env.NEXT_PUBLIC_BITGET_API_ACCESS_KEY ?? '';
+const bitgetSecretKey = process.env.NEXT_PUBLIC_BITGET_API_SECRET_KEY ?? '';
+
+const bitgetAxiosClient = axios.create({
+    baseURL: 'https://api.bitget.com',
+    headers: {
+        'Content-Type': 'application/json',
+        'locale': 'en-US',
+    }
+});
+
+const getBitgetSignature = (secretKey: string, method: 'GET', timestamp: string, path: string, params: Record<string, string>): string => {
+    const paramsJoint = Object.keys(params).map(key => `${key}=${params[key]}`).join('&');
+    const payload = `${timestamp}${method}${path}${paramsJoint.length > 0 ? `?${paramsJoint}` : ''}`;
+
+    // const signature = crypto.createHmac('sha256', secretKey).update(payload).toString();
+    const signature = HmacSHA256(payload, secretKey).toString();
+    const encodedSignature = Buffer.from(signature).toString('base64');
+    return encodedSignature;
+}
+
+const getBitgetAuthorizedHeaders = (apiKey: string, secretKey: string, path: string, params: Record<string, string>): Record<string, string> => {
+    const timestamp = new Date().getTime().toString();
+    const signature = getBitgetSignature(secretKey, 'GET', timestamp, path, params);
+
+    return {
+        'ACCESS-KEY': apiKey,
+        'ACCESS-SIGN': signature,
+        'ACCESS-TIMESTAMP': timestamp,
+    };
+}
+
+export const useFetchBitgetPrice = (refetchInterval: number | null) => {
+    const queryKey = ['fetchBitgetPrice'];
+
+    const path = '/api/v2/spot/market/tickers';
+
+    const authorizedHeaders = getBitgetAuthorizedHeaders(bitgetApiKey, bitgetSecretKey, path, {});
+    Object.keys(authorizedHeaders).forEach(key => {
+        bitgetAxiosClient.defaults.headers[key] = authorizedHeaders[key];
+    })
+
+    return useQuery<AxiosResponse<BitgetApiResponse<readonly BitgetWalletTickerApiData[]> | undefined>, AxiosError>({
+        queryFn: () => bitgetAxiosClient.get<BitgetApiResponse<readonly BitgetWalletTickerApiData[]> | undefined>(path),
+        queryKey,
+        refetchInterval: refetchInterval ?? 0,
+        enabled: refetchInterval !== null,
+    });
+};
+
+export const useFetchBitgetWalletStatus = (refetchInterval: number | null) => {
+    const queryKey = ['fetchBitgetWalletStatus'];
+
+    const path = '/api/v2/spot/public/coins';
+
+    const authorizedHeaders = getBitgetAuthorizedHeaders(bitgetApiKey, bitgetSecretKey, path, {});
+    Object.keys(authorizedHeaders).forEach(key => {
+        bitgetAxiosClient.defaults.headers[key] = authorizedHeaders[key];
+    })
+
+    return useQuery<AxiosResponse<BitgetApiResponse<readonly BitgetWalletStatusApiData[]> | undefined>, AxiosError>({
+        queryFn: () => bitgetAxiosClient.get<BitgetApiResponse<readonly BitgetWalletStatusApiData[]> | undefined>(path),
         queryKey,
         refetchInterval: refetchInterval ?? 0,
         enabled: refetchInterval !== null,

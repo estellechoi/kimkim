@@ -9,6 +9,7 @@ import EXCHANGE_BINANCE_LOGO from '@/resources/images/exchange_logo_binance.svg'
 import EXCHANGE_UPBIT_LOGO from '@/resources/images/exchange_logo_upbit.svg';
 import EXCHANGE_HTX_LOGO from '@/resources/images/exchange_logo_htx.svg';
 import EXCHANGE_BYBIT_LOGO from '@/resources/images/exchange_logo_bybit.svg';
+import EXCHANGE_BITGET_LOGO from '@/resources/images/exchange_logo_bitget.svg';
 
 
 export const googleAnalytics = new GoogleAnalytics('google analytics');
@@ -85,6 +86,7 @@ export enum Exchanges {
   UPBIT = 'Upbit',
   HTX = 'HTX',
   BYBIT = 'Bybit',
+  BITGET = 'Bitget',
 }
 
 export const EXCHANGES_METADATA_DICT: Record<Exchanges, { logoURL: string; }> = {
@@ -100,13 +102,16 @@ export const EXCHANGES_METADATA_DICT: Record<Exchanges, { logoURL: string; }> = 
   [Exchanges.BYBIT]: {
     logoURL: EXCHANGE_BYBIT_LOGO.src,
   },
+  [Exchanges.BITGET]: {
+    logoURL: EXCHANGE_BITGET_LOGO.src,
+  },
 };
 
 export type BaseExchange = Exchanges.UPBIT;
-export type QuoteExchange = Exchanges.BINANCE | Exchanges.HTX | Exchanges.BYBIT;
+export type QuoteExchange = Exchanges.BINANCE | Exchanges.HTX | Exchanges.BYBIT | Exchanges.BITGET;
 
 export const BASE_EXCHANGES: readonly BaseExchange[] = [Exchanges.UPBIT];
-export const QUOTE_EXCHANGES: readonly QuoteExchange[] = [Exchanges.BINANCE, Exchanges.HTX, Exchanges.BYBIT];
+export const QUOTE_EXCHANGES: readonly QuoteExchange[] = [Exchanges.BINANCE, Exchanges.HTX, Exchanges.BYBIT, Exchanges.BITGET];
 
 /**
  * 

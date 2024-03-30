@@ -1,5 +1,5 @@
 import { ExchangeWalletStatus } from "@/constants/app";
-import { BinanceTickerApiData, BinanceWalletStatusApiData, BybitTickerApiData, BybitTickerItemApiData, BybitWalletStatusApiData, BybitWalletStatusItemApiData } from "@/data/hooks/types";
+import { BinanceTickerApiData, BinanceWalletStatusApiData, BitgetWalletStatusApiData, BitgetWalletTickerApiData, BybitTickerApiData, BybitTickerItemApiData, BybitWalletStatusApiData, BybitWalletStatusItemApiData } from "@/data/hooks/types";
 import { HtxMarketApiData } from "@/pages/api/htx/ticker";
 import { HtxWalletStatusApiData } from "@/pages/api/htx/wallet";
 import { UpbitMarketApiData } from "@/pages/api/upbit/market";
@@ -64,6 +64,17 @@ export const reduceQuoteExchangePriceDataFromBybit = (acc: readonly QuoteExchang
         const symbol = data.symbol.replaceAll('USDT', '');
         const price = parseFloat(data.lastPrice);
         const volume = parseFloat(data.volume24h);
+        return [...acc, { symbol, price, volume }];    
+    }
+
+    return acc;
+}
+
+export const reduceQuoteExchangePriceDataFromBitget = (acc: readonly QuoteExchangePriceData[], data: BitgetWalletTickerApiData): readonly QuoteExchangePriceData[] => {
+    if (data.symbol.endsWith('USDT')){
+        const symbol = data.symbol.replaceAll('USDT', '');
+        const price = parseFloat(data.open);
+        const volume = parseFloat(data.usdtVolume);
         return [...acc, { symbol, price, volume }];    
     }
 
@@ -183,5 +194,35 @@ export const getExchangeWalletDataFromBybit = (data: BybitWalletStatusItemApiDat
 export const getExchangeWalletDataMapFromBybit = (data: readonly BybitWalletStatusItemApiData[]): Record<string, readonly ExchangeWalletData[]> => {
     return data.reduce<Record<string, readonly ExchangeWalletData[]>>((acc, item) => {
         return { ...acc, [item.coin]: getExchangeWalletDataFromBybit(item) };
+    }, {});
+}
+
+export const getExchangeWalletDataFromBitget = (data: BitgetWalletStatusApiData): readonly ExchangeWalletData[] => {
+    return data.chains.map(chain => {
+        const networkType = chain.chain;
+
+        const withdrawFeeType = 'fixed';
+        const withdrawFee = parseFloat(chain.withdrawFee) + parseFloat(chain.extraWithdrawFee);
+        const withdrawFeeCurrency = data.coin;
+
+        let status: ExchangeWalletStatus;
+
+        if (chain.rechargeable === 'true' && chain.withdrawable === 'true') {
+            status = ExchangeWalletStatus.WORKING;
+        } else if (chain.rechargeable === 'true') {
+            status = ExchangeWalletStatus.DEPOSIT_ONLY;
+        } else if (chain.withdrawable === 'true') {
+            status = ExchangeWalletStatus.WITHDRAW_ONLY;
+        } else {
+            status = ExchangeWalletStatus.PAUSED;
+        }
+    
+        return { networkType, status, withdrawFeeType, withdrawFee, withdrawFeeCurrency };
+    });
+}
+
+export const getExchangeWalletDataMapFromBitget = (data: readonly BitgetWalletStatusApiData[]): Record<string, readonly ExchangeWalletData[]> => {
+    return data.reduce<Record<string, readonly ExchangeWalletData[]>>((acc, item) => {
+        return { ...acc, [item.coin]: getExchangeWalletDataFromBitget(item) };
     }, {});
 }

@@ -164,3 +164,53 @@ export interface BybitWalletStatusItemApiData {
 export interface BybitWalletStatusApiData {
   rows?: readonly BybitWalletStatusItemApiData[];
 }
+
+/**
+ * 
+ * @description bitget api data
+ */
+export interface BitgetApiResponse<T> {
+  code: string;
+  msg: string;
+  data: T;
+}
+
+export interface BitgetWalletTickerApiData {
+  symbol: string;
+  high24h: string;
+  open: string;
+  low24h: string;
+  lastPr: string;
+  quoteVolume: string;
+  baseVolume: string;
+  usdtVolume: string;
+  bidPr: string;
+  askPr: string;
+  bidSz: string;
+  askSz: string;
+  openUtc: string;
+  ts: string;
+  changeUtc24h: string;
+  change24h: string;
+};
+
+export interface BitgetWalletStatusApiData {
+  coinId: string;
+  coin: string;
+  transfer: 'true' | 'false';
+  chains: readonly {
+    chain: string;
+    needTag: 'true' | 'false';
+    withdrawable: 'true' | 'false';
+    rechargeable: 'true' | 'false';
+    withdrawFee: string;
+    extraWithdrawFee: string;
+    depositConfirm: string;
+    withdrawConfirm: string;
+    minDepositAmount: string;
+    minWithdrawAmount: string;
+    browserUrl: string;
+    contractAddress: string;
+    withdrawStep: string;
+  }[];
+};
