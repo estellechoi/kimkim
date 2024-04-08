@@ -267,7 +267,7 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps)
             </Card>
           </section>}
 
-          <section className="w-full max-w-app_container space-y-2 px-page_x">
+          <section className="w-full max-w-app_container px-page_x">
             <div className="flex justify-between items-center gap-x-10">
               <div className="text-caption Font_label_12px p-4" >김치 프리미엄 {isDataError && <ExchangeDataWarningTag className="ml-2" />}</div>
               
@@ -279,13 +279,15 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps)
               </div>
             </div>
 
-            <Card color="glass" className="w-full space-y-4">
+            <Card color="glass" className="w-full space-y-4 mt-2">
               <KimchiPremiumTable rows={premiumFilteredRows} isLoading={isTableLoading} />
             </Card>
 
-            {hiddenRowsLength > 0 && <div className="flex justify-center">
-              <Button color="body" size="sm" iconType={showAllPremiumRows ? 'expand_less' : 'expand_more'} label={`${hiddenRowsLength}개 더보기`} onClick={() => setShowAllPremiumRows(!showAllPremiumRows)} />
-            </div>}
+            {hiddenRowsLength > 0 && (
+              <div className="flex justify-center mt-4">
+                <Button color="body" type="outline" size="sm" iconType={showAllPremiumRows ? 'expand_less' : 'expand_more'} label={`${hiddenRowsLength}개 더보기`} onClick={() => setShowAllPremiumRows(!showAllPremiumRows)} />
+              </div>
+            )}
           </section>
         </div>
     )

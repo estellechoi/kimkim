@@ -3,6 +3,6 @@ export const BOTTOM_SHEET_CLASSES = {
   heightClassName: 'max-h-bottom_sheet_max_height min-h-[40vh] h-min ',
   overflowClassName: 'overflow-auto',
   borderClassName: 'rounded-t-card_md md:rounded-card_md',
-  bgColorClassName: 'bg-primary',
+  bgColorClassName: 'bg-ground_variant_dark',
   shadowClassName: 'Elevation_box_4 md:Elevation_box_3',
 };

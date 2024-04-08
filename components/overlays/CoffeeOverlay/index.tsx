@@ -28,23 +28,23 @@ const CoffeeOverlay = (props: Omit<OverlayProps, 'ariaLabel'>) => {
 
   const Content = (
     <>
-      <CardLink color="on_primary" label="LinkedIn" href="https://www.linkedin.com/in/yujin-choi-460a931b2/" passHref className="mb-3" />
+      <CardLink color="body" label="LinkedIn" href="https://www.linkedin.com/in/yujin-choi-460a931b2/" className="mb-3" />
 
-      <p className="text-on_primary Font_body_xs my-5">기부금으로 전송하실 코인의 네트워크를 반드시 확인해주세요.</p>
+      <p className="text-caption Font_body_xs my-5">기부금으로 전송하실 네트워크를 반드시 확인해주세요.</p>
 
       <dl className="space-y-5">
         {DONATE_ADDRESSES.map(({ symbol, network, address }) => (
           <DescriptionTexts key={symbol}>
             <DescriptionTexts.Title>
-              <div className="flex items-center gap-x-2">
+              <div className="flex items-center gap-x-2 text-body">
                 <Coin symbol={symbol} size="sm" />
                 <div className="Font_label_14px">{symbol}</div>
               </div>
             </DescriptionTexts.Title>
             <DescriptionTexts.Block>
-              <div className="flex items-center gap-x-2 text-body">
-                <div className="Font_caption_xs">{network}</div>
-                <CopyHelper toCopy={address}>
+              <div className="flex justify-between items-baseline gap-x-2 text-body">
+                <div className="Font_caption_xs text-caption">{network}</div>
+                <CopyHelper toCopy={address} className="Font_label_12px">
                   {shortenText(address, 10)}
                 </CopyHelper>
               </div>  

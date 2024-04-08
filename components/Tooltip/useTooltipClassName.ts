@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { TOOLTIP_Z_INDEX_CLASS_DICT, type TooltipLayer, type TooltipType } from './styles';
 
 const ANIMATION_CLASS = 'animate-fade_in';
-const WIDTH_CLASS = 'max-w-[100vw] md:max-w-[30vw]';
+const WIDTH_CLASS = 'max-w-[100dvw] md:max-w-[30vw]';
 const COLOR_CLASS = 'bg-body text-ground';
 const SHADOW_CLASS = 'Elevation_box_3';
 const FONT_CLASS = 'Font_body_xs';

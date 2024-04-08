@@ -1,4 +1,4 @@
-export const DIALOG_TITLE = 'KimKim 프로젝트 응원하기';
+export const DIALOG_TITLE = 'KimKim 응원하기';
 
 export const DONATE_ADDRESSES: readonly {
   symbol: string;

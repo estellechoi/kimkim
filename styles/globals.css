@@ -41,7 +41,7 @@
 
     html, body {
         overflow-x: hidden;
-        min-height: 100vh;
+        min-height: 100dvh;
         @apply font-primary;
     }
 
@@ -229,10 +229,6 @@
      /* padding */
      .Padding_modal {
         @apply px-modal_padding_x pt-modal_padding_y pb-modal_padding_safe_bottom md:pb-modal_padding_y;
-     }
-
-     .Padding_page {
-        @apply px-page_x_mobile pt-page_top pb-page_padding_safe_bottom md:px-page_x md:pb-page_bottom;
      }
 
      /* elevation */

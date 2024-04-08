@@ -30,11 +30,11 @@ const Polling = ({
     return () => clearTimeout(mountingTimer)
   }, [formattedNumber])
 
-  const { text: textClassName } = NOTI_COLOR_CLASSNAMES_DICT[status];
+  const { text: textColorClassName } = NOTI_COLOR_CLASSNAMES_DICT[status];
 
   return (
     <div
-      className={`${className} flex items-center gap-x-2.5 ${textClassName}`}
+      className={`${className} flex items-center gap-x-2.5 ${textColorClassName}`}
     >
       {caption && <div className="Font_label_12px">{caption}</div>}
       

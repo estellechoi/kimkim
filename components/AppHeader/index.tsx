@@ -3,8 +3,7 @@ import Link from 'next/link';
 import AppLogo from '@/components/AppLogo';
 import useAppHeaderClassName from './useAppHeaderClassName';
 import DropDown from '@/components/DropDown';
-import { AllChains, Fiats } from '@/constants/app';
-import ChainLabel from '../ChainLabel';
+import { Fiats } from '@/constants/app';
 import { useAtom } from 'jotai';
 import {  selectedCurrencyAtom } from '@/store/states';
 import Currency from '../Currency';
@@ -14,7 +13,6 @@ import Coin from '../Coin';
 import Icon from '../Icon';
 import Tooltip from '../Tooltip';
 import useModal from '@/hooks/useModal';
-import OverlayGrid from '../OverlayGrid';
 import { Suspense, useCallback } from 'react';
 import CoffeeOverlay from '../overlays/CoffeeOverlay';
 
@@ -25,7 +23,7 @@ import CoffeeOverlay from '../overlays/CoffeeOverlay';
 type AppHeaderProps = { className?: string };
 
 const AppHeader = ({ className = '' }: AppHeaderProps) => {
-  const defaultClassName = useAppHeaderClassName();
+  const appHeaderClassName = useAppHeaderClassName();
 
   const [selectedCurrency, setSelectedCurrency] = useAtom(selectedCurrencyAtom);
 
@@ -40,18 +38,19 @@ const AppHeader = ({ className = '' }: AppHeaderProps) => {
   }, [coffeeModal]);
 
   return (
-    <header className={`${defaultClassName} ${className}`}>
-      <Link href="/">
-        <AppLogo size="md" color="dark" />
-      </Link>
-
-      <div className="flex items-center gap-x-10">
+    <header className={`h-app_header_height flex flex-col items-stretch ${className}`}>
+      <div className="grow-0 shrink-0 bg-ground_variant_dark flex items-center gap-x-6 px-app_header_padding_x py-2">
+        <ExchangeRatePolling />
         <div className="flex items-center gap-x-2">
           <Coin size="sm" symbol="USDT" />
           <USDTPricePolling />
         </div>
+      </div>
 
-        <ExchangeRatePolling />
+      <div className={`grow shrink ${appHeaderClassName}`}>
+        <Link href="/">
+          <AppLogo size="md" color="dark" />
+        </Link>
 
         <div className="flex items-center gap-x-6">
           <DropDown<Fiats>
@@ -62,7 +61,7 @@ const AppHeader = ({ className = '' }: AppHeaderProps) => {
             onChange={setSelectedCurrency}
           />
 
-          <Tooltip layer="navigation" content="KimKim 프로젝트 응원하기 ♥">
+          <Tooltip layer="navigation" content="KimKim 응원하기">
             <button 
               type="button" 
               className="Transition_500 transition-opacity hover:opacity-80"
@@ -75,8 +74,6 @@ const AppHeader = ({ className = '' }: AppHeaderProps) => {
           </Tooltip>
         </div>
       </div>
-
-      
     </header>
   );
 };

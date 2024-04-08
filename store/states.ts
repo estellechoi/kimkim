@@ -8,24 +8,10 @@ import { CMCMetadataItemData } from '@/pages/api/cmc/metadata';
 import { BinanceMarketSymbolDetailApiData } from '@/data/hooks/types';
 import { CoinGeckoCoinPriceApiData } from '@/pages/api/coingecko/prices';
 import { CoinGeckoCoinApiData } from '@/pages/api/coingecko/coins';
-import { UpbitWalletStatusApiData } from '@/pages/api/upbit/wallet';
-
-type TokenData = {
-  logoURI: string;
-};
 
 export const apolloClientsAtom = atom<AppApolloClients>(apolloClients);
 
 export const selectedCurrencyAtom = atom<Fiats>(Fiats.KRW);
-
-/**
- *
- * @description token symbol is used as key atm; should be replaced with contract address
- */
-export const allTokensDictAtom = atom<Record<TokenSymbols, TokenData>>({
-  [TokenSymbols.CONST]: { logoURI: 'https://injective.talis.art/svg/icons/inj.svg' },
-  [TokenSymbols.ARCH]: { logoURI: '' },
-});
 
 const userWalletAtomOrigin = atom<ConnectedWallet | null>(null);
 

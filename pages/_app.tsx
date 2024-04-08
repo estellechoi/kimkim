@@ -12,7 +12,6 @@ import {SEO} from '../next-seo.config';
 import SentryErrorBoundary from '@/components/ErrorBoundary/SentryErrorBoundary';
 import AppHeader from '@/components/AppHeader';
 import {ModalProvider} from '@/hooks/useModal/ModalProvider';
-import useSetupTokens from '@/hooks/useSetupTokens';
 import dynamic from 'next/dynamic';
 import AppFooter from '@/components/AppFooter';
 import AnalyticsProvider from '@/hooks/useAnalytics/AnalyticsProvider';
@@ -25,6 +24,8 @@ import useUsdBasedExchangeRateUpdate from '@/hooks/useUsdBasedExchangeRateUpdate
 import useBinanceMarketUpdate from '@/hooks/useBinanceMarketUpdate';
 import useCoinGeckoUpdate from '@/hooks/useCoinGeckoUpdate';
 import useCoinGeckoPriceUpdate from '@/hooks/useCoinGeckoPriceUpdate';
+import useUserAgent from '@/hooks/useUserAgent';
+import MobileBlocker from '@/components/home/MobileBlocker';
 
 const UserAgentDetector = dynamic(() => import('@/components/UserAgentDetector'), {ssr: false});
 
@@ -37,8 +38,6 @@ const MetaDataUpdater = () => {
 
   useUpbitMarketUpdate();
   useBinanceMarketUpdate();
-
-  useSetupTokens();
   return null;
 };
 
@@ -60,7 +59,7 @@ function MyApp({Component, pageProps}: AppProps<{dehydratedState: DehydratedStat
     });
   }
 
-
+  const { isMobile } = useUserAgent();
 
   return (
     <>
@@ -125,6 +124,7 @@ function MyApp({Component, pageProps}: AppProps<{dehydratedState: DehydratedStat
                   <AppHeader className="fixed top-0 left-0 right-0 z-navigation" />
                   <Component {...pageProps} />
                   <AppFooter />
+                  <MobileBlocker />
                 </ModalProvider>
               </HydrationBoundary>
             </QueryClientProvider>

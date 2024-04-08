@@ -1,5 +1,5 @@
 :root {
-    --size-app-header-height: 6.25rem;
+    --size-app-header-height: 7.5rem;
 }
 
 :root {
@@ -40,13 +40,13 @@
     --color-gray600: #707070;
     --color-gray700: #5c5c5c;
     --color-gray800: #3d3d3d;
-    --color-gray900: #1d1d1d;
-    --color-gray900-o80: rgba(29, 29, 29, 0.8);
-    --color-gray900-o35: rgba(29, 29, 29, 0.35);
-    --color-gray900-o10: rgba(29, 29, 29, 0.1);
-    --color-gray900-o4: rgba(29, 29, 29, 0.04);
-    --color-gray900-o2: rgba(29, 29, 29, 0.02);
-    --color-gray900-o0: rgba(29, 29, 29, 0);
+    --color-gray900: #140c0c;
+    --color-gray900-o80: rgba(17, 26, 17, 0.8);
+    --color-gray900-o35: rgba(17, 26, 17, 0.35);
+    --color-gray900-o10: rgba(17, 26, 17, 0.1);
+    --color-gray900-o4: rgba(17, 26, 17, 0.04);
+    --color-gray900-o2: rgba(17, 26, 17, 0.02);
+    --color-gray900-o0: rgba(17, 26, 17, 0);
     --color-coolgray50: #fafafa;
     --color-coolgray100: #f5f5f5;
     --color-coolgray100-o10: rgb(245 245 245 / 10%);
@@ -134,17 +134,17 @@
     --color-primary-o35: var(--color-red400-o35);
     --color-primary-o10: var(--color-red400-o10);
     --color-primary-o0: var(--color-red400-o0);
-    --color-primary-variant-dark: var(--color-black);
-    --color-primary-variant-light: var(--color-gray300);
-    --color-primary-variant-soft: var(--color-gray600);
-    --color-on_primary: var(--color-black);
-    --color-glass: var(--color-black-o10);
+    --color-primary-variant-dark: var(--color-red700);
+    --color-primary-variant-light: var(--color-red200);
+    --color-on_primary: var(--color-gray900);
+    --color-glass: var(--color-gray900-o10);
     --color-body: var(--color-white);
     --color-secondary: var(--color-neon400);
-    --color-on_secondary: var(--color-black);
+    --color-on_secondary: var(--color-gray900);
 }
 
 :root {
-    --color-ground: var(--color-black);
-    --color-ground-o10: var(--color-black-o10);
+    --color-ground: var(--color-gray900);
+    --color-ground-o10: var(--color-gray900-o10);
+    --color-ground-variant-dark: var(--color-black);
 }

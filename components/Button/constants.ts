@@ -34,7 +34,7 @@ export const BUTTON_WAITING_SYMBOL_COLOR_DICT: Record<ButtonType, Record<ButtonC
     on_primary: 'primary',
     secondary: 'caption',
     on_secondary: 'secondary',
-    body: 'caption',
+    body: 'body',
   },
   outline: {
     primary: 'primary',

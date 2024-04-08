@@ -16,7 +16,7 @@ const ICON_COLOR_CLASS_DICT: Record<ButtonType, Record<ButtonColor | 'disabled',
     secondary: 'text-secondary border border-solid border-secondary',
     on_secondary: 'text-white border border-solid border-secondary',
     disabled: 'text-disabled',
-    body: 'text-body border border-solid border-primary',
+    body: 'text-body border border-solid border-body',
   },
   text: {
     primary: 'text-primary',

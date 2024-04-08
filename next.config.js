@@ -13,44 +13,8 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'raw.githubusercontent.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'assets.coingecko.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'res.cloudinary.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'lh3.googleusercontent.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 's2.coinmarketcap.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'images.talis.art',
-      },
-      {
-        protocol: 'https',
-        hostname: 'talis-protocol.mo.cloudinary.net',
-      },
-      {
-        protocol: 'https',
-        hostname: 'talis-app-injective-staging.s3.eu-west-2.amazonaws.com',
-      },
-      /**
-       *
-       * @todo remove this
-       */
-      {
-        protocol: 'https',
-        hostname: 'i.seadn.io',
+        protocol: "https",
+        hostname: "**",
       },
     ],
   },
