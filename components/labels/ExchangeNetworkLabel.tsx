@@ -33,7 +33,7 @@ const ExchangeNetworkFeeLabel = ({ network, fundType, feeCurrencyPriceKrw }: Exc
             <span>{network.networkType}</span>
             
             <StatusDot 
-                status={network.status && workingStatuses.includes(network.status) ? 'success' : 'neutral'}
+                status={network.status && workingStatuses.includes(network.status) ? 'success' : 'error'}
                 // label={networks?.status}
             />
 

@@ -54,7 +54,7 @@ const KimchiPremiumTable = ({ rows, isLoading }: KimchiPremiumTableProps) => {
                   <span>입/출금 가능</span>
                 </div>
                 <div className="flex items-center gap-x-2">
-                  <StatusDot status="neutral" />
+                  <StatusDot status="error" />
                   <span>입/출금 불가</span>
                 </div>
               </div>
