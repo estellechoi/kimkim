@@ -53,8 +53,9 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps)
   const fetchBinancePriceData = quoteExchange === Exchanges.BINANCE && binanceSymbols.length > 0;
   const { data: binancePriceData, error: binancePriceError, isLoading: isBinancePriceLoading } = useFetchBinacePrice(fetchBinancePriceData ? binancePriceDataInterval : null, binanceSymbols);
 
-  // const { data: binanceSystemStatusData } = useFetchBinaceSystemStatus(0);
   const { data: binanceWalletStatusData, error: binanceWalletStatusError } = useFetchBinaceWalletStatus(fetchBinancePriceData ? 0 : null);
+
+  console.log('binanceWalletStatusError', binanceWalletStatusError)
 
   useEffect(() => {
     let retryTimer: NodeJS.Timeout;

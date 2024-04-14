@@ -1,6 +1,6 @@
 import axios, { AxiosError, type AxiosResponse } from "axios";
 import { useQuery } from "@tanstack/react-query";
-import type { BinanceMarketApiData, BinanceSystemStatusApiData, BinanceTickerApiData, BinanceWalletStatusApiData, BitgetApiResponse, BitgetWalletStatusApiData, BitgetWalletTickerApiData, BybitApiResponse, BybitTickerApiData, BybitWalletStatusApiData, ExchangeRateApiData } from "./types";
+import type { BinanceMarketApiData, BinanceSystemStatusApiData, BinanceTickerApiData, BitgetApiResponse, BitgetWalletStatusApiData, BitgetWalletTickerApiData, BybitApiResponse, BybitTickerApiData, BybitWalletStatusApiData, ExchangeRateApiData } from "./types";
 import type { UpbitTickerApiData } from "@/pages/api/upbit/ticker";
 import { UpbitMarketApiData } from "@/pages/api/upbit/market";
 import { CMCIdMapItemApiData } from "@/pages/api/cmc/idmap";
@@ -11,9 +11,10 @@ import { CoinGeckoCoinApiData } from "@/pages/api/coingecko/coins";
 import { CoinGeckoCoinPriceApiData } from "@/pages/api/coingecko/prices";
 import { HtxApiResponse, HtxMarketApiData } from "@/pages/api/htx/ticker";
 import { UpbitWalletStatusApiData } from "@/pages/api/upbit/wallet";
-import { HmacSHA256 } from 'crypto-js';
+import { HmacSHA256, enc } from 'crypto-js';
 import { HtxWalletStatusApiData } from "@/pages/api/htx/wallet";
 import * as crypto from 'crypto';
+import { BinanceWalletStatusApiData } from "@/pages/api/binance/wallet";
 
 /**
  * 
@@ -167,38 +168,11 @@ export const useFetchBinaceSystemStatus = (refetchInterval: number | null) => {
     });
 };
 
-const binanceApiKey = process.env.NEXT_PUBLIC_BINANCE_API_ACCESS_KEY ?? '';
-const binanceSecretKey = process.env.NEXT_PUBLIC_BINANCE_API_SECRET_KEY ?? '';
-
-const getBinanceAuthorizedHeaders = (apiKey: string): Record<string, string> => {
-    return {
-        'X-MBX-APIKEY': apiKey,
-    };
-}
-
-const getBinanceSignaturedParams = (secretKey: string, params: Record<string, string>): { signature: string; [key: string]: string } => {
-    const payload = Object.keys(params).sort().map(key => `${key}=${params[key]}`).join('&');
-    // const payload = Buffer.from(paramsJoint).toString('ascii');
-    const signature = crypto.createHmac('sha256', secretKey).update(payload).digest('base64');
-    // const signature = HmacSHA256(payload, binanceSecretKey).toString();
-    // const encodedSignature = Buffer.from(signature).toString('base64');
-
-    return { ...params, signature: signature };
-}
-
 export const useFetchBinaceWalletStatus = (refetchInterval: number | null) => {
     const queryKey = ['fetchBinaceWalletStatus'];
 
-    const authorizedHeaders = getBinanceAuthorizedHeaders(binanceApiKey);
-    Object.keys(authorizedHeaders).forEach(key => {
-        binanceAxiosClient.defaults.headers[key] = authorizedHeaders[key];
-    });
-
-    const timestamp = new Date().getTime().toString();
-    const signaturedParams = getBinanceSignaturedParams(binanceSecretKey, { timestamp });
-
     return useQuery<AxiosResponse<readonly BinanceWalletStatusApiData[] | undefined>, AxiosError>({
-        queryFn: () => binanceAxiosClient.get<readonly BinanceWalletStatusApiData[] | undefined>('/sapi/v1/capital/config/getall', { params: signaturedParams }),
+        queryFn: () => axios.get<readonly BinanceWalletStatusApiData[] | undefined>(`/api/binance/wallet`),
         queryKey,
         refetchInterval: refetchInterval ?? 0,
         enabled: refetchInterval !== null,
@@ -310,10 +284,8 @@ const getBitgetSignature = (secretKey: string, method: 'GET', timestamp: string,
     const paramsJoint = Object.keys(params).map(key => `${key}=${params[key]}`).join('&');
     const payload = `${timestamp}${method}${path}${paramsJoint.length > 0 ? `?${paramsJoint}` : ''}`;
 
-    // const signature = crypto.createHmac('sha256', secretKey).update(payload).toString();
-    const signature = HmacSHA256(payload, secretKey).toString();
-    const encodedSignature = Buffer.from(signature).toString('base64');
-    return encodedSignature;
+    const signature = HmacSHA256(payload, secretKey).toString(enc.Base64);
+    return signature;
 }
 
 const getBitgetAuthorizedHeaders = (apiKey: string, secretKey: string, path: string, params: Record<string, string>): Record<string, string> => {
