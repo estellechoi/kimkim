@@ -1,5 +1,4 @@
 {
     "presets": ["next/babel"],
-    "plugins": [],
-    "compact": false
+    "plugins": []
 }
