@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { HmacSHA256, HmacSHA512, enc } from 'crypto-js';
+import { HmacSHA256, enc } from 'crypto-js';
 
 export const binanceApiKey = process.env.NEXT_PUBLIC_BINANCE_API_ACCESS_KEY ?? '';
 export const binanceSecretKey = process.env.NEXT_PUBLIC_BINANCE_API_SECRET_KEY ?? '';

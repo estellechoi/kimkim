@@ -1,5 +1,6 @@
 import { ExchangeWalletStatus } from "@/constants/app";
-import { BinanceTickerApiData, BinanceWalletStatusApiData, BitgetWalletStatusApiData, BitgetWalletTickerApiData, BybitTickerApiData, BybitTickerItemApiData, BybitWalletStatusApiData, BybitWalletStatusItemApiData } from "@/data/hooks/types";
+import { BinanceTickerApiData, BitgetWalletStatusApiData, BitgetWalletTickerApiData, BybitTickerApiData, BybitTickerItemApiData, BybitWalletStatusApiData, BybitWalletStatusItemApiData } from "@/data/hooks/types";
+import { BinanceWalletStatusApiData } from "@/pages/api/binance/wallet";
 import { HtxMarketApiData } from "@/pages/api/htx/ticker";
 import { HtxWalletStatusApiData } from "@/pages/api/htx/wallet";
 import { UpbitMarketApiData } from "@/pages/api/upbit/market";
