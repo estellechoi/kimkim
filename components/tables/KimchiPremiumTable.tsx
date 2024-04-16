@@ -46,7 +46,7 @@ const KimchiPremiumTable = ({ rows, isLoading }: KimchiPremiumTableProps) => {
             type: 'jsx',
             sortType: 'string',
             sortValue: 'koreanName',
-            widthRatio: 32,
+            widthRatio: 24,
             tooltipContent: (
               <div className="flex flex-col gap-y-1 Font_body_xs">
                 <div className="flex items-center gap-x-2">
@@ -84,7 +84,7 @@ const KimchiPremiumTable = ({ rows, isLoading }: KimchiPremiumTableProps) => {
             sortType: 'number',
             sortValue: 'volume',
             align: 'right',
-            widthRatio: 20,
+            widthRatio: 14,
           },
           {
             label: '',

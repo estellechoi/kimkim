@@ -1,6 +1,6 @@
 import axios, { AxiosError, type AxiosResponse } from "axios";
 import { useQuery } from "@tanstack/react-query";
-import type { BinanceMarketApiData, BinanceSystemStatusApiData, BinanceTickerApiData, BitgetApiResponse, BitgetWalletStatusApiData, BitgetWalletTickerApiData, BybitApiResponse, BybitTickerApiData, BybitWalletStatusApiData, ExchangeRateApiData } from "./types";
+import type { BinanceMarketApiData, BinanceSystemStatusApiData, BinanceTickerApiData, BitgetApiResponse, BitgetWalletStatusApiData, BitgetWalletTickerApiData, BybitApiResponse, BybitTickerApiData, BybitWalletStatusApiData, ExchangeRateApiData, UpbitTickerWebSocketData } from "./types";
 import type { UpbitTickerApiData } from "@/pages/api/upbit/ticker";
 import { UpbitMarketApiData } from "@/pages/api/upbit/market";
 import { CMCIdMapItemApiData } from "@/pages/api/cmc/idmap";
@@ -15,6 +15,10 @@ import { HmacSHA256, enc } from 'crypto-js';
 import { HtxWalletStatusApiData } from "@/pages/api/htx/wallet";
 import * as crypto from 'crypto';
 import { BinanceWalletStatusApiData } from "@/pages/api/binance/wallet";
+import { initWebSocket } from "../websocket";
+import useWebSocket from "react-use-websocket";
+import { useEffect, useState } from "react";
+import queryClient from "../queryClient";
 
 /**
  * 

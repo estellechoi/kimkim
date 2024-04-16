@@ -66,7 +66,6 @@ const useGetPremiumTableRows = ({ watchListSymbols, onToggleWatchList, krwByUsd,
             </div>
           );
     
-    
           const premium = quoteExchangePriceKrw?.gt(0) ? BigNumber(baseExchangePrice).minus(quoteExchangePriceKrw).div(quoteExchangePriceKrw).multipliedBy(100) : null;
           const premiumLabel = (
             <div className="flex items-center gap-x-1">

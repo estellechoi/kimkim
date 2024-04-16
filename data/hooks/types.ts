@@ -173,3 +173,71 @@ export interface BitgetWalletStatusApiData {
     withdrawStep: string;
   }[];
 };
+
+/**
+ * 
+ * @description websocket data
+ */
+export interface UpbitTickerWebSocketData {
+  type: string;
+  code: string;
+  opening_price: number;
+  high_price: number;
+  low_price: number;
+  trade_price: number;
+  prev_closing_price: number;
+  acc_trade_price: number;
+  change: 'RISE' | 'FALL' | 'EVEN';
+  change_price: number;
+  signed_change_price: number;
+  change_rate: number;
+  signed_change_rate: number;
+  ask_bid: string;
+  trade_volume: number;
+  acc_trade_volume: number;
+  trade_date: string;
+  trade_time: string;
+  trade_timestamp: number;
+  acc_ask_volume: number;
+  acc_bid_volume: number;
+  highest_52_week_price: number;
+  highest_52_week_date: string;
+  lowest_52_week_price: number;
+  lowest_52_week_date: string;
+  market_state: string;
+  is_trading_suspended: boolean;
+  delisting_date: string | null;
+  market_warning: string;
+  timestamp: number;
+  acc_trade_price_24h: number;
+  acc_trade_volume_24h: number;
+  stream_type: string;
+};
+
+export interface BinanceKlineWebSocketData {
+  data: {
+    E: number; // Event time
+    e: string; // Event type
+    s: string; // Symbol
+    k: {
+      t: number;  // Kline start time
+      T: number;  // Kline close time
+      s: string;  // Symbol
+      i: string;  // Interval
+      f: number;  // First trade ID
+      L: number;  // Last trade ID
+      o: string;  // Open price
+      c: string;  // Close price
+      h: string;  // High price
+      l: string;  // Low price
+      v: string;  // Base asset volume
+      n: number;  // Number of trades
+      x: boolean; // Is this kline closed?
+      q: string;  // Quote asset volume
+      V: string;  // Taker buy base asset volume
+      Q: string;  // Taker buy quote asset volume
+      B: string;  // Ignore (assuming string as it's unspecified but seems numeric)
+    };
+  } | undefined;
+  stream: string;
+}

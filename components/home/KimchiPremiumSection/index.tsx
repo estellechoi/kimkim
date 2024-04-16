@@ -5,7 +5,7 @@ import KimchiPremiumTable, { KimchiPremiumTableRow } from '@/components/tables/K
 import useWatchListSymbols from '@/hooks/useWatchListSymbols';
 import ExchangeDropDownPair from '@/components/drop-downs/ExchangeDropDownPair';
 import { binanceMarketDataAtom, coinGeckoCoinIdMapAtom, upbitMarketDataAtom } from '@/store/states';
-import { useFetcHtxPrice, useFetcHtxWalletStatus, useFetchBinacePrice, useFetchBinaceSystemStatus, useFetchBinaceWalletStatus, useFetchBitgetPrice, useFetchBitgetWalletStatus, useFetchBybitPrice, useFetchBybitWalletStatus, useFetchUpbitPrice, useFetchUpbitWalletStatus } from '@/data/hooks';
+import { useFetcHtxPrice, useFetcHtxWalletStatus, useFetchBinacePrice, useFetchBinaceWalletStatus, useFetchBitgetPrice, useFetchBitgetWalletStatus, useFetchBybitPrice, useFetchBybitWalletStatus, useFetchUpbitPrice, useFetchUpbitWalletStatus } from '@/data/hooks';
 import { useAtom } from 'jotai';
 import { useEffect, useMemo, useState } from 'react';
 import Card from '@/components/Card';
@@ -17,6 +17,8 @@ import { BaseExchange, Exchanges, QuoteExchange } from '@/constants/app';
 import useGetPremiumTableRows from '@/hooks/useGetPremiumTableRows';
 import { BaseExchangePriceData, ExchangeWalletData, QuoteExchangePriceData, getExchangeWalletDataMapFromBinance, getExchangeWalletDataMapFromBitget, getExchangeWalletDataMapFromBybit, getExchangeWalletDataMapFromHtx, getExchangeWalletDataMapFromUpbit, reduceBaseExchangePriceDataFromUpbit, reduceQuoteExchangePriceDataFromBinance, reduceQuoteExchangePriceDataFromBitget, reduceQuoteExchangePriceDataFromBybit, reduceQuoteExchangePriceDataFromHtx } from '@/utils/exchange';
 import { AxiosError } from 'axios';
+import useUpbitPriceData from '@/hooks/useUpbitPriceData';
+import useBinancePriceData from '@/hooks/useBinancePriceData';
 
 type KimchiPremiumSectionProps = {
     krwByUsd: number | null;
@@ -37,7 +39,8 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps)
   , [upbitMarketData]);
 
   const fetchUpbitPriceData = baseExchange === Exchanges.UPBIT && upbitSymbols.length > 0;
-  const { data: upbitPriceData, error: upbitPriceError, isLoading: isUpbitPriceLoading } = useFetchUpbitPrice(fetchUpbitPriceData ? 3000 : null, upbitSymbols);
+
+  const { data: upbitPriceData, error: upbitPriceError, isLoading: isUpbitPriceLoading } = useUpbitPriceData(fetchUpbitPriceData, upbitSymbols);
 
   const { data: upbitWalletStatusData, error: upbitWalletStatusError } = useFetchUpbitWalletStatus(fetchUpbitPriceData ? 0 : null);
 
@@ -45,29 +48,10 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps)
    * 
    * @description binance data
    */
-  const [binanceMarketData] = useAtom(binanceMarketDataAtom);
-  const binanceSymbols = upbitSymbols.filter(symbol => binanceMarketData?.[symbol]);
-
-  const [binancePriceDataInterval, setBinancePriceInterval] = useState<number | null>(3000);
+  const { data: binancePriceData, error: binancePriceError, isLoading: isBinancePriceLoading, queriedSymbols: binanceSymbols } = useBinancePriceData(quoteExchange === Exchanges.BINANCE, upbitSymbols);
 
   const fetchBinancePriceData = quoteExchange === Exchanges.BINANCE && binanceSymbols.length > 0;
-  const { data: binancePriceData, error: binancePriceError, isLoading: isBinancePriceLoading } = useFetchBinacePrice(fetchBinancePriceData ? binancePriceDataInterval : null, binanceSymbols);
-
   const { data: binanceWalletStatusData, error: binanceWalletStatusError } = useFetchBinaceWalletStatus(fetchBinancePriceData ? 0 : null);
-
-  console.log('binanceWalletStatusError', binanceWalletStatusError)
-
-  useEffect(() => {
-    let retryTimer: NodeJS.Timeout;
-
-    if (binancePriceError?.response?.status === 429 || binancePriceError?.response?.status === 418 || binanceWalletStatusError?.response?.status === 429 || binanceWalletStatusError?.response?.status === 418) {
-      setBinancePriceInterval(null);
-      const retryAfter = binancePriceError?.response?.headers['Retry-After'];
-      retryTimer = setTimeout(() => setBinancePriceInterval(3000), parseInt(retryAfter) * 1000);
-    }
-
-    return () => clearTimeout(retryTimer);
-  }, [binancePriceError?.response, binanceWalletStatusError?.response]);
 
   /**
    * @description htx data 
@@ -122,11 +106,11 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps)
    * @description track exchange data error
    */
   const { baseExchangePriceErrorMap, quoteExchangePriceErrorMap } = useMemo(() => {
-    const baseExchangePriceErrorMap: Record<BaseExchange, AxiosError | null> = {
+    const baseExchangePriceErrorMap: Record<BaseExchange, AxiosError | Error | null> = {
       [Exchanges.UPBIT]: upbitPriceError,
     }
 
-    const quoteExchangePriceErrorMap: Record<QuoteExchange, AxiosError | null> = {
+    const quoteExchangePriceErrorMap: Record<QuoteExchange, AxiosError | Error | null> = {
       [Exchanges.BINANCE]: binancePriceError,
       [Exchanges.HTX]: htxPriceError,
       [Exchanges.BYBIT]: bybitPriceError,
@@ -154,13 +138,13 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps)
 
   const mappedBaseExchangePriceData = useMemo<readonly BaseExchangePriceData[]>(() => {
     switch (baseExchange) {
-      case Exchanges.UPBIT: return upbitPriceData?.data?.reduce(reduceBaseExchangePriceDataFromUpbit, []) ?? [];
+      case Exchanges.UPBIT: return upbitPriceData?.reduce(reduceBaseExchangePriceDataFromUpbit, []) ?? [];
     }
   }, [baseExchange, upbitPriceData]);
 
   const mappedQuoteExchangePriceData = useMemo<readonly QuoteExchangePriceData[]>(() => {
     switch (quoteExchange) {
-      case Exchanges.BINANCE: return binancePriceData?.data?.reduce(reduceQuoteExchangePriceDataFromBinance, []) ?? [];
+      case Exchanges.BINANCE: return binancePriceData?.reduce(reduceQuoteExchangePriceDataFromBinance, []) ?? [];
       case Exchanges.HTX: return htxPriceData?.data?.data?.reduce(reduceQuoteExchangePriceDataFromHtx, []) ?? [];
       case Exchanges.BYBIT: return bybitPriceData?.data?.result.list?.reduce(reduceQuoteExchangePriceDataFromBybit, []) ?? [];
       case Exchanges.BITGET: return bitgetPriceData?.data?.data.reduce(reduceQuoteExchangePriceDataFromBitget, []) ?? [];
