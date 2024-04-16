@@ -241,3 +241,18 @@ export interface BinanceKlineWebSocketData {
   } | undefined;
   stream: string;
 }
+
+export interface HtxKlineWebSocketData  {
+  ch: string;      // Channel name
+  ts: number;      // Timestamp
+  tick: {
+      id: number;        // ID of the tick
+      open: number;      // Opening price
+      close: number;     // Closing price
+      low: number;       // Lowest price
+      high: number;      // Highest price
+      amount: number;    // Amount traded
+      vol: number;       // Volume traded
+      count: number;     // Trade count
+  };
+};

@@ -19,6 +19,7 @@ import { BaseExchangePriceData, ExchangeWalletData, QuoteExchangePriceData, getE
 import { AxiosError } from 'axios';
 import useUpbitPriceData from '@/hooks/useUpbitPriceData';
 import useBinancePriceData from '@/hooks/useBinancePriceData';
+import { useWebSocketHtxPrice } from '@/data/hooks/webSocket';
 
 type KimchiPremiumSectionProps = {
     krwByUsd: number | null;
@@ -59,6 +60,8 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps)
    */
   const fetchHtxPriceData = quoteExchange === Exchanges.HTX;
   const { data: htxPriceData, error: htxPriceError, isLoading: isHtxPriceLoading } = useFetcHtxPrice(fetchHtxPriceData ? 3000 : null);
+
+  useWebSocketHtxPrice(fetchHtxPriceData, upbitSymbols);
 
   const { data: htxWalletStatusData, error: HtxWalletStatusError } = useFetcHtxWalletStatus(fetchHtxPriceData ? 0 : null);
 
