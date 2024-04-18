@@ -15,10 +15,6 @@ const useUsdBasedExchangeRateUpdate = () => {
      */
     const { data: forexData, error: forextError, isLoading: isForexLoading } = useFetchForex(usdBasedExchangeDataInterval);
 
-    console.log('forexData', forexData)
-    console.log('forextError', forextError)
-
-
     useEffect(() => {
       if (forextError?.response?.status === 429) {
         // Forext api has rate limit per minute
