@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 const useUsdBasedExchangeRateUpdate = () => {
     const [currencyExchangeRate, setCurrencyExchangeRate] = useAtom(currencyExchangeRateAtom);
     
-    const [usdBasedExchangeDataInterval, setUsdBasedExchangeInterval] = useState<number | null>(6000);
+    const [usdBasedExchangeDataInterval, setUsdBasedExchangeInterval] = useState<number | null>(1800000);
 
     /**
      * 
@@ -15,10 +15,14 @@ const useUsdBasedExchangeRateUpdate = () => {
      */
     const { data: forexData, error: forextError, isLoading: isForexLoading } = useFetchForex(usdBasedExchangeDataInterval);
 
+    console.log('forexData', forexData)
+    console.log('forextError', forextError)
+
+
     useEffect(() => {
       if (forextError?.response?.status === 429) {
         // Forext api has rate limit per minute
-        setUsdBasedExchangeInterval(60000);
+        setUsdBasedExchangeInterval(null);
       }
     }, [forextError]);
 
