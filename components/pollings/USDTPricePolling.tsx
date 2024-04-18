@@ -1,6 +1,7 @@
 import Polling from "@/components/Polling";
 import { Fiats } from "@/constants/app";
-import { coinGeckoCoinMapAtom, currencyExchangeRateAtom, selectedCurrencyAtom } from "@/store/states";
+import { useFetchCoinMarketCapPrice } from "@/data/hooks";
+import { currencyExchangeRateAtom, selectedCurrencyAtom } from "@/store/states";
 import { FormatCurrencyFunction, formatKRW, formatUSD } from "@/utils/number";
 import BigNumber from "bignumber.js";
 import { useAtom } from "jotai";
@@ -17,16 +18,19 @@ const TEXT_FORMATTER_DICT: Record<Fiats, FormatCurrencyFunction> = {
 };
 
 const USDTPricePolling = ({ className = '' }: USDTPricePollingProps) => {
-    const [coinGeckoCoinMap] = useAtom(coinGeckoCoinMapAtom);
+    const stableCoinSymbol = 'USDT';
+
+    const { data: coinMarketCapPriceData } = useFetchCoinMarketCapPrice(3000, [stableCoinSymbol]);
 
     const [currencyExchangeRate] = useAtom(currencyExchangeRateAtom);
     const [selectedCurrency] = useAtom(selectedCurrencyAtom);
-    const selectedCurrencyExchangeRate = currencyExchangeRate.rates[selectedCurrency];
 
     const usdtPriceInSelectedCurrency = useMemo<BigNumber | undefined>(() => {
-        const usdtPriceUsd = coinGeckoCoinMap?.USDT?.current_price;
+        const usdtPriceUsd = coinMarketCapPriceData?.data?.data?.[stableCoinSymbol]?.[0]?.quote.USD.price;
+        const selectedCurrencyExchangeRate = currencyExchangeRate.rates[selectedCurrency];
+
         return usdtPriceUsd && selectedCurrencyExchangeRate ? BigNumber(usdtPriceUsd).times(selectedCurrencyExchangeRate) : undefined;
-    }, [coinGeckoCoinMap?.USDT?.current_price])
+    }, [coinMarketCapPriceData?.data?.data, stableCoinSymbol, currencyExchangeRate, selectedCurrency])
 
     const format = TEXT_FORMATTER_DICT[selectedCurrency];
 

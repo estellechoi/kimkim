@@ -1,10 +1,9 @@
 import axios, { AxiosError, type AxiosResponse } from "axios";
 import { useQuery } from "@tanstack/react-query";
-import type { BinanceMarketApiData, BinanceSystemStatusApiData, BinanceTickerApiData, BitgetApiResponse, BitgetWalletStatusApiData, BitgetWalletTickerApiData, BybitApiResponse, BybitTickerApiData, BybitWalletStatusApiData, ExchangeRateApiData, UpbitTickerWebSocketData } from "./types";
+import type { BinanceMarketApiData, BinanceSystemStatusApiData, BinanceTickerApiData, BitgetApiResponse, BitgetWalletStatusApiData, BitgetWalletTickerApiData, BybitApiResponse, BybitTickerApiData, BybitWalletStatusApiData, ExchangeRateApiData, ForexApiData, UpbitTickerWebSocketData } from "./types";
 import type { UpbitTickerApiData } from "@/pages/api/upbit/ticker";
 import { UpbitMarketApiData } from "@/pages/api/upbit/market";
-import { CMCIdMapItemApiData } from "@/pages/api/cmc/idmap";
-import { CMCMetadataItemData } from "@/pages/api/cmc/metadata";
+import { CoinMarketCapMetadataApiData } from "@/pages/api/cmc/metadata";
 import { CMCResponse } from "@/pages/api/cmc";
 import { Fiats } from "@/constants/app";
 import { CoinGeckoCoinApiData } from "@/pages/api/coingecko/coins";
@@ -19,6 +18,7 @@ import { initWebSocket } from "../websocket";
 import useWebSocket from "react-use-websocket";
 import { useEffect, useState } from "react";
 import queryClient from "../queryClient";
+import { CoinMarketCapQuoteLatestApiData } from "@/pages/api/cmc/quote";
 
 /**
  * 
@@ -36,28 +36,47 @@ export const useFetchExchangeRate = (refetchInterval: number | null, baseCurrenc
     });
 }
 
+export const useFetchForex = (refetchInterval: number | null, baseCurrency?: Fiats.USD | Fiats.KRW) => {
+    const base = baseCurrency ?? Fiats.USD;
+    const currenciesJoint = [Fiats.KRW, Fiats.AUD].join(",");
+    const queryKey = ['fetchExchangeRate', base, currenciesJoint];
+
+    return useQuery<AxiosResponse<ForexApiData | undefined>, AxiosError>({
+        queryFn: () => axios.get<ForexApiData | undefined>(`https://api.fxapi.com/v1/latest`, {
+            params: {
+                apikey: process.env.NEXT_PUBLIC_FOREX_API_KEY,
+                base_currency: base,
+                currencies: currenciesJoint,
+            }
+        }),
+        queryKey,
+        refetchInterval: refetchInterval ?? 0,
+        enabled: refetchInterval !== null,
+    });
+}
+
 /**
  * 
  * @description coin market cap api fetching
  */
-export const useFetchCoinMarketCapIdMap = (refetchInterval: number | null) => {
-    const queryKey = ['fetchCoinMarketCapIdMap'];
+export const useFetchCoinMarketCapCoinMetadata = (refetchInterval: number | null, symbols: readonly string[]) => {
+    const symbolsJoint = symbols.join(',');
+    const queryKey = ['useFetchCoinMarketCapCoinMetadata', symbolsJoint];
 
-    return useQuery<AxiosResponse<CMCResponse<readonly CMCIdMapItemApiData[]>>, AxiosError>({
-        queryFn: () => axios.get<CMCResponse<readonly CMCIdMapItemApiData[]>>('/api/cmc/idmap'),
+    return useQuery<AxiosResponse<CMCResponse<{ [symbol: string]: readonly CoinMarketCapMetadataApiData[] }> | undefined>, AxiosError>({
+        queryFn: () => axios.get<CMCResponse<{ [symbol: string]: readonly CoinMarketCapMetadataApiData[] }> | undefined>('/api/cmc/metadata', { params: { symbol: symbolsJoint, skip_invalid: 'true' } }),
         queryKey,
         refetchInterval: refetchInterval ?? 0,
         enabled: refetchInterval !== null,
     });
 };
 
-export const useFetchCoinMarketCapMetadata = (refetchInterval: number | null, ids?: readonly number[]) => {
-    const id = ids?.join(',');
-    const options = id ? { params: { id } } : undefined;
-    const queryKey = ['fetchCoinMarketCapListings', id];
+export const useFetchCoinMarketCapPrice = (refetchInterval: number | null, symbols: readonly string[]) => {
+    const symbolsJoint = symbols.join(',');
+    const queryKey = ['useFetchCoinMarketCapPrice', symbolsJoint];
 
-    return useQuery<AxiosResponse<CMCResponse<{ [id: string]: CMCMetadataItemData }>>, AxiosError>({
-        queryFn: () => axios.get<CMCResponse<{ [id: string]: CMCMetadataItemData }>>('/api/cmc/metadata', options),
+    return useQuery<AxiosResponse<CMCResponse<{ [symbol: string]: readonly CoinMarketCapQuoteLatestApiData[] }> | undefined>, AxiosError>({
+        queryFn: () => axios.get<CMCResponse<{ [symbol: string]: readonly CoinMarketCapQuoteLatestApiData[] }> | undefined>('/api/cmc/quote', { params: { symbol: symbolsJoint, skip_invalid: 'true' } }),
         queryKey,
         refetchInterval: refetchInterval ?? 0,
         enabled: refetchInterval !== null,
@@ -79,9 +98,9 @@ export const useFetchCoinGeckoCoinIds = (refetchInterval: number | null) => {
     });
 };
 
-export const useFetchCoinGeckoCoins = (refetchInterval: number | null, ids?: readonly string[]) => {
-    const idsJoint = ids?.join(',');
-    const options = { params: { ids: idsJoint ? `${idsJoint},tether` : 'tether' } };
+export const useFetchCoinGeckoCoins = (refetchInterval: number | null, ids: readonly string[]) => {
+    const idsJoint = ids.join(',');
+    const options = { params: { ids: idsJoint } };
     const queryKey = ['fetchCoinGeckoCoins', idsJoint];
 
     return useQuery<AxiosResponse<readonly CoinGeckoCoinPriceApiData[] | undefined>, AxiosError>({
@@ -142,7 +161,7 @@ export const useFetchBinaceMarket = (refetchInterval: number | null) => {
     const queryKey = ['fetchBinanceMarket'];
 
     return useQuery<AxiosResponse<BinanceMarketApiData | undefined>, AxiosError>({
-        queryFn: () => binanceAxiosClient.get<BinanceMarketApiData | undefined>(`/api/v3/exchangeInfo`),
+        queryFn: () => binanceAxiosClient.get<BinanceMarketApiData | undefined>(`/api/v3/exchangeInfo`, { params: { permissions: 'SPOT' } }),
         queryKey,
         refetchInterval: refetchInterval ?? 0,
         enabled: refetchInterval !== null,

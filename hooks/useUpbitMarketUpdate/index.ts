@@ -5,16 +5,17 @@ import { useAtom } from "jotai";
 import { useEffect } from "react";
 
 const useUpbitMarketUpdate = () => {
-    const { data: upbitMarketData } = useFetchUpbitMarket(0);
+    const [upbitMarketData, setUpbitMarketData] = useAtom(upbitMarketDataAtom);
 
-    const [, setUpbitMarketData] = useAtom(upbitMarketDataAtom);
+    const { data: upbitSpotMarketData } = useFetchUpbitMarket(upbitMarketData ? null : 0);
+
     const [tokenKoreanNameMap, setTokenKoreanNameMap] = useAtom(tokenKoreanNameMapAtom);
 
     useEffect(() => {
         const newTokenKoreanNameMap: Record<string, string> = {};
 
         // update krw-quoted market data only
-        const data = upbitMarketData?.data?.reduce<Record<string, UpbitMarketApiData>>((acc, item) => {
+        const data = upbitSpotMarketData?.data?.reduce<Record<string, UpbitMarketApiData>>((acc, item) => {
             const symbol = item.market.includes('KRW-') ? item.market.replaceAll('KRW-', '') : null;
             if (symbol === null) return acc;
 
@@ -24,17 +25,9 @@ const useUpbitMarketUpdate = () => {
 
         setTokenKoreanNameMap({ ...tokenKoreanNameMap, ...newTokenKoreanNameMap });
         setUpbitMarketData(data);
-    }, [upbitMarketData]);
+    }, [upbitSpotMarketData]);
 
-    // const [, setUpbitWalletStatus] = useAtom(upbitWalletStatusAtom);
-
-    // useEffect(() => {
-    //     const data = upbitWalletStatus?.data?.reduce<Record<string, { networkType: string; status: ExchangeWalletStatus }>>((acc, item) => {
-    //         return { ...acc, [item.currency]: getExchangeWalletDataFromUpbit(item) };
-    //     }, {});
-
-    //     setUpbitWalletStatus(data);
-    // }, [upbitWalletStatus]);
+    return { upbitMarketData };
 }
 
 export default useUpbitMarketUpdate;

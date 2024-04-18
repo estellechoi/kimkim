@@ -3,7 +3,7 @@
 import '@/styles/globals.css';
 import type {AppProps} from 'next/app';
 import {DehydratedState, HydrationBoundary, QueryClient, QueryClientProvider, useQueryErrorResetBoundary} from '@tanstack/react-query';
-import {Suspense, useMemo, useRef} from 'react';
+import {Suspense, useRef} from 'react';
 import queryClient from '@/data/queryClient';
 import Fallback from '@/components/Fallback';
 import Head from 'next/head';
@@ -12,37 +12,23 @@ import {SEO} from '../next-seo.config';
 import SentryErrorBoundary from '@/components/ErrorBoundary/SentryErrorBoundary';
 import AppHeader from '@/components/AppHeader';
 import {ModalProvider} from '@/hooks/useModal/ModalProvider';
-import dynamic from 'next/dynamic';
 import AppFooter from '@/components/AppFooter';
 import AnalyticsProvider from '@/hooks/useAnalytics/AnalyticsProvider';
 import {googleAnalytics, mixpanel} from '@/constants/app';
 import GoogleAnalyticsReporter from '@/analytics/googleAnalytics/GoogleAnalyticsReporter';
 import MixPanelReporter from '@/analytics/mixpanel/MixPanelReporter';
 import GlowBackground from '@/components/GlowBackground';
-import useUpbitMarketUpdate from '@/hooks/useUpbitMarketUpdate';
 import useUsdBasedExchangeRateUpdate from '@/hooks/useUsdBasedExchangeRateUpdate';
-import useBinanceMarketUpdate from '@/hooks/useBinanceMarketUpdate';
-import useCoinGeckoUpdate from '@/hooks/useCoinGeckoUpdate';
-import useCoinGeckoPriceUpdate from '@/hooks/useCoinGeckoPriceUpdate';
 import useUserAgent from '@/hooks/useUserAgent';
 import MobileBlocker from '@/components/home/MobileBlocker';
 
-const UserAgentDetector = dynamic(() => import('@/components/UserAgentDetector'), {ssr: false});
-
 const MetaDataUpdater = () => {
   useUsdBasedExchangeRateUpdate();
-
-  // only fetch tether price by default
-  useCoinGeckoPriceUpdate([]);
-  useCoinGeckoUpdate();
-
-  useUpbitMarketUpdate();
-  useBinanceMarketUpdate();
   return null;
 };
 
 function MyApp({Component, pageProps}: AppProps<{dehydratedState: DehydratedState}>) {
-  const {reset} = useQueryErrorResetBoundary();
+  const { reset } = useQueryErrorResetBoundary();
 
   /**
    *
@@ -113,7 +99,6 @@ function MyApp({Component, pageProps}: AppProps<{dehydratedState: DehydratedStat
             <QueryClientProvider client={queryClientRef.current}>
               <HydrationBoundary state={pageProps.dehydratedState}>
                 <MetaDataUpdater />
-                <UserAgentDetector />
                 <ModalProvider>
                   <GlowBackground
                     color="primary"

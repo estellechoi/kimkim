@@ -1,21 +1,24 @@
-import { useFetchCoinMarketCapIdMap } from "@/data/hooks";
-import { CMCIdMapItemApiData } from "@/pages/api/cmc/idmap";
-import { coinMarketCapIdMapAtom } from "@/store/states";
+import { useFetchCoinMarketCapCoinMetadata } from "@/data/hooks";
+import { CoinMarketCapMetadataApiData } from "@/pages/api/cmc/metadata";
+import { coinMarketCapMetadataAtom } from "@/store/states";
 import { useAtom } from "jotai";
 import { useEffect } from "react";
 
-const useCoinMarketCapUpdate = () => {
-    const { data: idMapData } = useFetchCoinMarketCapIdMap(0);
-
-    const [,setCoinMarketCapMetadata] = useAtom(coinMarketCapIdMapAtom);
+const useCoinMarketCapUpdate = (symbols: readonly string[]) => {
+    const [coinMarketCapMetadata, setCoinMarketCapMetadataAtom] = useAtom(coinMarketCapMetadataAtom);
+    
+    const { data: coinMarketCapCoinMetadata } = useFetchCoinMarketCapCoinMetadata(coinMarketCapMetadata ? null : 0, symbols);
 
     useEffect(() => {
-        const data = idMapData?.data.data?.reduce<Record<string, CMCIdMapItemApiData>>((acc, item) => {
-            return { ...acc, [item.symbol]: item };
+        if (!coinMarketCapCoinMetadata?.data?.data) return;
+
+        const data = coinMarketCapCoinMetadata.data.data;
+        const reducedData = Object.keys(data).reduce<Record<string, CoinMarketCapMetadataApiData>>((acc, key) => {
+            return { ...acc, [key]: data[key][0] };
         }, {});
 
-        setCoinMarketCapMetadata(data);
-    }, [idMapData]);
+        setCoinMarketCapMetadataAtom(reducedData);
+    }, [coinMarketCapCoinMetadata]);
 }
 
 export default useCoinMarketCapUpdate;

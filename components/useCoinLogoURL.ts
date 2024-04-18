@@ -1,14 +1,14 @@
 import { useMemo } from 'react';
 import { useAtom } from 'jotai';
-import { coinGeckoCoinMapAtom } from '@/store/states';
+import { coinMarketCapMetadataAtom } from '@/store/states';
 
 const useCoinLogoURL = (symbol?: string) => {
+  const [coinMarketCapMetadata] = useAtom(coinMarketCapMetadataAtom);
 
-  const [coinGeckoCoinMap] = useAtom(coinGeckoCoinMapAtom);
 
   return useMemo<string | undefined>(() => {
-    return symbol ? coinGeckoCoinMap?.[symbol]?.image : undefined;
-  }, [symbol, coinGeckoCoinMap]);
+    return coinMarketCapMetadata?.[symbol ?? '']?.logo;
+  }, [symbol, coinMarketCapMetadata]);
 };
 
 export default useCoinLogoURL;

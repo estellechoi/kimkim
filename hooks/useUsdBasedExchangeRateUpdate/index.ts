@@ -1,5 +1,5 @@
 import { Fiats } from "@/constants/app";
-import { useFetchExchangeRate } from "@/data/hooks";
+import { useFetchForex } from "@/data/hooks";
 import { currencyExchangeRateAtom } from "@/store/states";
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
@@ -7,29 +7,30 @@ import { useEffect, useState } from "react";
 const useUsdBasedExchangeRateUpdate = () => {
     const [currencyExchangeRate, setCurrencyExchangeRate] = useAtom(currencyExchangeRateAtom);
     
-    const [usdBasedExchangeDataInterval, setUsdBasedExchangeInterval] = useState<number | null>(60000);
-    const { data: usdBasedExchangeRateData, error: usdBasedExchangeRateError } = useFetchExchangeRate(usdBasedExchangeDataInterval, Fiats.USD);
-  
-    
-    useEffect(() => {
-      if (usdBasedExchangeRateError?.response?.status === 429) {
-        setUsdBasedExchangeInterval(null);
-      }
-    }, [usdBasedExchangeRateError?.response?.status]);
+    const [usdBasedExchangeDataInterval, setUsdBasedExchangeInterval] = useState<number | null>(6000);
+
+    /**
+     * 
+     * @description replace with Forex api
+     */
+    const { data: forexData, error: forextError, isLoading: isForexLoading } = useFetchForex(usdBasedExchangeDataInterval);
 
     useEffect(() => {
-      const newCurrencyExchangeRate = Object.values(Fiats).reduce<Record<Fiats, number | null>>((acc, currency) => {
-        const item = {
-          [currency]: usdBasedExchangeRateData?.data?.conversion_rates[currency] ?? null
-        };
-        return { ...acc, ...item };
+      if (forextError?.response?.status === 429) {
+        // Forext api has rate limit per minute
+        setUsdBasedExchangeInterval(60000);
+      }
+    }, [forextError]);
+
+    useEffect(() => {
+      const lastUpdatedTime = forexData?.data?.meta.last_updated_at ? new Date(forexData.data.meta.last_updated_at).getTime() : undefined;
+
+      const rates = Object.values(Fiats).reduce<Record<Fiats, number | null>>((acc, currency) => {
+        return { ...acc, [currency]: forexData?.data?.data[currency]?.value ?? null };
       }, currencyExchangeRate.rates);
 
-      setCurrencyExchangeRate({
-        lastUpdatedTime: usdBasedExchangeRateData?.data? usdBasedExchangeRateData.data.time_last_update_unix * 1000 : undefined,
-        rates: newCurrencyExchangeRate,
-      });
-    }, [usdBasedExchangeRateData, currencyExchangeRate]);
+      setCurrencyExchangeRate({ lastUpdatedTime, rates });
+    }, [forexData]);
 }
 
 export default useUsdBasedExchangeRateUpdate;

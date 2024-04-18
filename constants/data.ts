@@ -1,6 +1,7 @@
 import { CoinGeckoCoinApiData } from "@/pages/api/coingecko/coins";
 
-export const COIN_GECKO_COINS: readonly CoinGeckoCoinApiData[] = [
+export const COIN_GECKO_COINS: readonly CoinGeckoCoinApiData[] = 
+[
     {
         "id": "01coin",
         "symbol": "zoc",

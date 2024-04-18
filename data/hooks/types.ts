@@ -1,3 +1,5 @@
+import { Fiats } from "@/constants/app";
+
 export interface ExchangeRateApiData {
     result: string;
     documentation: string;
@@ -8,6 +10,18 @@ export interface ExchangeRateApiData {
     time_next_update_utc: string;
     base_code: string;
     conversion_rates: { [currencyCode: string]: number };
+}
+
+export interface ForexApiData {
+  meta: {
+    last_updated_at: string;
+  };
+  data: {
+    [currency: string]: {
+      code: Fiats;
+      value: number;
+    }
+  }
 }
 
 export interface BinanceMarketApiData {
@@ -243,7 +257,7 @@ export interface BinanceKlineWebSocketData {
 }
 
 export interface HtxKlineWebSocketData  {
-  ch: string;      // Channel name
+  ch: string;      // Channel name; ex: market.btcusdt.kline.1min
   ts: number;      // Timestamp
   tick: {
       id: number;        // ID of the tick

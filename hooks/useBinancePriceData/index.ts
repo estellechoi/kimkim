@@ -4,8 +4,11 @@ import { useWebSocketBinancePrice } from "@/data/hooks/webSocket";
 import { binanceMarketDataAtom } from "@/store/states";
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
+import useBinanceMarketUpdate from "@/hooks/useBinanceMarketUpdate";
 
 const useBinancePriceData = (enabled: boolean, symbols: readonly string[]) => {
+    useBinanceMarketUpdate();
+
     const [binanceMarketData] = useAtom(binanceMarketDataAtom);
     const binanceSymbols = symbols.filter(symbol => binanceMarketData?.[symbol]);
   
