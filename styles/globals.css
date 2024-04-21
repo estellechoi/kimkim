@@ -46,11 +46,11 @@
     }
 
     body {
-        @apply bg-ground text-black;
+        @apply bg-ground text-body;
     }
 
     .dark body {
-        @apply bg-primary text-white;
+        @apply bg-primary text-on_primary;
     }
 }
 
@@ -108,19 +108,19 @@
 
     /* typography - body */
     .Font_body_xs {
-        @apply font-primary text-xs leading-snug font-normal;
+        @apply font-primary text-xs leading-relaxed font-normal;
     }
     
     .Font_body_sm {
-        @apply font-primary text-sm leading-snug font-normal;
+        @apply font-primary text-sm leading-normal font-normal;
     }
 
     .Font_body_md {
-        @apply font-primary text-base leading-snug font-normal;
+        @apply font-primary text-base leading-normal font-normal;
     }
 
     .Font_body_lg {
-        @apply font-primary text-xl leading-snug font-normal;
+        @apply font-primary text-xl leading-normal font-normal;
     }
 
     /** typography - label */

@@ -49,7 +49,7 @@ const AppHeader = ({ className = '' }: AppHeaderProps) => {
 
       <div className={`grow shrink ${appHeaderClassName}`}>
         <Link href="/">
-          <AppLogo size="md" color="dark" />
+          <AppLogo size="md" color="light" />
         </Link>
 
         <div className="flex items-center gap-x-6">

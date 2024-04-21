@@ -224,8 +224,8 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps)
   const isTableLoading = useMemo<boolean>(() => isBaseExchangeDataLoading || isQuoteExchangeDataLoading, [isBaseExchangeDataLoading, isQuoteExchangeDataLoading]);
 
     return (
-        <div className="w-full flex flex-col items-center gap-y-20">
-          {watchListTableRows.length > 0 && <section className="w-full max-w-app_container space-y-2 px-page_x">
+        <div className="w-full flex flex-col items-center gap-y-20 px-page_x">
+          {watchListTableRows.length > 0 && <section className="w-full max-w-content_max_width space-y-2">
             <div className="flex justify-between items-center gap-x-10">
               <div className="text-caption Font_label_12px p-4" >내 즐겨찾기 {isDataError && <ExchangeDataWarningTag className="ml-2" />}</div>
               
@@ -242,7 +242,7 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps)
             </Card>
           </section>}
 
-          <section className="w-full max-w-app_container px-page_x">
+          <section className="w-full max-w-content_max_width">
             <div className="flex justify-between items-center gap-x-10">
               <div className="text-caption Font_label_12px p-4" >김치 프리미엄 {isDataError && <ExchangeDataWarningTag className="ml-2" />}</div>
               
@@ -258,9 +258,17 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps)
               <KimchiPremiumTable rows={visiblePremiumRows} isLoading={isTableLoading} />
             </Card>
 
-            {hiddenRowsLength > 0 && (
+            {(showAllPremiumRows || hiddenRowsLength > 0) && (
               <div className="flex justify-center mt-4">
-                <Button color="body" type="outline" size="sm" iconType={showAllPremiumRows ? 'expand_less' : 'expand_more'} label={`${hiddenRowsLength}개 더보기`} onClick={() => setShowAllPremiumRows(!showAllPremiumRows)} />
+                <Button 
+                  color="body" 
+                  type="outline" 
+                  size="sm" 
+                  iconType={showAllPremiumRows ? 'expand_less' : 'expand_more'} 
+                  label={`${hiddenRowsLength}개 더보기`} 
+                  labelHidden={showAllPremiumRows}
+                  onClick={() => setShowAllPremiumRows(!showAllPremiumRows)} 
+                />
               </div>
             )}
           </section>

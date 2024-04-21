@@ -25,10 +25,10 @@ const TermsAndPolicyOverlay = (props: Omit<OverlayProps, 'ariaLabel'>) => {
 
   const Content = (
     <>
-      <CardLink color="on_primary" label="Terms of Use" href="/terms-of-use" className="mb-3" />
-      <CardLink color="on_primary" label="Privacy Policy" href="/privacy-policy" className="mb-modal_gap" />
+      <CardLink color="body" label="이용약관" href="/terms-of-use" className="mb-3" />
+      <CardLink color="body" label="개인정보처리방침" href="/privacy-policy" className="mb-modal_gap" />
 
-      <p className="text-caption_on_primary Font_body_sm mb-5">This app uses the following third party services:</p>
+      <p className="text-caption Font_body_sm mb-5">아래의 제3자 서비스를 이용해요.</p>
 
       <dl className="space-y-5">
         {THRD_PARTY_SERVICES.map(({ title, href, description }) => (

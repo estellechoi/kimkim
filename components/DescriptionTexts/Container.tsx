@@ -5,7 +5,7 @@ import Icon from '../Icon';
 
 const Title = ({ children, href }: { children: ReactNode; href?: string }) => {
   return (
-    <dt className="text-ground Font_label_14px">
+    <dt className="text-body Font_label_14px">
       {href ? (
         <A href={href} className="inline-flex items-center gap-x-1">
           {children}
@@ -19,7 +19,7 @@ const Title = ({ children, href }: { children: ReactNode; href?: string }) => {
 };
 
 const Block = ({ children }: { children: ReactNode }) => {
-  return <dd className="text-caption_on_primary Font_body_sm">{children}</dd>;
+  return <dd className="text-caption Font_body_sm">{children}</dd>;
 };
 
 const getTitle = (children: ReactNode) => getReactElements(children, Title);

@@ -1,15 +1,13 @@
 import Image from 'next/image';
-// import LOGO_LIGHT_URL from '@/resources/logos/logo_kimchi_compact.svg';
-// import LOGO_DARK_URL from '@/resources/logos/logo_kimchi_compact.svg';
-import AppLogoSVG from '../svgs/AppLogoSVG';
-import APP_LOGO_SVG from '@/resources/logos/app_logo.svg';
+import LOGO_LIGHT_URL from '@/resources/logos/logo_kimkim_white.svg';
+import LOGO_DARK_URL from '@/resources/logos/logo_kimkim_black.svg';
 
 type AppLogoColor = 'light' | 'dark';
 type AppLogoSize = 'md' | 'lg';
 
 const LOGO_IMG_URL_DICT: Record<AppLogoColor, string> = {
-  dark: APP_LOGO_SVG,
-  light: APP_LOGO_SVG,
+  dark: LOGO_DARK_URL.src,
+  light: LOGO_LIGHT_URL.src,
 };
 
 const LOGO_SIZE_CLASS_DICT: Record<AppLogoSize, { className: string; px: number }> = {
@@ -20,15 +18,27 @@ const LOGO_SIZE_CLASS_DICT: Record<AppLogoSize, { className: string; px: number 
 type AppLogoProps = {
   color?: AppLogoColor;
   size?: AppLogoSize;
+  className?: string;
 };
 
-const AppLogo = ({ color = 'light', size = 'md' }: AppLogoProps) => {
+const AppLogo = ({ color = 'light', size = 'md', className = '' }: AppLogoProps) => {
+  const src = LOGO_IMG_URL_DICT[color];
   const imgSize = LOGO_SIZE_CLASS_DICT[size];
   
-  return <AppLogoSVG className={`${imgSize.className} text-primary`} />
+  // return <AppLogoSVG className={`${imgSize.className} text-primary`} />
   
-  // const src = LOGO_IMG_URL_DICT[color];
-  // return <Image priority src={src} alt="App logo" width={imgSize.px} className={imgSize.className} />;
+  return (
+    <Image 
+      priority 
+      width={0} 
+      height={0} 
+      sizes="100%" 
+      style={{ height: 'auto' }} 
+      src={src} 
+      alt="App logo" 
+      className={`object-cover ${imgSize.className} ${className}`}
+    />
+  );
 };
 
 export default AppLogo;

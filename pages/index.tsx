@@ -90,7 +90,7 @@ const Home: NextPage = () => {
 
   return (
     <Main className="flex flex-col items-center gap-y-20 min-h-screen pt-app_header_height pb-page_bottom">
-      <section className="w-full max-w-app_container space-y-2 px-page_x mt-20">
+      <section className="w-full max-w-content_max_width space-y-2 mt-20">
         <div className="flex justify-between items-center gap-x-10">
           <div className="text-caption Font_label_12px p-4" >환율 {krwByUsd === undefined && <ExchangeDataWarningTag className="ml-2" />}</div>
           {currencyExchangeRate.lastUpdatedTime ? (

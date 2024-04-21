@@ -6,7 +6,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        primary: ['Poppins', ...defaultTheme.fontFamily.sans],
+        primary: ['Poppins', '"Noto Sans KR"', ...defaultTheme.fontFamily.sans],
         num: ['"Azeret Mono"', 'monospace', ...defaultTheme.fontFamily.mono],
       },
       borderRadius: {
@@ -22,11 +22,10 @@ module.exports = {
         safe_top: 'env(safe-area-inset-top, 44px)',
         safe_bottom: '36px',
         app_header_height: 'var(--size-app-header-height)',
-        screen_height_exept_app_header: 'calc(100dvh - var(--size-app-header-height))',
+        screen_height_exept_app_header: 'calc(100vh - var(--size-app-header-height))',
         app_header_padding_x: '2rem',
         app_header_padding_y: '2.75rem',
-        app_container: '1440px',
-        bottom_sheet_max_height: 'calc(100dvh - var(--size-app-header-height) - 2.25rem)',
+        bottom_sheet_max_height: 'calc(100vh - var(--size-app-header-height) - 2.25rem)',
         page_bottom: '6rem',
         page_top: 'calc(var(--size-app-header-height) + 2.25rem)',
         page_x: '10rem',
@@ -39,9 +38,10 @@ module.exports = {
         modal_padding_safe_bottom: 'calc(2.25rem + 36px)',
         modal_margin_x: '2.5rem',
         modal_margin_y: '2.25rem',
-        modal_height: 'calc(100dvh - 4.75rem)',
+        modal_height: 'calc(100vh - 4.5rem)',
         card_padding_x: '1rem',
         card_padding_y: '0.75rem',
+        content_max_width: '1140px',
       },
       zIndex: {
         base: 'var(--zindex-context-screen)',
