@@ -8,7 +8,7 @@ import { CMCResponse } from "@/pages/api/cmc";
 import { Fiats } from "@/constants/app";
 import { CoinGeckoCoinApiData } from "@/pages/api/coingecko/coins";
 import { CoinGeckoCoinPriceApiData } from "@/pages/api/coingecko/prices";
-import { HtxApiResponse, HtxMarketApiData } from "@/pages/api/htx/ticker";
+import { HtxApiResponse, HtxMarketApiData } from "@/pages/api/htx/tickers";
 import { UpbitWalletStatusApiData } from "@/pages/api/upbit/wallet";
 import { HmacSHA256, enc } from 'crypto-js';
 import { HtxWalletStatusApiData } from "@/pages/api/htx/wallet";
@@ -210,7 +210,7 @@ export const useFetcHtxPrice = (refetchInterval: number | null) => {
     const queryKey = ['fetcHtxPrice'];
 
     return useQuery<AxiosResponse<HtxApiResponse<readonly HtxMarketApiData[]> | undefined>, AxiosError>({
-        queryFn: () => axios.get<HtxApiResponse<readonly HtxMarketApiData[]> | undefined>('/api/htx/ticker'),
+        queryFn: () => axios.get<HtxApiResponse<readonly HtxMarketApiData[]> | undefined>('/api/htx/tickers'),
         queryKey,
         refetchInterval: refetchInterval ?? 0,
         enabled: refetchInterval !== null,

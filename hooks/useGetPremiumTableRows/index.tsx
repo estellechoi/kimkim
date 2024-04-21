@@ -31,7 +31,7 @@ const useGetPremiumTableRows = ({ watchListSymbols, onToggleWatchList, krwByUsd,
     ): readonly KimchiPremiumTableRow[] => {
         // map table rows
         return baseExchangeData.map(item => {
-          const { symbol, price: baseExchangePrice, volume: baseExchangeVolume } = item;
+          const { symbol, lastPrice: baseExchangePrice, volume: baseExchangeVolume } = item;
 
           const koreanName = tokenKoreanNameMap?.[symbol] ?? symbol;
 
@@ -54,7 +54,7 @@ const useGetPremiumTableRows = ({ watchListSymbols, onToggleWatchList, krwByUsd,
 
           const quoteExchangeItem = quoteExchangeData.find(({ symbol: quoteExchangeSymbol }) => quoteExchangeSymbol === symbol);
 
-          const quoteExchangePrice = quoteExchangeItem?.price;
+          const quoteExchangePrice = quoteExchangeItem?.lastPrice;
           const quoteExchangeVolume = quoteExchangeItem?.volume;
 
           const quoteExchangePriceKrw = quoteExchangePrice ? BigNumber(quoteExchangePrice).multipliedBy(krwByUsd ?? 0) : undefined;

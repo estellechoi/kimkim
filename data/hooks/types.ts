@@ -256,6 +256,35 @@ export interface BinanceKlineWebSocketData {
   stream: string;
 }
 
+export interface BinanceTickerWebSocketData {
+  data: {
+    e: string;  // Event type
+    E: number;     // Event time
+    s: string;      // Symbol
+    p: string;      // Price change
+    P: string;      // Price change percent
+    w: string;      // Weighted average price
+    x: string;      // First trade(F)-1 price (first trade before the 24hr rolling window)
+    c: string;      // Last price
+    Q: string;          // Last quantity
+    b: string;      // Best bid price
+    B: string;          // Best bid quantity
+    a: string;      // Best ask price
+    A: string;         // Best ask quantity
+    o: string;      // Open price
+    h: string;      // High price
+    l: string;      // Low price
+    v: string;       // Total traded base asset volume
+    q: string;          // Total traded quote asset volume
+    O: number;             // Statistics open time
+    C: number;      // Statistics close time
+    F: number;             // First trade ID
+    L: number;         // Last trade Id
+    n: number;          // Total number of trades
+  } | undefined;
+  stream: string;
+}
+
 export interface HtxKlineWebSocketData  {
   ch: string;      // Channel name; ex: market.btcusdt.kline.1min
   ts: number;      // Timestamp
@@ -268,5 +297,25 @@ export interface HtxKlineWebSocketData  {
       amount: number;    // Amount traded
       vol: number;       // Volume traded
       count: number;     // Trade count
+  };
+};
+
+export interface HtxTickerWebSocketData  {
+  ch: string;      // Channel name; ex: market.btcusdt.ticker
+  ts: number;      // Timestamp
+  tick: {
+      open: number;      // Opening price
+      close: number;     // Closing price
+      low: number;       // Lowest price
+      high: number;      // Highest price
+      amount: number;    // Amount traded
+      vol: number;       // Volume traded
+      count: number;     // Trade count
+      bid: number;       // Best bid price
+      bidSize: number;   // Best bid size
+      ask: number;       // Best ask price
+      askSize: number;   // Best ask size
+      lastPrice: number; // Last price
+      lastSize: number;  // Last size
   };
 };

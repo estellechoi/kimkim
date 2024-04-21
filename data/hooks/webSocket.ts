@@ -1,5 +1,5 @@
 import useWebSocket from "react-use-websocket";
-import { BinanceKlineWebSocketData, HtxKlineWebSocketData, UpbitTickerWebSocketData } from "@/data/hooks/types";
+import { BinanceKlineWebSocketData, BinanceTickerWebSocketData, HtxKlineWebSocketData, HtxTickerWebSocketData, UpbitTickerWebSocketData } from "@/data/hooks/types";
 import queryClient from "@/data/queryClient";
 import { useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -19,6 +19,10 @@ export const useWebSocketUpbitPrice = (connect: boolean, symbols: readonly strin
     ];
 
     const { lastMessage, readyState, sendJsonMessage } = useWebSocket<UpbitTickerWebSocketData>('wss://api.upbit.com/websocket/v1', { 
+        heartbeat: {
+            message: 'PING',
+            interval: 110000, // ping in every 120s
+        },
         shouldReconnect: () =>  true,
         onOpen: () => sendJsonMessage(requestMessage),
         onError: (event) => {
@@ -30,6 +34,7 @@ export const useWebSocketUpbitPrice = (connect: boolean, symbols: readonly strin
         if (readyState !== 1 || !lastMessage?.data) return;
 
         new Response(lastMessage.data as Blob).json().then((wsData) => {
+            if (wsData.status === 'UP') return; // ignore ping pong message
             queryClient.setQueryData<UpbitTickerWebSocketData | undefined>(queryKey, wsData);
         });
     }, [lastMessage, readyState]);
@@ -41,7 +46,7 @@ export const useWebSocketUpbitPrice = (connect: boolean, symbols: readonly strin
 };
 
 export const useWebSocketBinancePrice = (connect: boolean, symbols: readonly string[]) => {
-    const streamsJoint = symbols.map(symbol => `${symbol}USDT@kline_1s`).join('/').toLowerCase(); // 1s interval candle stick
+    const streamsJoint = symbols.map(symbol => `${symbol}USDT@ticker`).join('/').toLowerCase();
     const queryKey = ['useWebSocketBinancePrice', streamsJoint];
 
     const { lastMessage, readyState } = useWebSocket<any>('wss://stream.binance.com:9443/stream', { 
@@ -49,40 +54,37 @@ export const useWebSocketBinancePrice = (connect: boolean, symbols: readonly str
         shouldReconnect: () =>  true,
         onOpen: () => console.log('Binance WebSocket connected'),
         onError: (event) => {
-            queryClient.setQueryData(queryKey, new Error(event.eventPhase.toString()));
+            console.log('Htx WebSocket error', event);
         },
     }, connect);
 
     useEffect(() => {
         if (readyState !== 1 || !lastMessage?.data) return;
 
-        const { data } = JSON.parse(lastMessage.data as string) as BinanceKlineWebSocketData;
+        const parsedData = JSON.parse(lastMessage.data as string) as BinanceTickerWebSocketData;
 
-        queryClient.setQueryData<BinanceKlineWebSocketData['data'] | undefined>(queryKey, data);
+        queryClient.setQueryData<BinanceTickerWebSocketData | undefined>(queryKey, parsedData);
     }, [lastMessage, readyState]);
 
-    return useQuery<BinanceKlineWebSocketData['data'] | undefined>({
+    return useQuery<BinanceTickerWebSocketData | undefined>({
         queryKey,
         enabled: connect,
     });
 };
 
 export const useWebSocketHtxPrice = (connect: boolean, symbols: readonly string[]) => {
-    const subs = symbols.map(symbol => `market.${symbol}USDT.kline.1min`.toLowerCase()); // 1m interval candle stick
+    const subs = symbols.map(symbol => `market.${symbol}USDT.ticker`.toLowerCase()); // 1m interval candle stick
     const queryKey = ['useWebSocketHtxPrice', subs.join('/')];
 
     const { lastMessage, readyState, sendJsonMessage } = useWebSocket<any>('wss://api.huobi.pro/ws', { 
         shouldReconnect: () =>  true,
         onOpen: () => {
-            console.log('Htx WebSocket connected');
-
             subs.forEach(sub => {
-                const message = { sub, id: `${sub}.${uuid()}` };
-                sendJsonMessage(message);
+                sendJsonMessage({ sub });
             });
         },
         onError: (event) => {
-            queryClient.setQueryData(queryKey, new Error(event.eventPhase.toString()));
+            console.log('Htx WebSocket error', event)
         },
     }, connect);
 
@@ -92,18 +94,17 @@ export const useWebSocketHtxPrice = (connect: boolean, symbols: readonly string[
         // gzip decompression
         (lastMessage.data as Blob).arrayBuffer().then((arrayBuffer) => {
             const decompressedData = inflate(new Uint8Array(arrayBuffer), { to: 'string' });
-
             const parsedData = JSON.parse(decompressedData);
                 
             // ping pong to prevent disconnection
             parsedData?.ping && sendJsonMessage({ pong: parsedData.ping });
 
             // update data
-            parsedData?.ch && queryClient.setQueryData<HtxKlineWebSocketData | undefined>(queryKey, parsedData as HtxKlineWebSocketData);
+            parsedData?.ch && queryClient.setQueryData<HtxTickerWebSocketData | undefined>(queryKey, parsedData as HtxTickerWebSocketData);
         });
     }, [lastMessage, readyState]);
 
-    return useQuery<HtxKlineWebSocketData | undefined>({
+    return useQuery<HtxTickerWebSocketData | undefined>({
         queryKey,
         enabled: connect,
     });

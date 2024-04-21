@@ -1,15 +1,15 @@
 import { ExchangeWalletStatus } from "@/constants/app";
 import { BinanceTickerApiData, BitgetWalletStatusApiData, BitgetWalletTickerApiData, BybitTickerApiData, BybitTickerItemApiData, BybitWalletStatusApiData, BybitWalletStatusItemApiData } from "@/data/hooks/types";
 import { BinanceWalletStatusApiData } from "@/pages/api/binance/wallet";
-import { HtxMarketApiData } from "@/pages/api/htx/ticker";
+import { HtxMarketApiData } from "@/pages/api/htx/tickers";
 import { HtxWalletStatusApiData } from "@/pages/api/htx/wallet";
-import { UpbitMarketApiData } from "@/pages/api/upbit/market";
 import { UpbitTickerApiData } from "@/pages/api/upbit/ticker";
 import { UpbitWalletStatusApiData } from "@/pages/api/upbit/wallet";
+import { HtxTickerData } from "@/types/htx";
 import BigNumber from "bignumber.js";
 
-export type BaseExchangePriceData = { symbol: string; price: number; volume: number };
-export type QuoteExchangePriceData = { symbol: string; price: number; volume: number };
+export type BaseExchangePriceData = { symbol: string; lastPrice: number; volume: number };
+export type QuoteExchangePriceData = { symbol: string; lastPrice: number | undefined; volume: number };
 
 export type ExchangeWalletData = { 
     networkType: string; 
@@ -26,9 +26,9 @@ export type ExchangeWalletData = {
 export const reduceBaseExchangePriceDataFromUpbit = (acc: readonly BaseExchangePriceData[], data: UpbitTickerApiData): readonly BaseExchangePriceData[] => {
     if (data.market.startsWith('KRW-')) {
         const symbol = data.market.replace('KRW-', '');
-        const price = data.opening_price;
-        const volume = BigNumber(data.acc_trade_volume_24h).times(data.opening_price).toNumber();
-        return [...acc, { symbol, price, volume }];
+        const lastPrice = data.trade_price;
+        const volume = BigNumber(data.acc_trade_volume_24h).times(lastPrice).toNumber();
+        return [...acc, { symbol, lastPrice, volume }];
     }
 
     return acc;
@@ -41,20 +41,20 @@ export const reduceBaseExchangePriceDataFromUpbit = (acc: readonly BaseExchangeP
 export const reduceQuoteExchangePriceDataFromBinance = (acc: readonly QuoteExchangePriceData[], data: BinanceTickerApiData): readonly QuoteExchangePriceData[] => {
     if (data.symbol.endsWith('USDT')){
         const symbol = data.symbol.replaceAll('USDT', '');
-        const price = parseFloat(data.openPrice);
+        const lastPrice = parseFloat(data.lastPrice);
         const volume = parseFloat(data.quoteVolume);
-        return [...acc, { symbol, price, volume }];    
+        return [...acc, { symbol, lastPrice, volume }];    
     }
 
     return acc;
 }
 
-export const reduceQuoteExchangePriceDataFromHtx = (acc: readonly QuoteExchangePriceData[], data: HtxMarketApiData): readonly QuoteExchangePriceData[] => {
+export const reduceQuoteExchangePriceDataFromHtx = (acc: readonly QuoteExchangePriceData[], data: HtxTickerData): readonly QuoteExchangePriceData[] => {
     if (data.symbol.endsWith('usdt')){
         const symbol = data.symbol.replaceAll('usdt', '').toUpperCase();
-        const price = data.open;
+        const lastPrice = data.lastPrice;
         const volume = data.vol;
-        return [...acc, { symbol, price, volume }];    
+        return [...acc, { symbol, lastPrice, volume }];    
     }
 
     return acc;
@@ -63,9 +63,9 @@ export const reduceQuoteExchangePriceDataFromHtx = (acc: readonly QuoteExchangeP
 export const reduceQuoteExchangePriceDataFromBybit = (acc: readonly QuoteExchangePriceData[], data: BybitTickerItemApiData): readonly QuoteExchangePriceData[] => {
     if (data.symbol.endsWith('USDT')){
         const symbol = data.symbol.replaceAll('USDT', '');
-        const price = parseFloat(data.lastPrice);
+        const lastPrice = parseFloat(data.lastPrice);
         const volume = parseFloat(data.volume24h);
-        return [...acc, { symbol, price, volume }];    
+        return [...acc, { symbol, lastPrice, volume }];    
     }
 
     return acc;
@@ -74,9 +74,9 @@ export const reduceQuoteExchangePriceDataFromBybit = (acc: readonly QuoteExchang
 export const reduceQuoteExchangePriceDataFromBitget = (acc: readonly QuoteExchangePriceData[], data: BitgetWalletTickerApiData): readonly QuoteExchangePriceData[] => {
     if (data.symbol.endsWith('USDT')){
         const symbol = data.symbol.replaceAll('USDT', '');
-        const price = parseFloat(data.open);
+        const lastPrice = parseFloat(data.lastPr);
         const volume = parseFloat(data.usdtVolume);
-        return [...acc, { symbol, price, volume }];    
+        return [...acc, { symbol, lastPrice, volume }];    
     }
 
     return acc;

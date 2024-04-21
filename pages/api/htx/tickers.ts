@@ -33,7 +33,7 @@ const handler = async (
       return { status: err.response?.status, data: err.response?.data };
     });
 
-    res.status(response.status ?? 500).json(response.data);
+    res.status(response.data?.status === 'error' ? 400 : response.status ?? 500).json(response.data);
   };
   
   export default handler;

@@ -1,5 +1,5 @@
 import { useFetchBinacePrice } from "@/data/hooks";
-import { BinanceTickerApiData } from "@/data/hooks/types";
+import { BinanceTickerApiData, BinanceTickerWebSocketData } from "@/data/hooks/types";
 import { useWebSocketBinancePrice } from "@/data/hooks/webSocket";
 import { binanceMarketDataAtom } from "@/store/states";
 import { useAtom } from "jotai";
@@ -29,14 +29,29 @@ const useBinancePriceData = (enabled: boolean, symbols: readonly string[]) => {
       return () => clearTimeout(retryTimer);
     }, [binancePriceError?.response]);
 
-    const { data: webSocketBinancePriceData, error, isLoading } = useWebSocketBinancePrice(fetchBinancePriceData, symbols);
+    const { data: webSocketBinancePriceData } = useWebSocketBinancePrice(fetchBinancePriceData, symbols);
 
+    const [webSocketDataQueue, setWebSocketData] = useState<Record<string, BinanceTickerWebSocketData['data']>>({});
+
+    useEffect(() => {
+        if (!webSocketBinancePriceData?.data) return;
+
+        setWebSocketData({ ...webSocketDataQueue, [webSocketBinancePriceData.data.s]: webSocketBinancePriceData.data });
+    }, [webSocketBinancePriceData]);
+
+    /**
+     * 
+     * @description final data to render
+     */
     const [data, setData] = useState<readonly BinanceTickerApiData[] | undefined>(binancePriceData?.data);
 
     useEffect(() => {
-        const overwrittenData = binancePriceData?.data?.map(item => item.symbol === webSocketBinancePriceData?.s ? ({ ...item, openPrice: webSocketBinancePriceData.k.o }) : item);
+        const overwrittenData = binancePriceData?.data?.map(item => {
+          const queueData = webSocketDataQueue[item.symbol];
+          return queueData ? ({ ...item, lastPrice: queueData.c, lastQty: queueData.Q }) : item;
+        });
         setData(overwrittenData);
-    }, [binancePriceError, webSocketBinancePriceData]);
+    }, [binancePriceData, webSocketDataQueue]);
   
     return { data, error: binancePriceError, isLoading: isBinancePriceLoading, queriedSymbols: binanceSymbols };
 }

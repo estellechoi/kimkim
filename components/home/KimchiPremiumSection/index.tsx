@@ -166,25 +166,25 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps)
    * 
    * @description filter table rows
    */
-  const [showAllPremiumRows, setShowAllPremiumRows] = useState<boolean>(false);
-
-  const usingPremiumRows = useMemo<readonly KimchiPremiumTableRow[]>(() => {
-    const premiumBasedSortedRows = [...premiumTableRows].sort((a, b) => a.premium.gt(b.premium) ? -1 : 1);
-    return showAllPremiumRows ? premiumBasedSortedRows : premiumBasedSortedRows.slice(0, 15);
-  }, [premiumTableRows, showAllPremiumRows]);
-
-  const hiddenRowsLength = useMemo<number>(() => premiumTableRows.length - usingPremiumRows.length, [premiumTableRows.length, usingPremiumRows.length]);
 
   const [premiumSearchKeyword, setPremiumSearchKeyword] = useState<string>('');
 
-  const premiumFilteredRows = useMemo<readonly KimchiPremiumTableRow[]>(() => {
+  const premiumSearchedRows = useMemo<readonly KimchiPremiumTableRow[]>(() => {
+    if (premiumSearchKeyword === '') return premiumTableRows;
 
-    if (premiumSearchKeyword === '') return usingPremiumRows;
-
-    return usingPremiumRows.filter(row => {
+    return premiumTableRows.filter(row => {
       return row.symbol.toLowerCase().includes(premiumSearchKeyword.toLowerCase()) || row.koreanName.toLowerCase().includes(premiumSearchKeyword.toLowerCase());
     });
-  }, [showAllPremiumRows, usingPremiumRows, premiumSearchKeyword]);
+  }, [premiumTableRows, premiumSearchKeyword]);
+
+  const [showAllPremiumRows, setShowAllPremiumRows] = useState<boolean>(false);
+
+  const visiblePremiumRows = useMemo<readonly KimchiPremiumTableRow[]>(() => {
+    const premiumBasedSortedRows = [...premiumSearchedRows].sort((a, b) => a.premium.gt(b.premium) ? -1 : 1);
+    return showAllPremiumRows ? premiumBasedSortedRows : premiumBasedSortedRows.slice(0, 15);
+  }, [premiumSearchedRows, showAllPremiumRows]);
+
+  const hiddenRowsLength = useMemo<number>(() => premiumSearchedRows.length - visiblePremiumRows.length, [premiumSearchedRows.length, visiblePremiumRows.length]);
 
   /**
    * 
@@ -255,7 +255,7 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps)
             </div>
 
             <Card color="glass" className="w-full space-y-4 mt-2">
-              <KimchiPremiumTable rows={premiumFilteredRows} isLoading={isTableLoading} />
+              <KimchiPremiumTable rows={visiblePremiumRows} isLoading={isTableLoading} />
             </Card>
 
             {hiddenRowsLength > 0 && (
