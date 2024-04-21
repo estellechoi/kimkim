@@ -5,7 +5,6 @@ import apolloClients, { type AppApolloClients } from '@/data/graphql/apolloClien
 import { UpbitMarketApiData } from '@/pages/api/upbit/market';
 import { CoinMarketCapMetadataApiData } from '@/pages/api/cmc/metadata';
 import { BinanceMarketSymbolDetailApiData } from '@/data/hooks/types';
-import { CoinGeckoCoinPriceApiData } from '@/pages/api/coingecko/prices';
 
 export const apolloClientsAtom = atom<AppApolloClients>(apolloClients);
 

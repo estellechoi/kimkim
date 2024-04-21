@@ -14,10 +14,11 @@ const useCoinMarketCapUpdate = (symbols: readonly string[]) => {
 
         const data = coinMarketCapCoinMetadata.data.data;
         const reducedData = Object.keys(data).reduce<Record<string, CoinMarketCapMetadataApiData>>((acc, key) => {
+            if (key === 'USDT') console.log(key, data[key]);
             return { ...acc, [key]: data[key][0] };
         }, {});
 
-        setCoinMarketCapMetadataAtom(reducedData);
+        setCoinMarketCapMetadataAtom({ ...coinMarketCapMetadata, ... reducedData });
     }, [coinMarketCapCoinMetadata]);
 }
 
