@@ -38,7 +38,7 @@ const KimchiPremiumTable = ({ rows, isLoading }: KimchiPremiumTableProps) => {
             type: 'jsx',
             sortType: 'string',
             sortValue: 'koreanName',
-            widthRatio: 14,
+            widthRatio: 16,
           },
           {
             label: '네트워크 수수료',
