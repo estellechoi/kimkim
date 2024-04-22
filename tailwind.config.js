@@ -6,7 +6,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        primary: ['Poppins', '"Noto Sans KR"', ...defaultTheme.fontFamily.sans],
+        primary: ['Poppins', ...defaultTheme.fontFamily.sans],
         num: ['"Azeret Mono"', 'monospace', ...defaultTheme.fontFamily.mono],
       },
       borderRadius: {
