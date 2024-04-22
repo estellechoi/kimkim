@@ -7,7 +7,6 @@ import ExchangeDropDownPair from '@/components/drop-downs/ExchangeDropDownPair';
 import { useFetcHtxWalletStatus, useFetchBinaceWalletStatus, useFetchBitgetPrice, useFetchBitgetWalletStatus, useFetchBybitPrice, useFetchBybitWalletStatus, useFetchUpbitPrice, useFetchUpbitWalletStatus } from '@/data/hooks';
 import { useMemo, useState } from 'react';
 import Card from '@/components/Card';
-import ExchangeDataWarningTag from '@/components/tags/ExchangeDataWarningTag';
 import Button from '@/components/Button';
 import { BaseExchange, Exchanges, QuoteExchange } from '@/constants/app';
 import useGetPremiumTableRows from '@/hooks/useGetPremiumTableRows';
@@ -18,6 +17,7 @@ import useBinancePriceData from '@/hooks/useBinancePriceData';
 import useHtxPriceData from '@/hooks/useHtxPriceData';
 import useUpbitMarketUpdate from '@/hooks/useUpbitMarketUpdate';
 import useCoinMarketCapUpdate from '@/hooks/useCoinMarketCapUpdate';
+import Tag from '@/components/Tag';
 
 type KimchiPremiumSectionProps = {
     krwByUsd: number | null;
@@ -110,9 +110,12 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps)
     return { baseExchangePriceErrorMap, quoteExchangePriceErrorMap };
   }, [upbitPriceError, binancePriceError, htxPriceError, bybitPriceError, bitgetPriceError]);
 
-  const isDataError = useMemo(() => {
-    return krwByUsd === undefined || baseExchangePriceErrorMap[baseExchange] || quoteExchangePriceErrorMap[quoteExchange];
-  }, [krwByUsd, baseExchange, quoteExchange, baseExchangePriceErrorMap, quoteExchangePriceErrorMap]);
+  const errorDataLabel = useMemo<string | undefined>(() => {
+    if (krwByUsd === undefined) return '환율 데이터에 지연이 있어요';
+    if (baseExchangePriceErrorMap[baseExchange]) return `${baseExchange} 데이터에 지연이 있어요`;
+    if (quoteExchangePriceErrorMap[quoteExchange]) return `${quoteExchange} 데이터에 지연이 있어요`;
+    return undefined;
+  }, [baseExchange, quoteExchange, baseExchangePriceErrorMap, quoteExchangePriceErrorMap]);
 
   /**
    * 
@@ -227,7 +230,7 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps)
         <div className="w-full flex flex-col items-center gap-y-20 px-page_x">
           {watchListTableRows.length > 0 && <section className="w-full max-w-content_max_width space-y-2">
             <div className="flex justify-between items-center gap-x-10">
-              <div className="text-caption Font_label_12px p-4" >내 즐겨찾기 {isDataError && <ExchangeDataWarningTag className="ml-2" />}</div>
+              <div className="text-caption Font_label_12px p-4" >내 즐겨찾기 {errorDataLabel && <Tag size="sm" color="warning" label={errorDataLabel} className="ml-2" />}</div>
               
               <div className="flex items-center gap-x-4">
                 <ExchangeDropDownPair baseExchange={baseExchange} onBaseExchangeChange={setBaseExchange} quoteExchange={quoteExchange} onQuoteExchangeChange={setQuoteExchange} />
@@ -244,7 +247,7 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps)
 
           <section className="w-full max-w-content_max_width">
             <div className="flex justify-between items-center gap-x-10">
-              <div className="text-caption Font_label_12px p-4" >김치 프리미엄 {isDataError && <ExchangeDataWarningTag className="ml-2" />}</div>
+              <div className="text-caption Font_label_12px p-4" >김치 프리미엄 {errorDataLabel && <Tag size="sm" color="warning" label={errorDataLabel} className="ml-2" />}</div>
               
               <div className="flex items-center gap-x-4">
                 <ExchangeDropDownPair baseExchange={baseExchange} onBaseExchangeChange={setBaseExchange} quoteExchange={quoteExchange} onQuoteExchangeChange={setQuoteExchange} />

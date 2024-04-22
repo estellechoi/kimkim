@@ -2,8 +2,9 @@
 
 ## 1. Overview
 
-![Overview](./kimkim_overview1.png "Overview 1")
-![Overview](./kimkim_overview2.png "Overview 2")
+![Overview](./preview_1.png "Overview 1")
+![Overview](./preview_2.png "Overview 2")
+![Overview](./preview_3.png "Overview 2")
 
 
 ## 2. Run locally

@@ -2,7 +2,6 @@ import type {NextPage} from 'next';
 import {useCallback, useEffect, useState} from 'react';
 import Main from '@/components/Main';
 import Card from '@/components/Card';
-import ExchangeDataWarningTag from '@/components/tags/ExchangeDataWarningTag';
 import BigNumber from 'bignumber.js';
 import { useAtom } from 'jotai';
 import { currencyExchangeRateAtom } from '@/store/states';
@@ -11,6 +10,7 @@ import CurrencyAmountInput from '@/components/text-inputs/CurrencyAmountInput';
 import { TimeTick, formatDate } from '@/utils/date';
 import dynamic from 'next/dynamic';
 import WaitingSymbol from '@/components/WaitingSymbol';
+import Tag from '@/components/Tag';
 
 const KimchiPremiumSection = dynamic(() => import('@/components/home/KimchiPremiumSection'), { ssr: false });
 
@@ -92,7 +92,7 @@ const Home: NextPage = () => {
     <Main className="flex flex-col items-center gap-y-20 min-h-screen pt-app_header_height pb-page_bottom">
       <section className="w-full max-w-content_max_width space-y-2 mt-20">
         <div className="flex justify-between items-center gap-x-10">
-          <div className="text-caption Font_label_12px p-4" >환율 {krwByUsd === undefined && <ExchangeDataWarningTag className="ml-2" />}</div>
+          <div className="text-caption Font_label_12px p-4" >환율 {krwByUsd === undefined && <Tag size="sm" color="warning" label="데이터에 문제가 있어요" className="ml-2" />}</div>
           {currencyExchangeRate.lastUpdatedTime ? (
             <div className="text-caption Font_caption_xs p-4" >{formatDate(currencyExchangeRate.lastUpdatedTime, TimeTick.TIME, Languages.KR)}</div>
           ) : (
