@@ -76,9 +76,12 @@ jobs:
           yarn build
 
           # Start or restart the application using PM2
-          if ! pm2 list | grep -q kimkim; then
+          pm2 describe kimkim > /dev/null
+          if [ $? -ne 0 ]; then
+            echo "Process not found, starting..."
             pm2 start yarn --name "kimkim" -- start
           else
+            echo "Process found, restarting..."
             pm2 restart kimkim --update-env
           fi
 
