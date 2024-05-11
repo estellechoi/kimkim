@@ -37,6 +37,11 @@ jobs:
             npm install -g yarn
           fi
 
+          # Ensure PM2 is installed
+          if ! type pm2 > /dev/null 2>&1; then
+            npm install -g pm2
+          fi
+
           # Clone the repository if it does not exist
           if [ ! -d "~/kimkim" ]; then
             git clone https://github.com/estellechoi/kimkim.git ~/kimkim
