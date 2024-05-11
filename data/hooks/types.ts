@@ -228,6 +228,25 @@ export interface UpbitTickerWebSocketData {
   stream_type: string;
 }
 
+export interface BithumbTransactionWebSocketData {
+  type: 'transaction';
+  content: {
+    list: readonly {
+      symbol: string; // ex: "BTC_KRW"
+      buySellGb: `${number}`;
+      contPrice: `${number}`;
+      contQty: `${number}`;
+      contAmt: `${number}`;
+      contDtm: `${number}`;
+      updn: 'up' | 'dn';
+    }[];
+  };
+}
+
+export const isBithumbTransactionWebSocketData = (data: any): data is BithumbTransactionWebSocketData => {
+  return data?.type === 'transaction' && Array.isArray(data?.content?.list);
+};
+
 export interface BinanceKlineWebSocketData {
   data:
     | {

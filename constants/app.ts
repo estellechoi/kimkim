@@ -7,6 +7,7 @@ import FLAG_US from '@/resources/images/flag_us.png';
 import FLAG_AU from '@/resources/images/flag_au.png';
 import EXCHANGE_BINANCE_LOGO from '@/resources/images/exchange_logo_binance.svg';
 import EXCHANGE_UPBIT_LOGO from '@/resources/images/exchange_logo_upbit.svg';
+import EXCHANGE_BITHUMB_LOGO from '@/resources/images/exchange_logo_bithumb.svg';
 import EXCHANGE_HTX_LOGO from '@/resources/images/exchange_logo_htx.svg';
 import EXCHANGE_BYBIT_LOGO from '@/resources/images/exchange_logo_bybit.svg';
 import EXCHANGE_BITGET_LOGO from '@/resources/images/exchange_logo_bitget.svg';
@@ -83,6 +84,7 @@ export const FIATS_METADATA_DICT: Record<Fiats, { logoURL: string }> = {
 export enum Exchanges {
   BINANCE = 'Binance',
   UPBIT = 'Upbit',
+  BITHUMB = 'Bithumb',
   HTX = 'HTX',
   BYBIT = 'Bybit',
   BITGET = 'Bitget',
@@ -95,6 +97,9 @@ export const EXCHANGES_METADATA_DICT: Record<Exchanges, { logoURL: string }> = {
   [Exchanges.UPBIT]: {
     logoURL: EXCHANGE_UPBIT_LOGO.src,
   },
+  [Exchanges.BITHUMB]: {
+    logoURL: EXCHANGE_BITHUMB_LOGO.src,
+  },
   [Exchanges.HTX]: {
     logoURL: EXCHANGE_HTX_LOGO.src,
   },
@@ -106,10 +111,10 @@ export const EXCHANGES_METADATA_DICT: Record<Exchanges, { logoURL: string }> = {
   },
 };
 
-export type BaseExchange = Exchanges.UPBIT;
+export type BaseExchange = Exchanges.UPBIT | Exchanges.BITHUMB;
 export type QuoteExchange = Exchanges.BINANCE | Exchanges.HTX | Exchanges.BYBIT | Exchanges.BITGET;
 
-export const BASE_EXCHANGES: readonly BaseExchange[] = [Exchanges.UPBIT];
+export const BASE_EXCHANGES: readonly BaseExchange[] = [Exchanges.UPBIT, Exchanges.BITHUMB];
 export const QUOTE_EXCHANGES: readonly QuoteExchange[] = [Exchanges.BINANCE, Exchanges.HTX, Exchanges.BYBIT, Exchanges.BITGET];
 
 /**

@@ -1,7 +1,7 @@
 import Table from '@/components/Table';
 import BigNumber from 'bignumber.js';
-import { TableRowData } from '../Table/types';
-import StatusDot from '../StatusDot';
+import { TableRowData } from '@/components/Table/types';
+import NetworkFeeInfoTooltipContent from '@/components/kits/NetworkFeeInfoTooltipContent';
 
 export interface KimchiPremiumTableRow extends TableRowData {
   symbol: string;
@@ -38,7 +38,7 @@ const KimchiPremiumTable = ({ rows, isLoading }: KimchiPremiumTableProps) => {
           type: 'jsx',
           sortType: 'string',
           sortValue: 'koreanName',
-          widthRatio: 16,
+          widthRatio: 20,
         },
         {
           label: '네트워크 수수료',
@@ -47,18 +47,7 @@ const KimchiPremiumTable = ({ rows, isLoading }: KimchiPremiumTableProps) => {
           sortType: 'string',
           sortValue: 'koreanName',
           widthRatio: 24,
-          tooltipContent: (
-            <div className="flex flex-col gap-y-1 Font_body_xs">
-              <div className="flex items-center gap-x-2">
-                <StatusDot status="success" />
-                <span>입/출금 가능</span>
-              </div>
-              <div className="flex items-center gap-x-2">
-                <StatusDot status="error" />
-                <span>입/출금 불가</span>
-              </div>
-            </div>
-          ),
+          tooltipContent: <NetworkFeeInfoTooltipContent />,
         },
         {
           label: '가격',

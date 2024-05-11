@@ -1,16 +1,15 @@
 import useWebSocket from 'react-use-websocket';
 import {
-  BinanceKlineWebSocketData,
   BinanceTickerWebSocketData,
-  HtxKlineWebSocketData,
+  BithumbTransactionWebSocketData,
   HtxTickerWebSocketData,
   UpbitTickerWebSocketData,
+  isBithumbTransactionWebSocketData,
 } from '@/data/hooks/types';
 import queryClient from '@/data/queryClient';
 import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { inflate } from 'pako';
-import { uuid } from 'uuidv4';
 
 export const useWebSocketUpbitPrice = (connect: boolean, symbols: readonly string[]) => {
   const mappedSymbols = symbols.map((symbol) => `KRW-${symbol}`);
@@ -50,6 +49,44 @@ export const useWebSocketUpbitPrice = (connect: boolean, symbols: readonly strin
   }, [lastMessage, readyState]);
 
   return useQuery<UpbitTickerWebSocketData | undefined>({
+    queryKey,
+    enabled: connect,
+  });
+};
+
+export const useWebSocketBithumbPrice = (connect: boolean, symbols: readonly string[]) => {
+  const mappedSymbols = symbols.map((symbol) => `${symbol}_KRW`);
+  const queryKey = ['useWebSocketBithumbPrice', mappedSymbols.join(',')];
+
+  const requestMessage = {
+    type: 'transaction',
+    symbols: mappedSymbols,
+  };
+
+  const { lastMessage, readyState, sendJsonMessage } = useWebSocket<BithumbTransactionWebSocketData>(
+    'wss://pubwss.bithumb.com/pub/ws',
+    {
+      shouldReconnect: () => true,
+      onOpen: () => sendJsonMessage(requestMessage),
+      onError: (event) => {
+        queryClient.setQueryData(queryKey, new Error(event.eventPhase.toString()));
+      },
+    },
+    connect,
+  );
+
+  useEffect(() => {
+    if (readyState !== 1 || !lastMessage?.data) return;
+
+    const parsedData: BithumbTransactionWebSocketData | undefined =
+      typeof lastMessage.data === 'string' ? JSON.parse(lastMessage.data) : undefined;
+
+    if (isBithumbTransactionWebSocketData(parsedData)) {
+      queryClient.setQueryData<BithumbTransactionWebSocketData | undefined>(queryKey, parsedData);
+    }
+  }, [lastMessage, readyState]);
+
+  return useQuery<BithumbTransactionWebSocketData | undefined>({
     queryKey,
     enabled: connect,
   });
