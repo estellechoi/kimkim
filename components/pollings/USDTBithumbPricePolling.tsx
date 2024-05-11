@@ -43,7 +43,7 @@ const USDTBithumbPricePolling = ({ className = '' }: USDTBithumbPricePollingProp
 
   return (
     <Polling
-      caption="Bithumb USDT"
+      caption="USDT"
       formattedNumber={`${usdtPriceInSelectedCurrency ? format(usdtPriceInSelectedCurrency, { semiequate: true }) : '?'}`}
       isLoading={!usdtPriceInSelectedCurrency}
       className={className}

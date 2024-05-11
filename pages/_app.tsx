@@ -27,6 +27,9 @@ import GlowBackground from '@/components/GlowBackground';
 import useUsdBasedExchangeRateUpdate from '@/hooks/useUsdBasedExchangeRateUpdate';
 import useUserAgent from '@/hooks/useUserAgent';
 import MobileBlocker from '@/components/home/MobileBlocker';
+import dynamic from 'next/dynamic';
+
+const UserAgentDetector = dynamic(() => import('@/components/UserAgentDetector'), { ssr: false });
 
 const MetaDataUpdater = () => {
   useUsdBasedExchangeRateUpdate();
@@ -104,6 +107,7 @@ function MyApp({ Component, pageProps }: AppProps<{ dehydratedState: DehydratedS
             <QueryClientProvider client={queryClientRef.current}>
               <HydrationBoundary state={pageProps.dehydratedState}>
                 <MetaDataUpdater />
+                <UserAgentDetector />
                 <ModalProvider>
                   <GlowBackground
                     color="primary"
