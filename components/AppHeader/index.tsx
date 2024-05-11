@@ -3,7 +3,7 @@ import Link from 'next/link';
 import AppLogo from '@/components/AppLogo';
 import useAppHeaderClassName from './useAppHeaderClassName';
 import DropDown from '@/components/DropDown';
-import { Fiats } from '@/constants/app';
+import { Exchanges, Fiats } from '@/constants/app';
 import { useAtom } from 'jotai';
 import { selectedCurrencyAtom } from '@/store/states';
 import Currency from '@/components/Currency';
@@ -15,10 +15,8 @@ import Tooltip from '@/components/Tooltip';
 import useModal from '@/hooks/useModal';
 import { Suspense, useCallback } from 'react';
 import CoffeeOverlay from '@/components/overlays/CoffeeOverlay';
-
-// const AccountButton = dynamic(() => import('@/components/buttons/AccountButton'), {
-//   ssr: false,
-// });
+import USDTBithumbPricePolling from '@/components/pollings/USDTBithumbPricePolling';
+import ExchangeLogo from '../ExchangeLogo';
 
 type AppHeaderProps = { className?: string };
 
@@ -39,11 +37,17 @@ const AppHeader = ({ className = '' }: AppHeaderProps) => {
 
   return (
     <header className={`h-app_header_height flex flex-col items-stretch ${className}`}>
-      <div className="grow-0 shrink-0 bg-ground_variant_dark flex items-center gap-x-6 px-app_header_padding_x py-2">
+      <div className="grow-0 shrink-0 bg-ground_variant_dark flex flex-wrap items-center gap-x-6 md:gap-x-8 px-app_header_padding_x py-2">
         <ExchangeRatePolling />
+
         <div className="flex items-center gap-x-2">
           <Coin size="sm" symbol="USDT" />
           <USDTPricePolling />
+        </div>
+
+        <div className="flex items-center gap-x-2">
+          <ExchangeLogo exchange={Exchanges.BITHUMB} size="sm" />
+          <USDTBithumbPricePolling />
         </div>
       </div>
 

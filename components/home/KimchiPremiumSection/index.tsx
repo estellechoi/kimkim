@@ -9,10 +9,8 @@ import {
   useFetchBinaceWalletStatus,
   useFetchBitgetPrice,
   useFetchBitgetWalletStatus,
-  useFetchBithumbWalletStatus,
   useFetchBybitPrice,
   useFetchBybitWalletStatus,
-  useFetchUpbitPrice,
   useFetchUpbitWalletStatus,
 } from '@/data/hooks';
 import { useMemo, useState } from 'react';
@@ -41,7 +39,6 @@ import { AxiosError } from 'axios';
 import useUpbitPriceData from '@/hooks/useUpbitPriceData';
 import useBinancePriceData from '@/hooks/useBinancePriceData';
 import useHtxPriceData from '@/hooks/useHtxPriceData';
-import useUpbitMarketUpdate from '@/hooks/useUpbitMarketUpdate';
 import useCoinMarketCapUpdate from '@/hooks/useCoinMarketCapUpdate';
 import Tag from '@/components/Tag';
 import useBithumbPriceData from '@/hooks/useBithumbPriceData';
@@ -54,7 +51,7 @@ type KimchiPremiumSectionProps = {
 
 const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps) => {
   const [baseExchange, setBaseExchange] = useState<BaseExchange>(Exchanges.UPBIT);
-  const [quoteExchange, setQuoteExchange] = useState<QuoteExchange>(Exchanges.HTX);
+  const [quoteExchange, setQuoteExchange] = useState<QuoteExchange>(Exchanges.BINANCE);
 
   /**
    *

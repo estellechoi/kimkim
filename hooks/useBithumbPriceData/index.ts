@@ -11,7 +11,7 @@ const useBithumbPriceData = (enabled: boolean) => {
     data: bithumbPriceData,
     error: bithumbPriceError,
     isLoading: isBithumbPriceLoading,
-  } = useFetchBithumbPrice(enabled ? 3000 : null);
+  } = useFetchBithumbPrice(enabled ? 0 : null);
 
   const { arrayedBithumbPriceData, symbols } = useMemo<{
     arrayedBithumbPriceData: readonly BithumbTickerData[] | undefined;
@@ -47,7 +47,7 @@ const useBithumbPriceData = (enabled: boolean) => {
       ) ?? {};
 
     setWebSocketDataQueue({ ...webSocketDataQueue, ...newData });
-  }, [webSocketDataQueue, webSocketBithumbPriceData]);
+  }, [webSocketBithumbPriceData]);
 
   /**
    *
@@ -61,7 +61,7 @@ const useBithumbPriceData = (enabled: boolean) => {
       return queueData ? { ...item, lastPrice: queueData.contPrice } : item;
     });
     setData(overwrittenData);
-  }, [arrayedBithumbPriceData]);
+  }, [arrayedBithumbPriceData, webSocketDataQueue]);
 
   return { data, error: bithumbPriceError, isLoading: isBithumbPriceLoading, symbols };
 };

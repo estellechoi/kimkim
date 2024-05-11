@@ -29,6 +29,7 @@ import { BithumbTickerApiData } from '@/pages/api/bithumb/ticker';
 import { BithumbWalletApiData } from '@/pages/api/bithumb/wallet';
 import { BithumbApiResponse } from '@/pages/api/bithumb';
 import { BithumbNetworkInfoApiData } from '@/pages/api/bithumb/network-info';
+import { BithumbTransactionApiData } from '@/pages/api/bithumb/transaction';
 
 /**
  *
@@ -183,6 +184,20 @@ export const useFetchBithumbNetworkInfo = (refetchInterval: number | null) => {
 
   return useQuery<AxiosResponse<BithumbApiResponse<readonly BithumbNetworkInfoApiData[]> | undefined>, AxiosError>({
     queryFn: () => axios.get<BithumbApiResponse<readonly BithumbNetworkInfoApiData[]> | undefined>('/api/bithumb/network-info'),
+    queryKey,
+    refetchInterval: refetchInterval ?? 0,
+    enabled: refetchInterval !== null,
+  });
+};
+
+export const useFetchBithumbTrade = (refetchInterval: number | null, { symbol }: { symbol: string }) => {
+  const queryKey = ['useFetchBithumbTrade', symbol];
+
+  return useQuery<AxiosResponse<BithumbApiResponse<readonly [BithumbTransactionApiData]> | undefined>, AxiosError>({
+    queryFn: () =>
+      axios.get<BithumbApiResponse<readonly [BithumbTransactionApiData]> | undefined>('/api/bithumb/transaction', {
+        params: { symbol },
+      }),
     queryKey,
     refetchInterval: refetchInterval ?? 0,
     enabled: refetchInterval !== null,

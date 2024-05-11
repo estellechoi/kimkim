@@ -3,15 +3,12 @@ import {
   BinanceTickerApiData,
   BitgetWalletStatusApiData,
   BitgetWalletTickerApiData,
-  BybitTickerApiData,
   BybitTickerItemApiData,
-  BybitWalletStatusApiData,
   BybitWalletStatusItemApiData,
 } from '@/data/hooks/types';
 import { BithumbTickerData } from '@/hooks/useBithumbPriceData';
 import { BithumbWalletData } from '@/hooks/useBithumbWalletStatus';
 import { BinanceWalletStatusApiData } from '@/pages/api/binance/wallet';
-import { HtxMarketApiData } from '@/pages/api/htx/tickers';
 import { HtxWalletStatusApiData } from '@/pages/api/htx/wallet';
 import { UpbitTickerApiData } from '@/pages/api/upbit/ticker';
 import { UpbitWalletStatusApiData } from '@/pages/api/upbit/wallet';
