@@ -38,7 +38,7 @@ const AppHeader = ({ className = '' }: AppHeaderProps) => {
   return (
     <header className={`h-app_header_height flex flex-col items-stretch ${className}`}>
       <div className="grow-0 shrink-0 bg-ground_variant_dark flex flex-wrap items-center gap-x-6 md:gap-x-8 px-app_header_padding_x py-2">
-        <ExchangeRatePolling />
+        <ExchangeRatePolling className="hidden md:flex" />
 
         <div className="flex items-center gap-x-2">
           <Coin size="sm" symbol="USDT" />
@@ -73,16 +73,14 @@ const AppHeader = ({ className = '' }: AppHeaderProps) => {
             onChange={setSelectedCurrency}
           />
 
-          <Tooltip layer="navigation" content="KimKim 응원하기">
-            <button
-              type="button"
-              className="Transition_500 transition-opacity hover:opacity-80"
-              aria-expanded={coffeeModal.isOpen}
-              aria-controls={coffeeModal.id}
-              onClick={openCoffeeModal}>
-              <Icon type="coffee" className="text-body" />
-            </button>
-          </Tooltip>
+          <button
+            type="button"
+            className="Transition_500 transition-opacity hover:opacity-80"
+            aria-expanded={coffeeModal.isOpen}
+            aria-controls={coffeeModal.id}
+            onClick={openCoffeeModal}>
+            <Icon type="coffee" className="text-body" />
+          </button>
         </div>
       </div>
     </header>
