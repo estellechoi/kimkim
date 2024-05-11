@@ -34,8 +34,7 @@ const RowCell = <T extends TableRowData>({ data, field, type, colIndex, isLoadin
       className={`Component ${field.generateClassName?.(data) ?? ''} ${TABLE_CELL_GRID_X_DICT[type]} ${
         TABLE_CELL_GRID_Y_DICT[type]
       } ${TABLE_CELL_BORDER_DICT[type]} ${getTableCellAlignClassName(field, type)}`}
-      style={getTableCellWidthStyle(field)}
-    >
+      style={getTableCellWidthStyle(field)}>
       {isLoading ? (
         <Loader fontClassName={getCellFontClassName(field.type)} className="w-1/2" type={field.loaderType} />
       ) : (

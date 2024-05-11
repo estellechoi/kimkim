@@ -1,5 +1,5 @@
-import {FormatAmountOptions, formatNumber} from '@/utils/number';
-import {useMemo} from 'react';
+import { FormatAmountOptions, formatNumber } from '@/utils/number';
+import { useMemo } from 'react';
 
 type ProgressBarProps = {
   currentNumber: number;
@@ -22,7 +22,7 @@ const ProgressBar = ({
   const percentageFormatted = useMemo<string>(() => formatNumber(percentage, 0), [percentage]);
   const currentNumberFormatted = useMemo<string>(
     () => formatNumber(currentNumber, decimals ?? 2, formatOptions),
-    [currentNumber, formatOptions]
+    [currentNumber, formatOptions],
   );
 
   return (
@@ -37,8 +37,8 @@ const ProgressBar = ({
       </div>
 
       <div className="w-full h-4 rounded-full overflow-hidden bg-white">
-        <div className="h-full rounded-full bg-primary" style={{width: `${percentage}%`}}></div>
-        <div className="h-full rounded-full bg-secondary" style={{width: `${percentage}%`}}></div>
+        <div className="h-full rounded-full bg-primary" style={{ width: `${percentage}%` }}></div>
+        <div className="h-full rounded-full bg-secondary" style={{ width: `${percentage}%` }}></div>
       </div>
     </div>
   );

@@ -34,7 +34,7 @@ const AnimatedHeadline = ({ tagName, texts, className = '', onAnimationEnd }: An
     (index: number) => {
       if (index === texts.length - 1) onAnimationEnd?.();
     },
-    [texts.length, onAnimationEnd]
+    [texts.length, onAnimationEnd],
   );
 
   const Texts = useMemo<readonly JSX.Element[]>(
@@ -47,8 +47,7 @@ const AnimatedHeadline = ({ tagName, texts, className = '', onAnimationEnd }: An
           <span
             key={text}
             className={`relative w-fit overflow-hidden Transition_1000 transition-transform origin-left ${scaleClassName}`}
-            style={{ transitionDelay: `${scaleDelayMs}ms` }}
-          >
+            style={{ transitionDelay: `${scaleDelayMs}ms` }}>
             {text}
 
             <TextMask
@@ -59,7 +58,7 @@ const AnimatedHeadline = ({ tagName, texts, className = '', onAnimationEnd }: An
           </span>
         );
       }),
-    [texts, isVisible, scaleClassName, onItemAnimationEnd]
+    [texts, isVisible, scaleClassName, onItemAnimationEnd],
   );
 
   const HeadingElement = tagName;

@@ -1,4 +1,4 @@
-import {gql} from '@apollo/client';
+import { gql } from '@apollo/client';
 
 export type QQueryMultisigAddressesVariables = {
   limit?: number;
@@ -7,7 +7,7 @@ export type QQueryMultisigAddressesVariables = {
 export type QueryMultisigAddressesResponse = {
   multisig: {
     id: string;
-    __typename: "multisig";
+    __typename: 'multisig';
   }[];
 };
 

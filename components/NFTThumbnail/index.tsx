@@ -37,8 +37,7 @@ const NFTTumbnail = ({ imgSrc, name, size = 'md', className = '' }: NFTTumbnailP
     <section className={`${sizes.classNames.width} flex flex-col items-stretch gap-y-2 ${className}`}>
       <Card
         color="on_primary"
-        className={`group/nft !w-fit flex items-center justify-center ${sizes.classNames.width} ${sizes.classNames.height}`}
-      >
+        className={`group/nft !w-fit flex items-center justify-center ${sizes.classNames.width} ${sizes.classNames.height}`}>
         <Image
           src={imgSrc}
           width={sizes.pxSize}

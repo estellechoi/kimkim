@@ -22,7 +22,7 @@ const OverlayBackdrop = ({ children, color = 'glass', isOpen = false, onClick }:
       if (event.target !== event.currentTarget) return;
       onClick?.(event);
     },
-    [onClick]
+    [onClick],
   );
 
   // lock scroll when overlay is open

@@ -36,7 +36,7 @@ export const ModalProvider = ({ children }: PropsWithChildren<any>) => {
 
   const context = useMemo(
     () => ({ prevId, setPrevId, open, close, entries, getIsOpen }),
-    [prevId, setPrevId, open, close, entries, getIsOpen]
+    [prevId, setPrevId, open, close, entries, getIsOpen],
   );
 
   return (

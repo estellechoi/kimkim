@@ -12,7 +12,7 @@ export default class Mixpanel extends Analytics {
       track_pageview?: boolean;
       persistence?: Persistence;
       verbose?: boolean;
-    }
+    },
   ): Promise<void> {
     return new Promise((resolve) => {
       mixpanel.init(token, {

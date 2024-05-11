@@ -7,7 +7,7 @@ const useBottomSheetClassName = (isOpen: boolean) => {
   const staticClassName = useMemo<string>(() => Object.values(BOTTOM_SHEET_CLASSES).join(' '), []);
   const animateClassName = useMemo<string>(
     () => `transition-transform Transition_momentum ${isInitialized && isOpen ? 'translate-y-0' : 'translate-y-[140%]'}`,
-    [isInitialized, isOpen]
+    [isInitialized, isOpen],
   );
 
   useEffect(() => {

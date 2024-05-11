@@ -3,7 +3,7 @@ import useCoinLogoURL from '@/components/useCoinLogoURL';
 import { useCallback, useState } from 'react';
 import { AllChains, TokenSymbols } from '@/constants/app';
 import ChainLabel from '../ChainLabel';
-import APP_LOGO_SVG from '@/resources/svgs/crafted_sparkle.svg'
+import APP_LOGO_SVG from '@/resources/svgs/crafted_sparkle.svg';
 
 export type CoinSize = 'sm' | 'md' | 'lg' | 'xl';
 
@@ -24,7 +24,8 @@ type CoinProps = {
 const Coin = ({ symbol, chain, size = 'md', logoURL: injectedLogoURL }: CoinProps) => {
   const logoURL = useCoinLogoURL(symbol);
   const renderingLogoURL = injectedLogoURL ?? logoURL;
-  const refinedLogoURL: string = renderingLogoURL?.startsWith('https://') || renderingLogoURL?.startsWith('/') ? renderingLogoURL : APP_LOGO_SVG;
+  const refinedLogoURL: string =
+    renderingLogoURL?.startsWith('https://') || renderingLogoURL?.startsWith('/') ? renderingLogoURL : APP_LOGO_SVG;
 
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const onLoaded = useCallback(() => {

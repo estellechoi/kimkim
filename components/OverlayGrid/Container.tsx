@@ -27,7 +27,7 @@ const Container = ({ children, xUnitPx, isExpandable = false, className = '' }: 
         zIndex,
       };
     },
-    [items.length, xUnitPx, isExpanded]
+    [items.length, xUnitPx, isExpanded],
   );
 
   const hoverTranslateClassName = `Transition_500 transition-transform ${
@@ -42,8 +42,7 @@ const Container = ({ children, xUnitPx, isExpandable = false, className = '' }: 
         <li
           key={index}
           className={`${index > 0 ? 'absolute top-0' : 'relative'} w-fit ${hoverTranslateClassName}`}
-          style={getItemStyle(index)}
-        >
+          style={getItemStyle(index)}>
           {child}
         </li>
       ))}
@@ -51,13 +50,10 @@ const Container = ({ children, xUnitPx, isExpandable = false, className = '' }: 
       {isExpandable && (
         <span
           aria-hidden
-          className={`absolute -inset-y-0.5 -left-1 z-[11] w-24 bg-primary_left_to_right ${leftShadowOpacityClassName}`}
-        ></span>
+          className={`absolute -inset-y-0.5 -left-1 z-[11] w-24 bg-primary_left_to_right ${leftShadowOpacityClassName}`}></span>
       )}
 
-      {isExpandable && (
-        <span aria-hidden className={`absolute -inset-y-0.5 -right-1 z-[11] w-24 bg-primary_right_to_left`}></span>
-      )}
+      {isExpandable && <span aria-hidden className="absolute -inset-y-0.5 -right-1 z-[11] w-24 bg-primary_right_to_left"></span>}
 
       {isExpandable && (
         <Button

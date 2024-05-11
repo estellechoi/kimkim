@@ -4,7 +4,7 @@ import { useTooltipContext } from './TooltipProvider';
 
 const TooltipContentForwarder: ForwardRefRenderFunction<HTMLDivElement, HTMLProps<HTMLDivElement>> = (
   { style, ...props },
-  propRef
+  propRef,
 ) => {
   const context = useTooltipContext();
 

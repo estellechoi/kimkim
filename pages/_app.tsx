@@ -1,20 +1,26 @@
 'use client';
 
 import '@/styles/globals.css';
-import type {AppProps} from 'next/app';
-import {DehydratedState, HydrationBoundary, QueryClient, QueryClientProvider, useQueryErrorResetBoundary} from '@tanstack/react-query';
-import {Suspense, useRef} from 'react';
+import type { AppProps } from 'next/app';
+import {
+  DehydratedState,
+  HydrationBoundary,
+  QueryClient,
+  QueryClientProvider,
+  useQueryErrorResetBoundary,
+} from '@tanstack/react-query';
+import { Suspense, useRef } from 'react';
 import queryClient from '@/data/queryClient';
 import Fallback from '@/components/Fallback';
 import Head from 'next/head';
-import {NextSeo} from 'next-seo';
-import {SEO} from '../next-seo.config';
+import { NextSeo } from 'next-seo';
+import { SEO } from '../next-seo.config';
 import SentryErrorBoundary from '@/components/ErrorBoundary/SentryErrorBoundary';
 import AppHeader from '@/components/AppHeader';
-import {ModalProvider} from '@/hooks/useModal/ModalProvider';
+import { ModalProvider } from '@/hooks/useModal/ModalProvider';
 import AppFooter from '@/components/AppFooter';
 import AnalyticsProvider from '@/hooks/useAnalytics/AnalyticsProvider';
-import {googleAnalytics, mixpanel} from '@/constants/app';
+import { googleAnalytics, mixpanel } from '@/constants/app';
 import GoogleAnalyticsReporter from '@/analytics/googleAnalytics/GoogleAnalyticsReporter';
 import MixPanelReporter from '@/analytics/mixpanel/MixPanelReporter';
 import GlowBackground from '@/components/GlowBackground';
@@ -27,7 +33,7 @@ const MetaDataUpdater = () => {
   return null;
 };
 
-function MyApp({Component, pageProps}: AppProps<{dehydratedState: DehydratedState}>) {
+function MyApp({ Component, pageProps }: AppProps<{ dehydratedState: DehydratedState }>) {
   const { reset } = useQueryErrorResetBoundary();
 
   /**
@@ -94,8 +100,7 @@ function MyApp({Component, pageProps}: AppProps<{dehydratedState: DehydratedStat
                 analytics: mixpanel,
                 initializer: MixPanelReporter,
               },
-            ]}
-          >
+            ]}>
             <QueryClientProvider client={queryClientRef.current}>
               <HydrationBoundary state={pageProps.dehydratedState}>
                 <MetaDataUpdater />

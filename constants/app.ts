@@ -11,7 +11,6 @@ import EXCHANGE_HTX_LOGO from '@/resources/images/exchange_logo_htx.svg';
 import EXCHANGE_BYBIT_LOGO from '@/resources/images/exchange_logo_bybit.svg';
 import EXCHANGE_BITGET_LOGO from '@/resources/images/exchange_logo_bitget.svg';
 
-
 export const googleAnalytics = new GoogleAnalytics('google analytics');
 export const mixpanel = new Mixpanel('mixpanel');
 
@@ -23,7 +22,7 @@ export const COMPACT_DECIMALS = 4;
 
 export const LOCAL_STORAGE_KEYS = {
   LAST_USED_WALLET: 'user_last_used_wallet',
-  WATCH_LIST_SYMBOLS: 'watch_list_symbols'
+  WATCH_LIST_SYMBOLS: 'watch_list_symbols',
 };
 
 export const TEXTS = {
@@ -39,7 +38,7 @@ export enum AllChains {
   NIBIRU_TESTNET = 'Nibiru Testnet-1',
 }
 
-export const CHAIN_METADATA_DICT: Record<AllChains, { explorerAddressURL: string; logoURL: string; }> = {
+export const CHAIN_METADATA_DICT: Record<AllChains, { explorerAddressURL: string; logoURL: string }> = {
   [AllChains.ARCH_MAINNET]: {
     explorerAddressURL: '',
     logoURL: CHAIN_LOGO_ARCHWAY.src,
@@ -69,7 +68,7 @@ export enum Fiats {
   AUD = 'AUD',
 }
 
-export const FIATS_METADATA_DICT: Record<Fiats, { logoURL: string; }> = {
+export const FIATS_METADATA_DICT: Record<Fiats, { logoURL: string }> = {
   [Fiats.KRW]: {
     logoURL: FLAG_KR.src,
   },
@@ -89,7 +88,7 @@ export enum Exchanges {
   BITGET = 'Bitget',
 }
 
-export const EXCHANGES_METADATA_DICT: Record<Exchanges, { logoURL: string; }> = {
+export const EXCHANGES_METADATA_DICT: Record<Exchanges, { logoURL: string }> = {
   [Exchanges.BINANCE]: {
     logoURL: EXCHANGE_BINANCE_LOGO.src,
   },
@@ -114,7 +113,7 @@ export const BASE_EXCHANGES: readonly BaseExchange[] = [Exchanges.UPBIT];
 export const QUOTE_EXCHANGES: readonly QuoteExchange[] = [Exchanges.BINANCE, Exchanges.HTX, Exchanges.BYBIT, Exchanges.BITGET];
 
 /**
- * 
+ *
  * @description exchange wallet status
  */
 export enum ExchangeWalletStatus {
@@ -135,7 +134,7 @@ export enum TokenSymbols {
   ARCH = 'ARCH',
 }
 
-export type CoinData = {denomOn: Record<AllChains, string | null>; decimals: number};
+export type CoinData = { denomOn: Record<AllChains, string | null>; decimals: number };
 
 export const COIN_DICT: Record<TokenSymbols, CoinData> = {
   [TokenSymbols.CONST]: {

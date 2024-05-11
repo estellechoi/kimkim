@@ -21,11 +21,11 @@ const UpDownNumberText = ({ number, unit, color = 'primary', className = '' }: U
   const colorClassName = useMemo<string>(
     () =>
       fallbackedNumber.gt(0) ? 'text-semantic_bull' : fallbackedNumber.lt(0) ? 'text-semantic_bear' : COLOR_CLASS_DICT[color],
-    [fallbackedNumber, color]
+    [fallbackedNumber, color],
   );
   const iconType = useMemo<IconType | undefined>(
     () => (fallbackedNumber.gt(0) ? 'increase' : fallbackedNumber.lt(0) ? 'decrease' : undefined),
-    [fallbackedNumber]
+    [fallbackedNumber],
   );
 
   return (

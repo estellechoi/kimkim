@@ -1,23 +1,14 @@
-
-import { ApolloProvider, type ApolloClient, NormalizedCacheObject } from "@apollo/client";
-import { ReactNode } from "react";
+import { ApolloProvider, type ApolloClient, NormalizedCacheObject } from '@apollo/client';
+import { ReactNode } from 'react';
 
 const GraphqlProvider = ({
-    apolloClient,
-    children,
+  apolloClient,
+  children,
 }: {
-    apolloClient: ApolloClient<NormalizedCacheObject>;
-    children: ReactNode;
+  apolloClient: ApolloClient<NormalizedCacheObject>;
+  children: ReactNode;
 }) => {
-    return (
-        <>
-            {apolloClient &&
-                <ApolloProvider client={apolloClient} >
-                    {children}
-                </ApolloProvider>
-            }
-        </>
-    );
-}
+  return <>{apolloClient && <ApolloProvider client={apolloClient}>{children}</ApolloProvider>}</>;
+};
 
 export default GraphqlProvider;

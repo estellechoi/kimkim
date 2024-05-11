@@ -32,17 +32,15 @@ const Switch = <T extends string | JSX.Element>({
       const isSelected = selectedValue === index;
       return isSelected ? 'text-white' : 'text-caption hover:text-white';
     },
-    [selectedValue]
+    [selectedValue],
   );
 
   return (
     <div
-      className={`relative w-max inline-flex items-center justify-between border border-solid border-caption rounded-button ${className}`}
-    >
+      className={`relative w-max inline-flex items-center justify-between border border-solid border-caption rounded-button ${className}`}>
       <span
         aria-hidden
-        className={`absolute inset-y-0.5 left-0.5 w-[calc(50%_-_0.125rem)] bg-primary_inverted_gradient_1 rounded-button ${gradientTransformClassName}`}
-      ></span>
+        className={`absolute inset-y-0.5 left-0.5 w-[calc(50%_-_0.125rem)] bg-primary_inverted_gradient_1 rounded-button ${gradientTransformClassName}`}></span>
 
       {labels.map((label, index) => (
         <button
@@ -51,8 +49,7 @@ const Switch = <T extends string | JSX.Element>({
           className={`relative grow shrink basis-1/2 Font_caption_xs truncate ${getItemColorClassName(index as 0 | 1)} ${
             itemSizeClassNames.padding
           }`}
-          onClick={() => onSwitch(index as 0 | 1)}
-        >
+          onClick={() => onSwitch(index as 0 | 1)}>
           {label}
         </button>
       ))}

@@ -1,21 +1,21 @@
-import {gql} from '@apollo/client';
+import { gql } from '@apollo/client';
 
 export type QueryTransactionsVariables = {
-    limit?: number;
+  limit?: number;
 };
 
 export type QueryTransactionsResponse = {
-    transaction: {
-        id: string;
-        date: string;
-        from_id: string;
-        to_id: string;
-    }[];
+  transaction: {
+    id: string;
+    date: string;
+    from_id: string;
+    to_id: string;
+  }[];
 };
 
 const QUERY_TRANSACTIONS = gql`
   query MyQuery($limit: Int) {
-    transaction (limit: $limit) {
+    transaction(limit: $limit) {
       id
       date
       from_id

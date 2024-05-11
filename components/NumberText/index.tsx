@@ -40,7 +40,7 @@ const NumberText = ({
   const sizeClassNames = SIZE_CLASS_DICT[size];
   const fractionsSizeClassName = useMemo(
     () => (type === 'small_fractions' ? sizeClassNames.fractions : sizeClassNames.integer),
-    [type, sizeClassNames]
+    [type, sizeClassNames],
   );
 
   // number parts
@@ -56,7 +56,11 @@ const NumberText = ({
         <>
           <span className="flex items-baseline">
             <span className={sizeClassNames.integer}>
-              {animate ? <CountUpNumber formattedNumber={integer} locale={locale} isStarted={!fractions || isFractionsAnimated} /> : integer}
+              {animate ? (
+                <CountUpNumber formattedNumber={integer} locale={locale} isStarted={!fractions || isFractionsAnimated} />
+              ) : (
+                integer
+              )}
             </span>
 
             {fractions && (

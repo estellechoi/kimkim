@@ -32,8 +32,7 @@ const SentryErrorBoundary = ({ children, fallbackComponent, onReset }: { childre
             }}
           />
         );
-      }}
-    >
+      }}>
       {children}
     </ErrorBoundary>
   );

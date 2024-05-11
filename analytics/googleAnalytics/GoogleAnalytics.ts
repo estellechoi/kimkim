@@ -16,7 +16,7 @@ export default class GoogleAnalytics extends Analytics {
       testMode?: boolean;
       gaOptions?: GaOptions | any;
       gtagOptions?: any;
-    }
+    },
   ): void {
     ReactGA.initialize(measurementId, options);
   }
@@ -30,7 +30,7 @@ export default class GoogleAnalytics extends Analytics {
     category: EventCategory,
     action: string,
     event?: Omit<UaEventOptions, 'category' | 'action'>,
-    params?: any
+    params?: any,
   ): void {
     if (!ReactGA.isInitialized) return;
 

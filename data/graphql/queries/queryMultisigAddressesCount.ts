@@ -1,11 +1,11 @@
-import {gql} from '@apollo/client';
+import { gql } from '@apollo/client';
 
 export type QueryMultisigAddressesCountResponse = {
-    multisig_aggregate: {
-        aggregate: {
-            count: number;
-        }
-    }
+  multisig_aggregate: {
+    aggregate: {
+      count: number;
+    };
+  };
 };
 
 const QUERY_MULTISIG_ADDRESSES_COUNT = gql`

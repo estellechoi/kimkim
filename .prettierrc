@@ -1,8 +1,18 @@
 {
+  "bracketSameLine": true,
+  "singleQuote": true,
+  "semi": true,
   "arrowParens": "always",
   "bracketSpacing": true,
   "endOfLine": "lf",
-  "semi": true,
-  "singleQuote": true,
-  "printWidth": 130
+  "printWidth": 130,
+  "overrides": [
+    {
+      "files": "*.json",
+      "options": {
+        "printWidth": 200,
+        "tabWidth": 2
+      }
+    }
+  ]
 }

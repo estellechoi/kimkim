@@ -14,7 +14,7 @@ const useBottomSheetTouchDrag = ({ onDragEnd }: { onDragEnd: () => void }) => {
         resolve();
       });
     },
-    [onDragEnd]
+    [onDragEnd],
   );
 
   const ref = useTouchDraggableRef<HTMLDivElement>({

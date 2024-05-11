@@ -115,8 +115,8 @@ export const getTableCellWidthStyle = <T extends TableRowData>(field: TableField
       field.widthPx !== undefined
         ? `${field.widthPx}px`
         : field.widthRatio !== undefined
-        ? `${field.widthRatio}%`
-        : 'auto w-full',
+          ? `${field.widthRatio}%`
+          : 'auto w-full',
   };
 };
 

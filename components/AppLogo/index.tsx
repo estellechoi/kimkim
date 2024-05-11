@@ -24,18 +24,18 @@ type AppLogoProps = {
 const AppLogo = ({ color = 'light', size = 'md', className = '' }: AppLogoProps) => {
   const src = LOGO_IMG_URL_DICT[color];
   const imgSize = LOGO_SIZE_CLASS_DICT[size];
-  
+
   // return <AppLogoSVG className={`${imgSize.className} text-primary`} />
-  
+
   return (
-    <Image 
-      priority 
-      width={0} 
-      height={0} 
-      sizes="100%" 
-      style={{ height: 'auto' }} 
-      src={src} 
-      alt="App logo" 
+    <Image
+      priority
+      width={0}
+      height={0}
+      sizes="100%"
+      style={{ height: 'auto' }}
+      src={src}
+      alt="App logo"
       className={`object-cover ${imgSize.className} ${className}`}
     />
   );

@@ -31,7 +31,7 @@ export interface HtxNetworkApiData {
   withdrawStatus: 'allowed' | 'prohibited';
   transactFeeRateWithdraw?: string;
   transactFeeWithdraw?: string;
-};
+}
 
 export interface HtxWalletStatusApiData {
   chains: HtxNetworkApiData[];
@@ -40,18 +40,20 @@ export interface HtxWalletStatusApiData {
 }
 
 const handler = async (
-    req: NextApiRequest,
-    res: NextApiResponse<HtxApiResponse<readonly HtxWalletStatusApiData[]> | undefined>
-  ) => {
-    const endpoint = '/v2/reference/currencies';
-    // const params = { currency: 'usdt' };
-    const signaturedParams = getHtxSignaturedURLParams(endpoint);
+  req: NextApiRequest,
+  res: NextApiResponse<HtxApiResponse<readonly HtxWalletStatusApiData[]> | undefined>,
+) => {
+  const endpoint = '/v2/reference/currencies';
+  // const params = { currency: 'usdt' };
+  const signaturedParams = getHtxSignaturedURLParams(endpoint);
 
-    const response = await axiosHtxClient.get<HtxApiResponse<readonly HtxWalletStatusApiData[]> | undefined>(endpoint, { params: signaturedParams }).catch(err => {
+  const response = await axiosHtxClient
+    .get<HtxApiResponse<readonly HtxWalletStatusApiData[]> | undefined>(endpoint, { params: signaturedParams })
+    .catch((err) => {
       return { status: err.response?.status, data: err.response?.data };
     });
 
-    res.status(response.status ?? 500).json(response.data);
-  };
-  
-  export default handler;
+  res.status(response.status ?? 500).json(response.data);
+};
+
+export default handler;

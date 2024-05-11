@@ -117,8 +117,7 @@ const Icon = ({ type, size = 'md', className = '' }: IconProps) => {
     <IconContext.Provider
       value={{
         className: '',
-      }}
-    >
+      }}>
       <IconComponent className={`${sizeClassName} ${className}`} />
     </IconContext.Provider>
   );

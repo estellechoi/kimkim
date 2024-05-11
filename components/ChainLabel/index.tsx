@@ -23,7 +23,7 @@ const CHAIN_LABEL_FONT_DICT: Record<ChainLabelSize, string> = {
   md: 'Font_label_14px',
   lg: 'Font_label_14px',
   xl: 'Font_label_14px',
-}
+};
 
 type ChainLabelProps = {
   chain: AllChains;
@@ -34,7 +34,14 @@ type ChainLabelProps = {
   className?: string;
 };
 
-const ChainLabel = ({ chain, color = 'body', size = 'md', logoURL: injectedLogoURL, logoOnly = false, className = '' }: ChainLabelProps) => {
+const ChainLabel = ({
+  chain,
+  color = 'body',
+  size = 'md',
+  logoURL: injectedLogoURL,
+  logoOnly = false,
+  className = '',
+}: ChainLabelProps) => {
   const logoURL = CHAIN_METADATA_DICT[chain].logoURL;
   const renderingLogoURL = injectedLogoURL ?? logoURL;
 

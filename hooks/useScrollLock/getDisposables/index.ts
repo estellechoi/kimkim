@@ -10,7 +10,7 @@ export function getDisposables() {
       element: HTMLElement | Window | Document,
       name: TEventName,
       listener: (event: WindowEventMap[TEventName]) => any,
-      options?: boolean | AddEventListenerOptions
+      options?: boolean | AddEventListenerOptions,
     ) {
       element.addEventListener(name, listener as any, options);
       return api.add(() => element.removeEventListener(name, listener as any, options));

@@ -28,7 +28,7 @@ const ModalControllerRefForwarder = ({ modalElement: ModalElement, onClosed }: M
     () => {
       return { onClose };
     },
-    [onClose]
+    [onClose],
   );
 
   /**

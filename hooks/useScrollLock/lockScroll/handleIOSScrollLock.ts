@@ -65,7 +65,7 @@ const handleIOSScrollLock = (): ScrollLockStep<Options> => {
               }
             } catch (err) {}
           },
-          true
+          true,
         );
 
         disposables.addEventListener(
@@ -77,7 +77,7 @@ const handleIOSScrollLock = (): ScrollLockStep<Options> => {
               e.preventDefault();
             }
           },
-          { passive: false }
+          { passive: false },
         );
 
         // Restore scroll position

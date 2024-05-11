@@ -1,6 +1,44 @@
 {
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      // Allows for the parsing of JSX
+      "jsx": true
+    },
+    "project": "./tsconfig.json"
+  },
+  "plugins": ["prettier", "json"],
   "extends": [
-    "next",
-    "next/core-web-vitals"
+    "next/core-web-vitals",
+    "plugin:@next/next/recommended",
+    "prettier",
+    "plugin:prettier/recommended",
+    "plugin:json/recommended"
+  ],
+  "rules": {
+    "next/no-html-link-for-pages": "off",
+    "prettier/prettier": "error",
+    "multiline-comment-style": ["error", "separate-lines"],
+    "import/no-unused-modules": "error",
+    "react/react-in-jsx-scope": "off",
+    "react/jsx-curly-brace-presence": ["error", { "props": "never", "children": "never" }]
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "ignorePatterns": [
+    "node_modules",
+    "coverage",
+    "public/**/*.js",
+    ".next",
+    ".DS_Store",
+    ".env-cmdrc",
+    ".vscode/",
+    "package-lock.json",
+    "yarn.lock"
   ]
 }

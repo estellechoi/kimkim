@@ -1,5 +1,5 @@
-import type {NextPage} from 'next';
-import {useCallback, useEffect, useState} from 'react';
+import type { NextPage } from 'next';
+import { useCallback, useEffect, useState } from 'react';
 import Main from '@/components/Main';
 import Card from '@/components/Card';
 import BigNumber from 'bignumber.js';
@@ -16,7 +16,7 @@ const KimchiPremiumSection = dynamic(() => import('@/components/home/KimchiPremi
 
 const Home: NextPage = () => {
   /**
-   * 
+   *
    * @description exchange rate
    */
   const [currencyExchangeRate] = useAtom(currencyExchangeRateAtom);
@@ -24,77 +24,90 @@ const Home: NextPage = () => {
   const audByUsd = currencyExchangeRate.rates[Fiats.AUD];
 
   /**
-   * 
+   *
    * @description exchange rate
    */
   const [usdInput, setUsdInput] = useState<string>('1');
   const [audInput, setAudInput] = useState<string>();
-  const [krwInput, setKrwInput] = useState<string>(krwByUsd ? BigNumber(1).times(krwByUsd).dp(1).toString() :'');
+  const [krwInput, setKrwInput] = useState<string>(krwByUsd ? BigNumber(1).times(krwByUsd).dp(1).toString() : '');
 
-  const onChangeUsdInput = useCallback((value: string) => {
-    setUsdInput(value);
+  const onChangeUsdInput = useCallback(
+    (value: string) => {
+      setUsdInput(value);
 
-    const parsedValue = parseFloat(value);
-    if (Number.isNaN(parsedValue)) return;
-    
-    if (audByUsd !== null) {
-      const audValue = BigNumber(parsedValue).times(audByUsd);
-      setAudInput(audValue.dp(2).toString());
-    }
-
-    if (krwByUsd !== null) {
-      const krwValue = BigNumber(parsedValue).times(krwByUsd);
-      setKrwInput(krwValue.dp(1).toString());  
-    }
-  }, [krwByUsd, audByUsd]);
-
-  const onChangeAudInput = useCallback((value: string) => {
-    setAudInput(value);
-
-    const parsedValue = parseFloat(value);
-    if (Number.isNaN(parsedValue)) return;
-
-    if (audByUsd !== null) {
-      const usdValue = BigNumber(parsedValue).div(audByUsd);
-      setUsdInput(usdValue.dp(2).toString());  
-
-      if (krwByUsd !== null) {
-        const krwValue = usdValue.times(krwByUsd);
-        setKrwInput(krwValue.dp(1).toString());  
-      }
-    }
-  }, [krwByUsd, audByUsd]);
-
-  const onChangeKrwInput = useCallback((value: string) => {
-    setKrwInput(value);
-
-    const parsedValue = parseFloat(value);
-    if (Number.isNaN(parsedValue)) return;
-
-    if (krwByUsd !== null) {
-      const usdValue = BigNumber(parsedValue).div(krwByUsd);
-      setUsdInput(usdValue.dp(2).toString());
+      const parsedValue = parseFloat(value);
+      if (Number.isNaN(parsedValue)) return;
 
       if (audByUsd !== null) {
-        const audValue = usdValue.times(audByUsd);
-        setAudInput(audValue.dp(2).toString());  
+        const audValue = BigNumber(parsedValue).times(audByUsd);
+        setAudInput(audValue.dp(2).toString());
       }
-    }
-  }, [krwByUsd, audByUsd]);
+
+      if (krwByUsd !== null) {
+        const krwValue = BigNumber(parsedValue).times(krwByUsd);
+        setKrwInput(krwValue.dp(1).toString());
+      }
+    },
+    [krwByUsd, audByUsd],
+  );
+
+  const onChangeAudInput = useCallback(
+    (value: string) => {
+      setAudInput(value);
+
+      const parsedValue = parseFloat(value);
+      if (Number.isNaN(parsedValue)) return;
+
+      if (audByUsd !== null) {
+        const usdValue = BigNumber(parsedValue).div(audByUsd);
+        setUsdInput(usdValue.dp(2).toString());
+
+        if (krwByUsd !== null) {
+          const krwValue = usdValue.times(krwByUsd);
+          setKrwInput(krwValue.dp(1).toString());
+        }
+      }
+    },
+    [krwByUsd, audByUsd],
+  );
+
+  const onChangeKrwInput = useCallback(
+    (value: string) => {
+      setKrwInput(value);
+
+      const parsedValue = parseFloat(value);
+      if (Number.isNaN(parsedValue)) return;
+
+      if (krwByUsd !== null) {
+        const usdValue = BigNumber(parsedValue).div(krwByUsd);
+        setUsdInput(usdValue.dp(2).toString());
+
+        if (audByUsd !== null) {
+          const audValue = usdValue.times(audByUsd);
+          setAudInput(audValue.dp(2).toString());
+        }
+      }
+    },
+    [krwByUsd, audByUsd],
+  );
 
   useEffect(() => {
     onChangeUsdInput(usdInput);
-    onChangeAudInput(audByUsd ? BigNumber(usdInput).times(audByUsd).dp(1).toString() :'');
-    onChangeKrwInput(krwByUsd ? BigNumber(usdInput).times(krwByUsd).dp(1).toString() :'');
+    onChangeAudInput(audByUsd ? BigNumber(usdInput).times(audByUsd).dp(1).toString() : '');
+    onChangeKrwInput(krwByUsd ? BigNumber(usdInput).times(krwByUsd).dp(1).toString() : '');
   }, [krwByUsd, audByUsd]);
 
   return (
     <Main className="flex flex-col items-center gap-y-20 min-h-screen pt-app_header_height pb-page_bottom">
       <section className="w-full max-w-content_max_width space-y-2 mt-20">
         <div className="flex justify-between items-center gap-x-10">
-          <div className="text-caption Font_label_12px p-4" >환율 {krwByUsd === undefined && <Tag size="sm" color="warning" label="데이터에 문제가 있어요" className="ml-2" />}</div>
+          <div className="text-caption Font_label_12px p-4">
+            환율 {krwByUsd === undefined && <Tag size="sm" color="warning" label="데이터에 문제가 있어요" className="ml-2" />}
+          </div>
           {currencyExchangeRate.lastUpdatedTime ? (
-            <div className="text-caption Font_caption_xs p-4" >{formatDate(currencyExchangeRate.lastUpdatedTime, TimeTick.TIME, Languages.KR)}</div>
+            <div className="text-caption Font_caption_xs p-4">
+              {formatDate(currencyExchangeRate.lastUpdatedTime, TimeTick.TIME, Languages.KR)}
+            </div>
           ) : (
             <WaitingSymbol />
           )}

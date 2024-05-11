@@ -8,10 +8,7 @@ const AppFooter = () => {
 
       <section className="flex items-center justify-between gap-x-4">
         <div className="flex items-center gap-x-2">
-          <A
-            href="/"
-            className="flex items-center gap-x-1 bg-body text-ground px-3 py-0.5 rounded-full Font_label_12px"
-          >
+          <A href="/" className="flex items-center gap-x-1 bg-body text-ground px-3 py-0.5 rounded-full Font_label_12px">
             <span>by</span>
             <span>KimKim Foundation</span>
           </A>

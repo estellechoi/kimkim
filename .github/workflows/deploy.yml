@@ -26,8 +26,11 @@ jobs:
           
           # Install Node.js and Yarn if they don't exist
           if ! type node > /dev/null 2>&1; then
-            curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-            sudo apt-get install -y nodejs
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm install stable
+            nvm use stable
           fi
 
           if ! type yarn > /dev/null 2>&1; then

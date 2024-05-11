@@ -4,7 +4,7 @@ import { useMergeRefs } from '@floating-ui/react';
 
 const TooltipTrigger = forwardRef<HTMLElement, HTMLProps<HTMLElement> & { asChild?: boolean }>(function TooltipTrigger(
   { children, asChild = false, ...props },
-  propRef
+  propRef,
 ) {
   const context = useTooltipContext();
   const childrenRef = (children as any).ref;
@@ -19,7 +19,7 @@ const TooltipTrigger = forwardRef<HTMLElement, HTMLProps<HTMLElement> & { asChil
         ...props,
         ...children.props,
         'data-state': context.open ? 'open' : 'closed',
-      })
+      }),
     );
   }
 
@@ -28,8 +28,7 @@ const TooltipTrigger = forwardRef<HTMLElement, HTMLProps<HTMLElement> & { asChil
       ref={ref}
       // The user can style the trigger based on the state
       data-state={context.open ? 'open' : 'closed'}
-      {...context.getReferenceProps(props)}
-    >
+      {...context.getReferenceProps(props)}>
       {children}
     </div>
   );

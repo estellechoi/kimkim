@@ -41,7 +41,7 @@ const ICON_INVERT_COLOR_CLASS_DICT: Record<ButtonType, Record<ButtonColor, strin
     on_primary: 'text-white border border-solid border-white',
     secondary: 'text-secondary border border-solid border-secondary',
     on_secondary: 'text-white border border-solid border-secondary',
-    body: 'text-body border border-solid border-body'
+    body: 'text-body border border-solid border-body',
   },
   text: {
     primary: 'text-primary',
@@ -92,8 +92,7 @@ const ButtonLeadingIcon = ({ type, color, size, iconType, disabled }: ButtonLead
 
       <span
         aria-hidden
-        className={`absolute inset-0.5 flex items-center justify-center rounded-icon Transition_500 transition-all origin-center scale-0 translate-x-4 opacity-0 group-enabled/button:group-hover/button:scale-100 group-hover/button:translate-x-0 group-hover/button:opacity-100 ${iconInvertColorClassName}`}
-      >
+        className={`absolute inset-0.5 flex items-center justify-center rounded-icon Transition_500 transition-all origin-center scale-0 translate-x-4 opacity-0 group-enabled/button:group-hover/button:scale-100 group-hover/button:translate-x-0 group-hover/button:opacity-100 ${iconInvertColorClassName}`}>
         <Icon
           type={iconType}
           size={iconSize}

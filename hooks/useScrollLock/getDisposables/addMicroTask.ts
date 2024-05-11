@@ -12,7 +12,7 @@ const addMicroTask = (callback: () => void) => {
       .catch((e) =>
         setTimeout(() => {
           throw e;
-        })
+        }),
       );
   }
 };

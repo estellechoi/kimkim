@@ -1,4 +1,4 @@
-import { ArchwayClient } from "@archwayhq/arch3.js/build";
+import { ArchwayClient } from '@archwayhq/arch3.js/build';
 
 export type WalletType = 'keplr';
 
@@ -14,8 +14,7 @@ export type Wallet = Readonly<{
 export type ArchAccount = Awaited<ReturnType<ArchwayClient['getAccount']>>;
 
 export type ConnectedWallet = Readonly<
-  Omit<Wallet, 'onNoConnector'> 
-  & {
+  Omit<Wallet, 'onNoConnector'> & {
     account: ArchAccount;
   }
 >;

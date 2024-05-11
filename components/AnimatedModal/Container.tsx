@@ -40,8 +40,7 @@ const AnimatedModal = ({ id, isOpen, onClose, size = 'md', ariaLabel, children, 
         role="dialog"
         aria-modal
         aria-label={ariaLabel}
-        className={`Component fixed z-top_context top-0 right-0 h-screen md:top-modal_margin_y md:right-modal_margin_x md:h-modal_height rounded-tl-card_md rounded-bl-card_md md:rounded-card_md bg-ground_variant_dark Elevation_box_3 ${widthClassName} ${animateClassName} ${className}`}
-      >
+        className={`Component fixed z-top_context top-0 right-0 h-screen md:top-modal_margin_y md:right-modal_margin_x md:h-modal_height rounded-tl-card_md rounded-bl-card_md md:rounded-card_md bg-ground_variant_dark Elevation_box_3 ${widthClassName} ${animateClassName} ${className}`}>
         {getTitle(children)}
         {getContent(children)}
         {getBottomBar(children)}

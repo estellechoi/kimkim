@@ -44,7 +44,7 @@ const CardLink = ({ label, color = 'primary', className = '', ...props }: CardLi
       return {
         LinkElement: Link,
         linkProps: props,
-        iconType: 'arrow_forward'
+        iconType: 'arrow_forward',
       };
     }
   }, [props]);

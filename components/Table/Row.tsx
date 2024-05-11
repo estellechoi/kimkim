@@ -63,17 +63,17 @@ const Row = <T extends TableRowData>({
   // class names
   const overlayClassName = useMemo<string>(
     () => (onClick || (data.subJsx && onToggleSubJsx) ? `cursor-pointer ${TABLE_ROW_HOVER_LAYER_BG_DICT[type]}` : ''),
-    [onClick, data.subJsx, onToggleSubJsx, type]
+    [onClick, data.subJsx, onToggleSubJsx, type],
   );
 
   const colorClassName = useMemo<string>(
     () => `${TABLE_ROW_BG_DICT[type]} ${TABLE_ROW_BORDER_DICT[type]} ${tailwindGroupName} ${data.className ?? ''}`,
-    [type, tailwindGroupName, data.className]
+    [type, tailwindGroupName, data.className],
   );
 
   const gridClassName = useMemo<string>(
     () => `w-full ${TABLE_ROW_GRID_X_DICT[type]} ${needRightSpace ? TABLE_ROW_RIGHT_PADDING : ''} ${TABLE_ROW_GRID_Y_DICT[type]}`,
-    [type, needRightSpace]
+    [type, needRightSpace],
   );
 
   return (
@@ -83,8 +83,7 @@ const Row = <T extends TableRowData>({
         onClick={isWholeRowClickable ? onRowClick : undefined}
         style={mouseEffectStyle}
         onMouseMove={onMouseMove}
-        onMouseLeave={onMouseLeave}
-      >
+        onMouseLeave={onMouseLeave}>
         {fields.map((field, index) => (
           <RowCell key={field.value} colIndex={index} data={data} field={field} type={type} isLoading={isLoading} />
         ))}

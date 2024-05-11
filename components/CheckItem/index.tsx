@@ -23,7 +23,7 @@ const CheckItem = ({ imgURL, label, checked = false, onChange, disabled, trailin
       // setIsChecked(newIsChecked);
       onChange?.(event.target.checked);
     },
-    [onChange]
+    [onChange],
   );
 
   const opacityClassName = useMemo<string>(() => (disabled ? 'opacity-40' : ''), [disabled]);
@@ -45,8 +45,7 @@ const CheckItem = ({ imgURL, label, checked = false, onChange, disabled, trailin
     <div
       className={`group/check-item Component relative rounded-md bg-ground box-content px-1 Transition_500 transition-colors border-2 border-solid ${
         isChecked ? 'border-primary_variant_dark' : 'border-primary'
-      } ${opacityClassName} ${hoverClassName}`}
-    >
+      } ${opacityClassName} ${hoverClassName}`}>
       {Content}
       <input
         type="checkbox"

@@ -28,7 +28,7 @@ const AnalyticsProvider = ({ children, items }: AnalyticsProviderProps) => {
         item.analytics.sendEvent(...args);
       });
     },
-    [items]
+    [items],
   );
 
   const identify: Analytics['identify'] = useCallback(
@@ -37,7 +37,7 @@ const AnalyticsProvider = ({ children, items }: AnalyticsProviderProps) => {
         item.analytics.identify(...args);
       });
     },
-    [items]
+    [items],
   );
 
   const resetUser: Analytics['resetUser'] = useCallback(
@@ -46,7 +46,7 @@ const AnalyticsProvider = ({ children, items }: AnalyticsProviderProps) => {
         item.analytics.resetUser(...args);
       });
     },
-    [items]
+    [items],
   );
 
   const context = useMemo(() => ({ sendEvent, identify, resetUser }), [sendEvent, identify, resetUser]);

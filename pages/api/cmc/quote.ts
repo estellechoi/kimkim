@@ -7,13 +7,16 @@ export type CoinMarketCapQuoteLatestApiData = {
       price: number;
       last_updated: string;
       // should define others soon
-    }
-  }
+    };
+  };
 };
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const response = await coinMarketCapAxiosClient
-    .get<CMCResponse<{ [symbol: string]: readonly CoinMarketCapQuoteLatestApiData[] }>>('/v2/cryptocurrency/quotes/latest', { params: req.query }).catch(err => {
+    .get<
+      CMCResponse<{ [symbol: string]: readonly CoinMarketCapQuoteLatestApiData[] }>
+    >('/v2/cryptocurrency/quotes/latest', { params: req.query })
+    .catch((err) => {
       return { status: err.response?.status, data: err.response?.data };
     });
 

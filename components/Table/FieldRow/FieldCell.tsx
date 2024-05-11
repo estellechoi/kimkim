@@ -28,7 +28,7 @@ const FieldCell = <T extends TableRowData>({
 }: FieldCellProps<T>) => {
   const isSortingField = useMemo<boolean>(
     () => sortValue === (field.sortValue ?? field.value),
-    [sortValue, field.sortValue, field.value]
+    [sortValue, field.sortValue, field.value],
   );
 
   const ariaSort = useMemo(() => {
@@ -48,8 +48,7 @@ const FieldCell = <T extends TableRowData>({
       style={getTableCellWidthStyle(field)}
       onClick={() => {
         if (!field.sortDisabled) sortBy(field);
-      }}
-    >
+      }}>
       <div className={`${className} flex items-center gap-x-1 ${TABLE_FIELD_TYPO_DICT[type]}`}>
         <Tooltip content={field.tooltipContent} layer={tooltipContext}>
           {field.label}

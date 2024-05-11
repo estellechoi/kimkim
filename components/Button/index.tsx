@@ -46,7 +46,7 @@ const Button = ({
   const cursorClassName = useMemo(() => BUTTON_CURSOR_CLASS_DICT[status], [status]);
   const colorClassName = useMemo(
     () => (labelHidden ? '' : BUTTON_COLOR_CLASS_DICT[type][status === 'disabled' ? 'disabled' : color]),
-    [labelHidden, type, color, status]
+    [labelHidden, type, color, status],
   );
   const { fontClassName, heightClassName, labelPaddingClassName, paddingClassName } = useMemo(
     () => ({
@@ -55,7 +55,7 @@ const Button = ({
       paddingClassName: BUTTON_PADDING_CLASS_DICT[type][size],
       labelPaddingClassName: BUTTON_LABEL_PADDING_CLASS_DICT[size],
     }),
-    [type, size]
+    [type, size],
   );
   const textVisibilityClassName = useMemo(() => (labelHidden ? 'sr-only' : ''), [labelHidden]);
   const hoverAnimationClassName = disabled
@@ -68,13 +68,11 @@ const Button = ({
       disabled={disabled}
       onClick={onClick}
       className={`Component group/button relative w-fit inline-flex justify-between items-center rounded-button ${heightClassName} ${paddingClassName} ${cursorClassName} ${colorClassName} ${className}`}
-      {...intrinsicProps}
-    >
+      {...intrinsicProps}>
       {iconType && <ButtonLeadingIcon type={type} color={color} size={size} iconType={iconType} disabled={disabled} />}
 
       <span
-        className={`grow truncate ${fontClassName} ${labelPaddingClassName} ${textVisibilityClassName} ${hoverAnimationClassName}`}
-      >
+        className={`grow truncate ${fontClassName} ${labelPaddingClassName} ${textVisibilityClassName} ${hoverAnimationClassName}`}>
         {processing ? <WaitingSymbol color={BUTTON_WAITING_SYMBOL_COLOR_DICT[type][color]} /> : label}
       </span>
     </button>

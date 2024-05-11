@@ -43,7 +43,7 @@ const useModal = () => {
         ));
       });
     },
-    [handlers]
+    [handlers],
   );
 
   const modal = useMemo(() => {

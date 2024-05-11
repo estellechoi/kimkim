@@ -45,7 +45,7 @@ const Container = ({
   }, [injectedValue]);
 
   const debouncedValue = useDebounce(value, 500);
-  const finalValue = useMemo(() => debounce ? debouncedValue : value, [debouncedValue, value, debounce]);
+  const finalValue = useMemo(() => (debounce ? debouncedValue : value), [debouncedValue, value, debounce]);
 
   const [isValid, setIsValid] = useState<boolean>(true);
 
@@ -82,15 +82,16 @@ const Container = ({
   const heightClassName = 'h-[2.75rem] max-h-[2.75rem]';
   const borderClassName = '';
   const bgClassName = `border border-solid ${
-    disabled
-      ? 'border-disabled bg-disabled'
-      : 'bg-on_primary transition-colors Transition_500 border-primary_line_dark'
+    disabled ? 'border-disabled bg-disabled' : 'bg-on_primary transition-colors Transition_500 border-primary_line_dark'
   }`;
   const iconColorClassName = 'text-caption';
   const colorClassName = `placeholder:text-caption_on_primary text-white ${
     disabled ? '' : 'transition-colors Transition_500 focus-within:text-primary group-hover/text-input:text-white'
   }`;
-  const fontClassName = type === 'number' ? 'placeholder:Font_caption_md_num Font_data_16px_num md:placeholder:Font_caption_sm_num md:Font_data_14px_num' : 'placeholder:Font_caption_md Font_data_16px md:placeholder:Font_caption_sm md:Font_data_14px';
+  const fontClassName =
+    type === 'number'
+      ? 'placeholder:Font_caption_md_num Font_data_16px_num md:placeholder:Font_caption_sm_num md:Font_data_14px_num'
+      : 'placeholder:Font_caption_md Font_data_16px md:placeholder:Font_caption_sm md:Font_data_14px';
   const cursorClassName = disabled ? 'cursor-not-allowed' : 'cursor-text';
 
   return (
@@ -100,8 +101,7 @@ const Container = ({
       </label>
 
       <div
-        className={`group/text-input relative flex items-center gap-x-card_padding_x px-card_padding_x py-1 rounded-card_sm Elevation_box_1 ${heightClassName} ${bgClassName} ${borderClassName} ${iconColorClassName}`}
-      >
+        className={`group/text-input relative flex items-center gap-x-card_padding_x px-card_padding_x py-1 rounded-card_sm Elevation_box_1 ${heightClassName} ${bgClassName} ${borderClassName} ${iconColorClassName}`}>
         {getIcon(children)}
 
         <input

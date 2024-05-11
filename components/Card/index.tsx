@@ -21,7 +21,7 @@ type CardProps = { children: ReactNode; color?: CardColor; size?: CardSize; clas
 
 const CardRefForwarder = (
   { children, color = 'primary', size = 'md', className = '' }: CardProps,
-  propRef?: ForwardedRef<HTMLElement>
+  propRef?: ForwardedRef<HTMLElement>,
 ) => {
   const bgClassName = CARD_BG_COLOR_DICT[color];
   const radiusClassName = CARD_RADIUS_CLASS_DICT[size];

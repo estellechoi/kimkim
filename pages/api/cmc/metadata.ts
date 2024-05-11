@@ -3,15 +3,15 @@ import { CMCResponse, coinMarketCapAxiosClient } from '.';
 
 export type CoinMarketCapMetadataApiData = {
   urls: {
-      website: string[];
-      technical_doc: string[];
-      twitter: string[];
-      reddit: string[];
-      message_board: string[];
-      announcement: string[];
-      chat: string[];
-      explorer: string[];
-      source_code: string[];
+    website: string[];
+    technical_doc: string[];
+    twitter: string[];
+    reddit: string[];
+    message_board: string[];
+    announcement: string[];
+    chat: string[];
+    explorer: string[];
+    source_code: string[];
   };
   logo: string;
   id: number;
@@ -23,11 +23,11 @@ export type CoinMarketCapMetadataApiData = {
   date_launched: string;
   tags: string[];
   platform: null | {
-      id: string;
-      name: string;
-      symbol: string;
-      slug: string;
-      token_address: string;
+    id: string;
+    name: string;
+    symbol: string;
+    slug: string;
+    token_address: string;
   };
   category: string;
   twitter_username?: string;
@@ -49,7 +49,10 @@ export type CoinMarketCapMetadataApiData = {
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const response = await coinMarketCapAxiosClient
-    .get<CMCResponse<{ [symbol: string]: readonly CoinMarketCapMetadataApiData[] }>>('/v2/cryptocurrency/info', { params: req.query }).catch(err => {
+    .get<
+      CMCResponse<{ [symbol: string]: readonly CoinMarketCapMetadataApiData[] }>
+    >('/v2/cryptocurrency/info', { params: req.query })
+    .catch((err) => {
       return { status: err.response?.status, data: err.response?.data };
     });
 

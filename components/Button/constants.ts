@@ -24,7 +24,7 @@ export const BUTTON_COLOR_CLASS_DICT: Record<ButtonType, Record<ButtonColor | 'd
     secondary: 'bg-transparent text-secondary',
     on_secondary: 'bg-transparent text-white',
     disabled: 'bg-transparent text-disabled',
-    body: 'bg-transparent text-body'
+    body: 'bg-transparent text-body',
   },
 };
 

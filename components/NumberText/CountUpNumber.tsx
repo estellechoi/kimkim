@@ -23,7 +23,7 @@ const CountUpNumber = ({
 
   const { number, decimals, prefix } = useMemo<{ number: number; decimals: number; prefix?: string }>(
     () => unformatNumber(formattedNumber, locale),
-    [formattedNumber, locale]
+    [formattedNumber, locale],
   );
 
   const [start, setStart] = useState<number>(0);

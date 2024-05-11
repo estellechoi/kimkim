@@ -31,7 +31,7 @@ export default function PieChart<T extends PieChartKey>({
 }: PieChartProps<T>) {
   const isZero = useMemo<boolean>(
     () => data.reduce((accm, item) => accm.plus(new BigNumber(item.value)), new BigNumber(0)).isZero(),
-    [data]
+    [data],
   );
 
   const validSize = useMemo<number>(() => (size <= 0 ? DEFAULT_PX_SIZE : size), [size]);
@@ -50,7 +50,7 @@ export default function PieChart<T extends PieChartKey>({
         }
       }
     },
-    [setValue, value, setType, type]
+    [setValue, value, setType, type],
   );
 
   const handleMouseLeave = useCallback(() => {
@@ -67,8 +67,7 @@ export default function PieChart<T extends PieChartKey>({
         height: `${validSize}px`,
         minWidth: `${validSize}px`,
         minHeight: `${validSize}px`,
-      }}
-    >
+      }}>
       <Chart width={validSize} height={validSize}>
         <Pie
           data={isZero ? EMPTY_DATA : data}
@@ -85,8 +84,7 @@ export default function PieChart<T extends PieChartKey>({
           paddingAngle={0}
           onMouseEnter={handleMouseOn}
           onMouseMove={handleMouseOn}
-          onMouseLeave={handleMouseLeave}
-        >
+          onMouseLeave={handleMouseLeave}>
           {data.map((item) => (
             <Cell key={item.type} fill={isZero ? EMPTY_COLOR : colorMap?.[item.type] ?? EMPTY_COLOR} />
           ))}

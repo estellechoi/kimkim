@@ -55,7 +55,7 @@ const useTouchDraggableRef = <T extends HTMLElement>(options?: UseTouchDraggable
 
       ref?.current?.style.setProperty('transform', `translate(${moveX}px, ${moveY}px)`, 'important');
     },
-    [touchStart, options]
+    [touchStart, options],
   );
 
   const handleTouchEnd: TouchEventHandler<T> = useCallback(
@@ -87,7 +87,7 @@ const useTouchDraggableRef = <T extends HTMLElement>(options?: UseTouchDraggable
         resetTouchStates();
       }
     },
-    [resetTouchStates, touchStart, options]
+    [resetTouchStates, touchStart, options],
   );
 
   useEffect(() => {

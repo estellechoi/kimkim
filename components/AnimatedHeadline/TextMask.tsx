@@ -11,8 +11,7 @@ const TextMask = ({ translateDelayMs, isOff, onAnimationEnd }: TextMaskProps) =>
       aria-hidden
       className={`absolute inset-0 bg-black Transition_1000 transition-transform ${maskTranslateClassName}`}
       style={style}
-      onTransitionEnd={onAnimationEnd}
-    ></span>
+      onTransitionEnd={onAnimationEnd}></span>
   );
 };
 

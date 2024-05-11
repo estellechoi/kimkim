@@ -25,17 +25,17 @@ export default function LoadingRows({
       return type === 'span' || type === 'coin_label'
         ? 'col-span-3'
         : isNthChild(index + 1, 4, 1)
-        ? 'col-start-1 col-end-3'
-        : isNthChild(index + 1, 4, 0)
-        ? 'col-start-3 col-end-4'
-        : '';
+          ? 'col-start-1 col-end-3'
+          : isNthChild(index + 1, 4, 0)
+            ? 'col-start-3 col-end-4'
+            : '';
     },
-    [type]
+    [type],
   );
 
   const CoinSkeleton = useMemo(
     () => <span className={`grow-0 shrink-0 w-[1em] h-[1em] rounded-full ${bgClassName} mr-1.5`}></span>,
-    [bgClassName]
+    [bgClassName],
   );
   const RowSkeleton = useMemo(() => <span className={`grow basis-full rounded-row ${bgClassName}`}></span>, [bgClassName]);
 

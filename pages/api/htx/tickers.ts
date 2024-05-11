@@ -20,20 +20,19 @@ export interface HtxMarketApiData {
   bidSize: number;
   ask: number;
   askSize: number;
-};
+}
 
-const handler = async (
-    req: NextApiRequest,
-    res: NextApiResponse<HtxApiResponse<readonly HtxMarketApiData[]> | undefined>
-  ) => {
-    const endpoint = '/market/tickers';
-    const signaturedParams = getHtxSignaturedURLParams(endpoint);
+const handler = async (req: NextApiRequest, res: NextApiResponse<HtxApiResponse<readonly HtxMarketApiData[]> | undefined>) => {
+  const endpoint = '/market/tickers';
+  const signaturedParams = getHtxSignaturedURLParams(endpoint);
 
-    const response = await axiosHtxClient.get<HtxApiResponse<readonly HtxMarketApiData[]> | undefined>(endpoint, { params: signaturedParams }).catch(err => {
+  const response = await axiosHtxClient
+    .get<HtxApiResponse<readonly HtxMarketApiData[]> | undefined>(endpoint, { params: signaturedParams })
+    .catch((err) => {
       return { status: err.response?.status, data: err.response?.data };
     });
 
-    res.status(response.data?.status === 'error' ? 400 : response.status ?? 500).json(response.data);
-  };
-  
-  export default handler;
+  res.status(response.data?.status === 'error' ? 400 : response.status ?? 500).json(response.data);
+};
+
+export default handler;

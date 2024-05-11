@@ -13,7 +13,7 @@ const useUserAgent = () => {
         isIOS: false,
         isNonIOSMobile: false,
       },
-    [userAgent]
+    [userAgent],
   );
 };
 

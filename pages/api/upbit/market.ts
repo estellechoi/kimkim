@@ -15,19 +15,17 @@ export interface UpbitMarketApiData {
       TRADING_VOLUME_SOARING: boolean;
     };
     warning: boolean;
-  }
+  };
+}
+
+const handler = async (req: NextApiRequest, res: NextApiResponse<any>) => {
+  const response = await axiosUpbitClient
+    .get<readonly UpbitMarketApiData[]>('v1/market/all', { params: { isDetails: true } })
+    .catch((err) => {
+      return { status: err.response?.status, data: err.response?.data };
+    });
+
+  res.status(response.status ?? 500).json(response.data);
 };
 
-const handler = async (
-    req: NextApiRequest,
-    res: NextApiResponse<any>
-  ) => {
-    const response = await axiosUpbitClient
-      .get<readonly UpbitMarketApiData[]>('v1/market/all', { params: { isDetails: true } }).catch(err => {
-        return { status: err.response?.status, data: err.response?.data };
-      });
-
-    res.status(response.status ?? 500).json(response.data);
-  };
-  
-  export default handler;
+export default handler;

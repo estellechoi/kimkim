@@ -74,7 +74,7 @@ const useTooltip = ({
       ...interactions,
       ...floating,
     }),
-    [open, setOpen, interactions, floating]
+    [open, setOpen, interactions, floating],
   );
 };
 

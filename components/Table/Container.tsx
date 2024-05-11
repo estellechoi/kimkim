@@ -68,7 +68,7 @@ const TableContainer = <T extends TableRowData>({
   const hasAnySubJsxOpen = useMemo<boolean>(() => rows.some((row) => row.isSubJsxOpen), [rows]);
   const needRightSpace = useMemo<boolean>(
     () => (showRowClickIcon && onRowClick !== undefined) || hasAnySubJsx || rows.some((row) => row.rightEnd !== undefined),
-    [hasAnySubJsx, showRowClickIcon, onRowClick, rows]
+    [hasAnySubJsx, showRowClickIcon, onRowClick, rows],
   );
 
   const hasField = useMemo<boolean>(() => getFieldRows(children).length > 0, [children]);
@@ -79,14 +79,14 @@ const TableContainer = <T extends TableRowData>({
       bgClassName: TABLE_BG_COLOR_DICT[type],
       gapYClassName: `${TABLE_SPACE_Y_DICT[type]}`,
     }),
-    [type]
+    [type],
   );
   const { heightClassName, overFlowClassName } = useMemo(
     () => ({
       heightClassName: rowsScrollHeight ? 'h-full' : '',
       overFlowClassName: rowsScrollHeight ? 'overflow-y-auto' : '',
     }),
-    [rowsScrollHeight]
+    [rowsScrollHeight],
   );
 
   return (
@@ -111,8 +111,7 @@ const TableContainer = <T extends TableRowData>({
       <div
         role="rowgroup"
         className={`relative w-full ${gapYClassName} ${overFlowClassName}`}
-        style={{ height: rowsScrollHeight, scrollbarGutter: 'stable' }}
-      >
+        style={{ height: rowsScrollHeight, scrollbarGutter: 'stable' }}>
         {sortedRows.map((row) => (
           <Row
             key={row.id}
@@ -133,8 +132,7 @@ const TableContainer = <T extends TableRowData>({
         {sortedRows.length === 0 && (
           <div
             role="row"
-            className={`relative w-full h-[240px] flex items-center justify-center text-center px-3 py-5 md:px-4 hover:!bg-none ${TABLE_ROW_BG_DICT[type]}`}
-          >
+            className={`relative w-full h-[240px] flex items-center justify-center text-center px-3 py-5 md:px-4 hover:!bg-none ${TABLE_ROW_BG_DICT[type]}`}>
             {isLoading ? <WaitingSymbol color="caption" /> : <span className="Font_caption_sm text-caption">No data found</span>}
           </div>
         )}

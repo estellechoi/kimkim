@@ -44,8 +44,7 @@ const TableFieldRow = <T extends TableRowData>({
       className={`relative w-full ${TABLE_FIELD_BORDER_DICT[type]} ${TABLE_FIELD_GRID_X_DICT[type]} ${
         needRightSpace ? TABLE_FIELD_RIGHT_PADDING : ''
       } ${TABLE_FIELD_GRID_Y_DICT[type]} ${TABLE_FIELD_BG_DICT[type]} ${rowsScrollHeight ? 'overflow-y-auto' : ''}`}
-      style={{ scrollbarGutter: 'stable' }}
-    >
+      style={{ scrollbarGutter: 'stable' }}>
       {fields
         .filter((field) => !field.hide)
         .map((field, index) => (
@@ -65,8 +64,7 @@ const TableFieldRow = <T extends TableRowData>({
         <div
           role="columnheader"
           aria-sort="none"
-          className={`flex items-center justify-center absolute right-2 inset-y-0 ${TABLE_EXPAND_ICON_GRID_X[type]}`}
-        >
+          className={`flex items-center justify-center absolute right-2 inset-y-0 ${TABLE_EXPAND_ICON_GRID_X[type]}`}>
           <Button
             iconType={hasAnySubJsxOpen ? 'expand_less' : 'expand_more'}
             size="sm"

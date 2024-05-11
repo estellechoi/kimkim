@@ -15,22 +15,22 @@ const upbitSecretKey = process.env.NEXT_PUBLIC_UPBIT_OPEN_API_SECRET_KEY ?? '';
 // const Authorization = `Bearer ${jwt}`;
 
 export const axiosUpbitClient = axios.create({
-    baseURL: 'https://api.upbit.com',
-    headers: {
-        accept: 'application/json',
-        // Authorization,
-    },
+  baseURL: 'https://api.upbit.com',
+  headers: {
+    accept: 'application/json',
+    // Authorization,
+  },
 });
 
 export const getUpbitAuthorizationHeader = (): string => {
-    const payload = {
-        access_key: upbitAccessKey,
-        nonce: v4(),
-    }
-    
-    const jwt = jsonwebtoken.sign(payload, upbitSecretKey, { algorithm: 'HS256' });
-    
-    const authorization = `Bearer ${jwt}`;
+  const payload = {
+    access_key: upbitAccessKey,
+    nonce: v4(),
+  };
 
-    return authorization;
-}
+  const jwt = jsonwebtoken.sign(payload, upbitSecretKey, { algorithm: 'HS256' });
+
+  const authorization = `Bearer ${jwt}`;
+
+  return authorization;
+};
