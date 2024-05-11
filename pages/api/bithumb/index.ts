@@ -1,6 +1,12 @@
 import axios from 'axios';
 import { HmacSHA512 } from 'crypto-js';
 
+export type BithumbApiResponse<T> = Readonly<{
+  status: string;
+  data: T;
+  date: string;
+}>;
+
 export const bithumbConnectKey = process.env.NEXT_PUBLIC_BITHUMB_API_CONNECT_KEY ?? '';
 export const bithumbSecretKey = process.env.NEXT_PUBLIC_BITHUMB_API_SECRET_KEY ?? '';
 

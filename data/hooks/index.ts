@@ -32,6 +32,10 @@ import useWebSocket from 'react-use-websocket';
 import { useEffect, useState } from 'react';
 import queryClient from '../queryClient';
 import { CoinMarketCapQuoteLatestApiData } from '@/pages/api/cmc/quote';
+import { BithumbTickerApiData } from '@/pages/api/bithumb/ticker';
+import { BithumbWalletApiData } from '@/pages/api/bithumb/wallet';
+import { BithumbApiResponse } from '@/pages/api/bithumb';
+import { BithumbNetworkInfoApiData } from '@/pages/api/bithumb/network-info';
 
 /**
  *
@@ -114,34 +118,6 @@ export const useFetchCoinMarketCapPrice = (refetchInterval: number | null, symbo
 
 /**
  *
- * @description coingecko api fetching
- */
-export const useFetchCoinGeckoCoinIds = (refetchInterval: number | null) => {
-  const queryKey = ['fetchCoinGeckoCoinIds'];
-
-  return useQuery<AxiosResponse<readonly CoinGeckoCoinApiData[] | undefined>, AxiosError>({
-    queryFn: () => axios.get<readonly CoinGeckoCoinApiData[] | undefined>('/api/coingecko/coins'),
-    queryKey,
-    refetchInterval: refetchInterval ?? 0,
-    enabled: refetchInterval !== null,
-  });
-};
-
-export const useFetchCoinGeckoCoins = (refetchInterval: number | null, ids: readonly string[]) => {
-  const idsJoint = ids.join(',');
-  const options = { params: { ids: idsJoint } };
-  const queryKey = ['fetchCoinGeckoCoins', idsJoint];
-
-  return useQuery<AxiosResponse<readonly CoinGeckoCoinPriceApiData[] | undefined>, AxiosError>({
-    queryFn: () => axios.get<readonly CoinGeckoCoinPriceApiData[] | undefined>('/api/coingecko/prices', options),
-    queryKey,
-    refetchInterval: refetchInterval ?? 0,
-    enabled: refetchInterval !== null,
-  });
-};
-
-/**
- *
  * @description upbit open api fetching
  */
 export const useFetchUpbitMarket = (refetchInterval: number | null) => {
@@ -173,6 +149,47 @@ export const useFetchUpbitPrice = (refetchInterval: number | null, symbols: read
   return useQuery<AxiosResponse<readonly UpbitTickerApiData[] | undefined>, AxiosError>({
     queryFn: () =>
       axios.get<readonly UpbitTickerApiData[] | undefined>('/api/upbit/ticker', { params: { markets: marketsJoint } }),
+    queryKey,
+    refetchInterval: refetchInterval ?? 0,
+    enabled: refetchInterval !== null,
+  });
+};
+
+/**
+ *
+ * @description bithumb open api fetching
+ */
+export const useFetchBithumbPrice = (refetchInterval: number | null) => {
+  const queryKey = ['useFetchBithumbPrice'];
+
+  return useQuery<
+    AxiosResponse<BithumbApiResponse<Readonly<{ [symbol: string]: BithumbTickerApiData }>> | undefined>,
+    AxiosError
+  >({
+    queryFn: () =>
+      axios.get<BithumbApiResponse<Readonly<{ [symbol: string]: BithumbTickerApiData }>> | undefined>('/api/bithumb/ticker'),
+    queryKey,
+    refetchInterval: refetchInterval ?? 0,
+    enabled: refetchInterval !== null,
+  });
+};
+
+export const useFetchBithumbWalletStatus = (refetchInterval: number | null) => {
+  const queryKey = ['useFetchBithumbWalletStatus'];
+
+  return useQuery<AxiosResponse<BithumbApiResponse<readonly BithumbWalletApiData[]> | undefined>, AxiosError>({
+    queryFn: () => axios.get<BithumbApiResponse<readonly BithumbWalletApiData[]> | undefined>('/api/bithumb/wallet'),
+    queryKey,
+    refetchInterval: refetchInterval ?? 0,
+    enabled: refetchInterval !== null,
+  });
+};
+
+export const useFetchBithumbNetworkInfo = (refetchInterval: number | null) => {
+  const queryKey = ['useFetchBithumbNetworkInfo'];
+
+  return useQuery<AxiosResponse<BithumbApiResponse<readonly BithumbNetworkInfoApiData[]> | undefined>, AxiosError>({
+    queryFn: () => axios.get<BithumbApiResponse<readonly BithumbNetworkInfoApiData[]> | undefined>('/api/bithumb/network-info'),
     queryKey,
     refetchInterval: refetchInterval ?? 0,
     enabled: refetchInterval !== null,

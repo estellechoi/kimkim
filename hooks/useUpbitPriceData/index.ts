@@ -2,16 +2,23 @@ import { useFetchUpbitPrice } from '@/data/hooks';
 import { UpbitTickerWebSocketData } from '@/data/hooks/types';
 import { useWebSocketUpbitPrice } from '@/data/hooks/webSocket';
 import { UpbitTickerApiData } from '@/pages/api/upbit/ticker';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import useUpbitMarketUpdate from '@/hooks/useUpbitMarketUpdate';
 
-const useUpbitPriceData = (enabled: boolean, symbols: readonly string[]) => {
+const useUpbitPriceData = (enabled: boolean) => {
+  const { upbitMarketData } = useUpbitMarketUpdate();
+
+  const symbols = useMemo(() => (upbitMarketData ? Object.keys(upbitMarketData) : []), [upbitMarketData]);
+
+  const fetch = enabled && symbols.length > 0;
+
   const {
     data: upbitPriceData,
     error: upbitPriceError,
     isLoading: isUpbitPriceLoading,
-  } = useFetchUpbitPrice(enabled ? 3000 : null, symbols);
+  } = useFetchUpbitPrice(fetch ? 3000 : null, symbols);
 
-  const { data: webSocketUpbitPriceData } = useWebSocketUpbitPrice(enabled, symbols);
+  const { data: webSocketUpbitPriceData } = useWebSocketUpbitPrice(fetch, symbols);
 
   const [webSocketDataQueue, setWebSocketData] = useState<Record<string, UpbitTickerWebSocketData>>({});
 
@@ -35,7 +42,7 @@ const useUpbitPriceData = (enabled: boolean, symbols: readonly string[]) => {
     setData(overwrittenData);
   }, [upbitPriceData, webSocketDataQueue]);
 
-  return { data, error: upbitPriceError, isLoading: isUpbitPriceLoading };
+  return { data, error: upbitPriceError, isLoading: isUpbitPriceLoading, symbols };
 };
 
 export default useUpbitPriceData;

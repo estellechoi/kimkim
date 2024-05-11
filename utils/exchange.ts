@@ -8,6 +8,8 @@ import {
   BybitWalletStatusApiData,
   BybitWalletStatusItemApiData,
 } from '@/data/hooks/types';
+import { BithumbTickerData } from '@/hooks/useBithumbPriceData';
+import { BithumbWalletData } from '@/hooks/useBithumbWalletStatus';
 import { BinanceWalletStatusApiData } from '@/pages/api/binance/wallet';
 import { HtxMarketApiData } from '@/pages/api/htx/tickers';
 import { HtxWalletStatusApiData } from '@/pages/api/htx/wallet';
@@ -43,6 +45,16 @@ export const reduceBaseExchangePriceDataFromUpbit = (
   }
 
   return acc;
+};
+
+export const reduceBaseExchangePriceDataFromBithumb = (
+  acc: readonly BaseExchangePriceData[],
+  data: BithumbTickerData,
+): readonly BaseExchangePriceData[] => {
+  const symbol = data.symbol;
+  const lastPrice = Number(data.lastPrice ?? data.closing_price);
+  const volume = BigNumber(data.acc_trade_value_24H).toNumber();
+  return [...acc, { symbol, lastPrice, volume }];
 };
 
 /**
@@ -135,11 +147,37 @@ export const getExchangeWalletDataFromUpbit = (data: UpbitWalletStatusApiData): 
   return [{ networkType, status, withdrawFeeType: 'fixed', withdrawFee: undefined, withdrawFeeCurrency }];
 };
 
+export const getExchangeWalletDataFromBithumb = (data: BithumbWalletData): readonly ExchangeWalletData[] => {
+  const networkType = data.net_name ?? data.net_type;
+  const withdrawFeeCurrency = data.currency;
+
+  let status: ExchangeWalletStatus;
+
+  switch (data.deposit_status) {
+    case 1:
+      status = ExchangeWalletStatus.WORKING;
+      break;
+    case 0:
+      status = ExchangeWalletStatus.PAUSED;
+      break;
+  }
+
+  return [{ networkType, status, withdrawFeeType: 'fixed', withdrawFee: undefined, withdrawFeeCurrency }];
+};
+
 export const getExchangeWalletDataMapFromUpbit = (
   data: readonly UpbitWalletStatusApiData[],
 ): Record<string, readonly ExchangeWalletData[]> => {
   return data.reduce<Record<string, readonly ExchangeWalletData[]>>((acc, item) => {
     return { ...acc, [item.currency]: getExchangeWalletDataFromUpbit(item) };
+  }, {});
+};
+
+export const getExchangeWalletDataMapFromBithumb = (
+  data: readonly BithumbWalletData[],
+): Record<string, readonly ExchangeWalletData[]> => {
+  return data.reduce<Record<string, readonly ExchangeWalletData[]>>((acc, item) => {
+    return { ...acc, [item.currency]: getExchangeWalletDataFromBithumb(item) };
   }, {});
 };
 
