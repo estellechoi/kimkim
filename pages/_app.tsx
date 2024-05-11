@@ -66,27 +66,36 @@ function MyApp({ Component, pageProps }: AppProps<{ dehydratedState: DehydratedS
           content="width=device-width, initial-scale=1, maximum-scale=5, minimum-scale=1, viewport-fit=cover"
         />
         <meta name="theme-color" content="#f5f5f5" />
-        <link rel="icon" href="/icons/app_favicon.png" />
+        <link rel="icon" href="/favicon.png" />
 
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="application-name" content="KimKim" />
         <meta name="apple-mobile-web-app-title" content="KimKim" />
-        <link rel="apple-touch-icon" href="/icons/app_icon_192.png" />
-        <link rel="apple-touch-icon" sizes="152x152" href="/icons/app_icon_192.png" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/icons/app_icon_192.png" />
-        <link rel="apple-touch-icon" sizes="167x167" href="/icons/app_icon_192.png" />
 
-        <link rel="icon" type="image/png" sizes="32x32" href="/icons/app_favicon.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/icons/app_favicon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon.png" />
         <link rel="manifest" href="/manifest.json" />
-        {/* <link rel="mask-icon" href="" color="#F5F5F5" /> */}
+        {/* <link rel="mask-icon" href="" color="#FFF" /> */}
 
         <meta name="description" content="실시간 김치 프리미엄" />
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="msapplication-TileColor" content="#F5F5F5" />
+        <meta name="msapplication-TileColor" content="#000" />
         <meta name="msapplication-tap-highlight" content="no" />
-        <meta name="theme-color" content="#F5F5F5" />
+        <meta name="theme-color" content="#000" />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://kimkim.space" />
+        <meta property="og:title" content="KimKim" />
+        <meta property="og:description" content="실시간 김치 프리미엄" />
+        <meta property="og:image" content="/images/open_graph_thumbnail.png" />
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://kimkim.space" />
+        <meta property="twitter:title" content="KimKim" />
+        <meta property="twitter:description" content="실시간 김치 프리미엄" />
+        <meta property="twitter:image" content="https://app.nomos.ms//images/open_graph_thumbnail.png" />
       </Head>
 
       <NextSeo {...SEO} />
