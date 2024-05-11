@@ -12,25 +12,18 @@ import type {
   BybitWalletStatusApiData,
   ExchangeRateApiData,
   ForexApiData,
-  UpbitTickerWebSocketData,
 } from './types';
 import type { UpbitTickerApiData } from '@/pages/api/upbit/ticker';
 import { UpbitMarketApiData } from '@/pages/api/upbit/market';
 import { CoinMarketCapMetadataApiData } from '@/pages/api/cmc/metadata';
 import { CMCResponse } from '@/pages/api/cmc';
 import { Fiats } from '@/constants/app';
-import { CoinGeckoCoinApiData } from '@/pages/api/coingecko/coins';
-import { CoinGeckoCoinPriceApiData } from '@/pages/api/coingecko/prices';
 import { HtxApiResponse, HtxMarketApiData } from '@/pages/api/htx/tickers';
 import { UpbitWalletStatusApiData } from '@/pages/api/upbit/wallet';
 import { HmacSHA256, enc } from 'crypto-js';
 import { HtxWalletStatusApiData } from '@/pages/api/htx/wallet';
 import * as crypto from 'crypto';
 import { BinanceWalletStatusApiData } from '@/pages/api/binance/wallet';
-import { initWebSocket } from '../websocket';
-import useWebSocket from 'react-use-websocket';
-import { useEffect, useState } from 'react';
-import queryClient from '../queryClient';
 import { CoinMarketCapQuoteLatestApiData } from '@/pages/api/cmc/quote';
 import { BithumbTickerApiData } from '@/pages/api/bithumb/ticker';
 import { BithumbWalletApiData } from '@/pages/api/bithumb/wallet';

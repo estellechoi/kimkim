@@ -11,7 +11,7 @@ import {
 } from './constants';
 import type { ButtonColor, ButtonSize, ButtonStatus, ButtonType } from './types';
 import type { IconType } from '@/components/Icon';
-import WaitingSymbol from '../WaitingSymbol';
+import WaitingSymbol from '@/components/WaitingSymbol';
 
 export type ButtonProps = Readonly<
   {

@@ -1,7 +1,7 @@
 import TextInput from '@/components/TextInput';
 import { Fiats } from '@/constants/app';
 import { TextInputProps } from '@/components/TextInput/Container';
-import Currency from '../Currency';
+import Currency from '@/components/Currency';
 
 type CurrencyAmountInputProps = Omit<TextInputProps, 'type' | 'label' | 'form'> & {
   fiat: Fiats;

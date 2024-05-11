@@ -4,7 +4,7 @@ import useBottomSheetClassName from './useBottomSheetClassName';
 import OverlayBackdrop from '@/components/OverlayBackdrop';
 import Handle from './Handle';
 import useBottomSheetTouchDrag from './useBottomSheetTouchDrag';
-import getReactElements from '../utils/getReactElements';
+import getReactElements from '@/components/utils/getReactElements';
 import Title from './Title';
 import Content from './Content';
 

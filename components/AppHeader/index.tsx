@@ -6,15 +6,15 @@ import DropDown from '@/components/DropDown';
 import { Fiats } from '@/constants/app';
 import { useAtom } from 'jotai';
 import { selectedCurrencyAtom } from '@/store/states';
-import Currency from '../Currency';
-import ExchangeRatePolling from '../pollings/ExchangeRatePolling';
-import USDTPricePolling from '../pollings/USDTPricePolling';
-import Coin from '../Coin';
-import Icon from '../Icon';
-import Tooltip from '../Tooltip';
+import Currency from '@/components/Currency';
+import ExchangeRatePolling from '@/components/pollings/ExchangeRatePolling';
+import USDTPricePolling from '@/components/pollings/USDTPricePolling';
+import Coin from '@/components/Coin';
+import Icon from '@/components/Icon';
+import Tooltip from '@/components/Tooltip';
 import useModal from '@/hooks/useModal';
 import { Suspense, useCallback } from 'react';
-import CoffeeOverlay from '../overlays/CoffeeOverlay';
+import CoffeeOverlay from '@/components/overlays/CoffeeOverlay';
 
 // const AccountButton = dynamic(() => import('@/components/buttons/AccountButton'), {
 //   ssr: false,

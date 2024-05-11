@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
-import getReactElements from '../utils/getReactElements';
+import getReactElements from '@/components/utils/getReactElements';
 import A from '@/components/A';
-import Icon from '../Icon';
+import Icon from '@/components/Icon';
 
 const Title = ({ children, href }: { children: ReactNode; href?: string }) => {
   return (
