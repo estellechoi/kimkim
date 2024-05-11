@@ -1,5 +1,5 @@
 import { ReactNode, useMemo } from 'react';
-import getReactElements from '../utils/getReactElements';
+import getReactElements from '@/components/utils/getReactElements';
 import { TEXTS } from '@/constants/app';
 import { TABLE_SPACE_Y_DICT, TABLE_ROW_BG_DICT, TABLE_BG_COLOR_DICT } from './styles';
 import Row from './Row';
@@ -8,7 +8,7 @@ import FieldRowPseudo from './FieldRow/Pseudo';
 import TableFieldRow from './FieldRow/FieldRow';
 import useSortedRows from './hooks/useSortedRows';
 import type { TooltipLayer } from '@/components/Tooltip/styles';
-import WaitingSymbol from '../WaitingSymbol';
+import WaitingSymbol from '@/components/WaitingSymbol';
 
 const getFieldRows = (children: ReactNode) => getReactElements(children, FieldRowPseudo);
 

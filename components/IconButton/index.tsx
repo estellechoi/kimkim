@@ -1,5 +1,5 @@
 import { ButtonHTMLAttributes } from 'react';
-import Icon, { IconType } from '../Icon';
+import Icon, { IconType } from '@/components/Icon';
 
 type IconButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   iconType: IconType;

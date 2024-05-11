@@ -1,5 +1,5 @@
 import { useLayoutEffect } from 'react';
-import useUserAgent from '../useUserAgent';
+import useUserAgent from '@/hooks/useUserAgent';
 import { getDisposables } from './getDisposables';
 import lockScroll from './lockScroll';
 import unlockScroll from './unlockScroll';

@@ -26,7 +26,6 @@ type KimchiPremiumTableProps = {
 const KimchiPremiumTable = ({ rows, isLoading }: KimchiPremiumTableProps) => {
   return (
     <Table<KimchiPremiumTableRow>
-      // hasMouseEffect={true}
       tooltipContext="base"
       dSortValue="premium"
       rows={rows}
