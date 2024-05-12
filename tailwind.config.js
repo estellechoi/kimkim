@@ -89,6 +89,7 @@ module.exports = {
         ground_dark_o: 'var(--color-gray900-o10)',
         ground_effected: 'var(--color-sky400)',
         ground_variant_dark: 'var(--color-ground-variant-dark)',
+        divider: 'var(--color-gray800-o35)',
         body: 'var(--color-body)',
         caption: 'var(--color-gray500)',
         caption_on_primary: 'var(--color-gray400)',

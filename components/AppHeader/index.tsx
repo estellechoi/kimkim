@@ -17,6 +17,7 @@ import CoffeeOverlay from '@/components/overlays/CoffeeOverlay';
 import USDTBithumbPricePolling from '@/components/pollings/USDTBithumbPricePolling';
 import ExchangeLogo from '@/components/ExchangeLogo';
 import ForexPopover from '@/components/kits/ForexPopover';
+import IconButton from '../IconButton';
 
 type AppHeaderProps = { className?: string };
 
@@ -56,7 +57,7 @@ const AppHeader = ({ className = '' }: AppHeaderProps) => {
           <AppLogo size="md" color="light" />
         </Link>
 
-        <div className="flex items-center gap-x-6">
+        <div className="flex items-center gap-x-2 md:gap-x-6">
           <DropDown<Fiats>
             placeholder="Select chain"
             defaultKey={selectedCurrency}
@@ -72,16 +73,18 @@ const AppHeader = ({ className = '' }: AppHeaderProps) => {
             }))}
             onChange={setSelectedCurrency}
           />
-          <ForexPopover id="forex-popover-at-header" />
 
-          <button
-            type="button"
-            className="Transition_500 transition-opacity hover:opacity-80"
-            aria-expanded={coffeeModal.isOpen}
-            aria-controls={coffeeModal.id}
-            onClick={openCoffeeModal}>
-            <Icon type="coffee" className="text-body" />
-          </button>
+          <div className="flex items-center gap-x-0 md:gap-x-2">
+            <ForexPopover id="forex-popover-at-header" />
+
+            <IconButton
+              iconType="coffee"
+              className="text-body"
+              aria-expanded={coffeeModal.isOpen}
+              aria-controls={coffeeModal.id}
+              onClick={openCoffeeModal}
+            />
+          </div>
         </div>
       </div>
     </header>

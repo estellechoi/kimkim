@@ -41,7 +41,7 @@ const TableFieldRow = <T extends TableRowData>({
   return (
     <div
       role="row"
-      className={`relative w-full ${TABLE_FIELD_BORDER_DICT[type]} ${TABLE_FIELD_GRID_X_DICT[type]} ${
+      className={`relative w-full min-w-content_max_width ${TABLE_FIELD_BORDER_DICT[type]} ${TABLE_FIELD_GRID_X_DICT[type]} ${
         needRightSpace ? TABLE_FIELD_RIGHT_PADDING : ''
       } ${TABLE_FIELD_GRID_Y_DICT[type]} ${TABLE_FIELD_BG_DICT[type]} ${rowsScrollHeight ? 'overflow-y-auto' : ''}`}
       style={{ scrollbarGutter: 'stable' }}>

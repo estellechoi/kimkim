@@ -14,7 +14,7 @@ const Home: NextPage = () => {
 
   return (
     <Main className="flex flex-col items-center gap-y-20 min-h-screen pt-app_header_height pb-page_bottom">
-      <KimchiPremiumSection krwByUsd={krwByUsd} audByUsd={audByUsd} className="mt-10" />
+      <KimchiPremiumSection krwByUsd={krwByUsd} audByUsd={audByUsd} className="mt-6 md:mt-10" />
     </Main>
   );
 };

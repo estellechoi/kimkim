@@ -346,7 +346,7 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd, className = '' }: KimchiPrem
   );
 
   return (
-    <div className={`w-full flex flex-col items-center gap-y-20 px-page_x ${className}`}>
+    <div className={`w-full max-w-content_max_width mx-auto flex flex-col items-center gap-y-20 ${className}`}>
       {watchListTableRows.length > 0 && (
         <section className="w-full max-w-content_max_width space-y-2">
           <div className="flex justify-between items-center gap-x-10">
@@ -380,12 +380,12 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd, className = '' }: KimchiPrem
       )}
 
       <section className="w-full max-w-content_max_width">
-        <div className="flex justify-between items-center gap-x-10">
-          <div className="text-caption Font_label_12px p-4">
+        <div className="flex flex-col justify-between gap-4 md:flex-row md:gap-10 md:items-center">
+          <div className="text-caption Font_label_12px px-4 py-4 md:py-0">
             김치 프리미엄 {errorDataLabel && <Tag size="sm" color="warning" label={errorDataLabel} className="ml-2" />}
           </div>
 
-          <div className="flex items-center gap-x-4">
+          <div className="flex flex-col items-stretch gap-4 p-4 md:flex-row md:items-center md:p-0">
             <ExchangeDropDownPair
               baseExchange={baseExchange}
               onBaseExchangeChange={setBaseExchange}

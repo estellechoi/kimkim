@@ -6,7 +6,7 @@ const AppFooter = () => {
     <footer className="relative grid grid-cols-1 gap-y-20 px-app_header_padding_x py-app_header_padding_y bg-ground_variant_dark text-caption">
       <h2 className="sr-only">Summary of the App</h2>
 
-      <section className="flex items-center justify-between gap-x-4">
+      <section className="flex flex-col items-stretch justify-between gap-8 md:flew-row md:items-center">
         <div className="flex items-center gap-x-2">
           <A href="/" className="flex items-center gap-x-1 bg-body text-ground px-3 py-0.5 rounded-full Font_label_12px">
             <span>by</span>

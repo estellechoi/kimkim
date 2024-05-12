@@ -35,9 +35,10 @@ const ExchangeDropDownPair = ({
         defaultKey={baseExchange}
         options={BASE_EXCHANGES.map((exchange) => ({ label: <ExchangeDropDownLabel exchange={exchange} />, key: exchange }))}
         onChange={(exchange) => onBaseExchangeChange?.(exchange)}
+        className="grow shrink basis-full md:basis-auto"
       />
 
-      <Icon type="arrow_back" className="text-caption" />
+      <Icon type="arrow_back" className="grow-0 shrink-0 text-caption" />
 
       <DropDown<QuoteExchange>
         size="sm"
@@ -45,6 +46,7 @@ const ExchangeDropDownPair = ({
         defaultKey={quoteExchange}
         options={QUOTE_EXCHANGES.map((exchange) => ({ label: <ExchangeDropDownLabel exchange={exchange} />, key: exchange }))}
         onChange={(exchange) => onQuoteExchangeChange?.(exchange)}
+        className="grow shrink basis-full md:basis-auto"
       />
     </div>
   );
