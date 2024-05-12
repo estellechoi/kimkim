@@ -11,12 +11,12 @@ import ExchangeRatePolling from '@/components/pollings/ExchangeRatePolling';
 import USDTPricePolling from '@/components/pollings/USDTPricePolling';
 import Coin from '@/components/Coin';
 import Icon from '@/components/Icon';
-import Tooltip from '@/components/Tooltip';
 import useModal from '@/hooks/useModal';
 import { Suspense, useCallback } from 'react';
 import CoffeeOverlay from '@/components/overlays/CoffeeOverlay';
 import USDTBithumbPricePolling from '@/components/pollings/USDTBithumbPricePolling';
-import ExchangeLogo from '../ExchangeLogo';
+import ExchangeLogo from '@/components/ExchangeLogo';
+import ForexPopover from '@/components/kits/ForexPopover';
 
 type AppHeaderProps = { className?: string };
 
@@ -72,6 +72,7 @@ const AppHeader = ({ className = '' }: AppHeaderProps) => {
             }))}
             onChange={setSelectedCurrency}
           />
+          <ForexPopover id="forex-popover-at-header" />
 
           <button
             type="button"
