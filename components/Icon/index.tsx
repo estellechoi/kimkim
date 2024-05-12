@@ -28,6 +28,7 @@ import {
   MdMoreHoriz,
 } from 'react-icons/md';
 import { FaGithub } from 'react-icons/fa';
+import { BsCurrencyExchange } from 'react-icons/bs';
 
 export type IconSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 export type IconType =
@@ -60,7 +61,8 @@ export type IconType =
   | 'fire'
   | 'coffee'
   | 'info'
-  | 'more';
+  | 'more'
+  | 'currency_exchange';
 
 const ICON_SIZE_CLASS_DICT: Record<IconSize, string> = {
   xs: 'w-2 h-2',
@@ -101,6 +103,7 @@ const ICON_DICT: Record<IconType, React.ElementType> = {
   coffee: MdCoffee,
   info: MdInfo,
   more: MdMoreHoriz,
+  currency_exchange: BsCurrencyExchange,
 };
 
 type IconProps = {

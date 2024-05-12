@@ -47,9 +47,10 @@ import useBithumbWalletStatus from '@/hooks/useBithumbWalletStatus';
 type KimchiPremiumSectionProps = {
   krwByUsd: number | null;
   audByUsd: number | null;
+  className?: string;
 };
 
-const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps) => {
+const KimchiPremiumSection = ({ krwByUsd, audByUsd, className = '' }: KimchiPremiumSectionProps) => {
   const [baseExchange, setBaseExchange] = useState<BaseExchange>(Exchanges.UPBIT);
   const [quoteExchange, setQuoteExchange] = useState<QuoteExchange>(Exchanges.BINANCE);
 
@@ -345,7 +346,7 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd }: KimchiPremiumSectionProps)
   );
 
   return (
-    <div className="w-full flex flex-col items-center gap-y-20 px-page_x">
+    <div className={`w-full flex flex-col items-center gap-y-20 px-page_x ${className}`}>
       {watchListTableRows.length > 0 && (
         <section className="w-full max-w-content_max_width space-y-2">
           <div className="flex justify-between items-center gap-x-10">
