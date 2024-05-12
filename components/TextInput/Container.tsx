@@ -101,7 +101,7 @@ const Container = ({
       </label>
 
       <div
-        className={`group/text-input relative flex items-center gap-x-card_padding_x px-card_padding_x py-1 rounded-card_sm Elevation_box_1 ${heightClassName} ${bgClassName} ${borderClassName} ${iconColorClassName}`}>
+        className={`group/text-input relative flex items-center gap-x-card_padding_x px-card_padding_x py-1 rounded-full Elevation_box_1 ${heightClassName} ${bgClassName} ${borderClassName} ${iconColorClassName}`}>
         {getIcon(children)}
 
         <input

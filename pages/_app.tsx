@@ -25,8 +25,6 @@ import GoogleAnalyticsReporter from '@/analytics/googleAnalytics/GoogleAnalytics
 import MixPanelReporter from '@/analytics/mixpanel/MixPanelReporter';
 import GlowBackground from '@/components/GlowBackground';
 import useUsdBasedExchangeRateUpdate from '@/hooks/useUsdBasedExchangeRateUpdate';
-import useUserAgent from '@/hooks/useUserAgent';
-import MobileBlocker from '@/components/home/MobileBlocker';
 import dynamic from 'next/dynamic';
 
 const UserAgentDetector = dynamic(() => import('@/components/UserAgentDetector'), { ssr: false });
@@ -54,7 +52,7 @@ function MyApp({ Component, pageProps }: AppProps<{ dehydratedState: DehydratedS
     });
   }
 
-  const { isMobile } = useUserAgent();
+  // const { isMobile } = useUserAgent();
 
   return (
     <>
@@ -127,7 +125,7 @@ function MyApp({ Component, pageProps }: AppProps<{ dehydratedState: DehydratedS
                   <AppHeader className="fixed top-0 left-0 right-0 z-navigation" />
                   <Component {...pageProps} />
                   <AppFooter />
-                  <MobileBlocker />
+                  {/* <MobileBlocker /> */}
                 </ModalProvider>
               </HydrationBoundary>
             </QueryClientProvider>

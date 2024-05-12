@@ -35,12 +35,12 @@ const DropDown = <T extends Key>({
       disabledKeys={disabledKeys}
       defaultSelectedKey={defaultKey}
       placeholder={placeholder}
-      className={`Component flex flex-col items-end ${className}`}
+      className={`Component flex flex-col ${className}`}
       onSelectionChange={(key) => onChange?.(key as T)}>
       {({ isOpen }) => (
         <>
           <Button
-            className={`group/select-button w-36 flex items-center justify-between gap-x-4 ${fontClassName} bg-body text-ground rounded-button ${pxClassName} ${pyClassName}`}>
+            className={`group/select-button min-w-36 flex items-center justify-between gap-x-4 ${fontClassName} bg-body text-ground rounded-button ${pxClassName} ${pyClassName}`}>
             <SelectValue
               title={placeholder}
               defaultValue={defaultKey}
@@ -51,14 +51,15 @@ const DropDown = <T extends Key>({
 
           <Popover
             placement="bottom right"
-            className={`w-36 ${fontClassName} bg-body text-ground rounded-card_sm ${pxClassName} ${pyClassName}`}>
-            <ListBox className="space-y-0">
+            className={`min-w-36 ${fontClassName} bg-body text-ground rounded-card_sm ${pxClassName} ${pyClassName}`}>
+            <ListBox className="w-full space-y-0">
               {options.map((option) => (
                 <ListBoxItem
                   key={option.key}
                   id={option.key}
-                  className={`w-full truncate ${pyClassName} ${disabledKeys?.includes(option.key) ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer Transition_500 transition-transform hover:translate-x-0.5'}`}>
+                  className={`flex items-center justify-between gap-x-4 w-full truncate ${pyClassName} ${disabledKeys?.includes(option.key) ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer Transition_500 transition-transform hover:translate-x-0.5'}`}>
                   {option.label}
+                  <div aria-hidden className="w-4 opacity-0"></div>
                 </ListBoxItem>
               ))}
             </ListBox>

@@ -1,6 +1,5 @@
 import BigNumber from 'bignumber.js';
 import { FORMAT_LOCALE_FALLBACK, MAX_DECIMALS } from '@/constants/app';
-import { ethers } from 'ethers';
 
 /**
  *
@@ -66,7 +65,7 @@ export const formatKRW: FormatCurrencyFunction = (
   value: BigNumber | number | undefined | null,
   options?: FormatAmountOptions,
 ): string => {
-  return formatNumber(value, 0, { currencySymbol: '₩', ...options });
+  return formatNumber(value, 0, { currencySymbol: '₩', locale: 'ko', ...options });
 };
 
 export const getDecimalSeperator = (locale: string): string => {
@@ -98,6 +97,3 @@ export const unformatNumber = (formattedValue: string, locale: string): { number
   const decimals = fractions?.length ?? 0;
   return { number, decimals, prefix };
 };
-
-export const simpleFormat = (number: BigNumber | bigint | string | number, decimals: number = 18) =>
-  ethers.formatUnits(number.toString(), decimals);

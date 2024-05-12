@@ -1,16 +1,36 @@
-import { ButtonHTMLAttributes } from 'react';
 import Icon, { IconType } from '@/components/Icon';
+import { useMemo } from 'react';
+import { Button } from 'react-aria-components';
 
-type IconButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  iconType: IconType;
-  iconClassName?: string;
-};
+type IconButtonProps = React.RefAttributes<HTMLButtonElement> &
+  Readonly<{
+    type?: 'button' | 'popover';
+    iconType: IconType;
+    onClick?: () => void;
+    className?: string;
+  }>;
 
-const IconButton = ({ iconType, iconClassName = '', ...args }: IconButtonProps) => {
+const IconButton = ({ type = 'button', iconType, className = '', onClick, ...props }: IconButtonProps) => {
+  const commonProps = useMemo(
+    () => ({
+      className: `grow-0 shrink-0 w-fit h-fit p-3 bg-transparent rounded-full Transition_500 transition-colors hover:bg-white_o10 ${className}`,
+      ...props,
+    }),
+    [props, className],
+  );
+
+  if (type === 'button') {
+    return (
+      <button type="button" onClick={onClick} {...commonProps}>
+        <Icon type={iconType} />
+      </button>
+    );
+  }
+
   return (
-    <button type="button" className="Transition_500 transition-opacity hover:opacity-80" {...args}>
-      <Icon type={iconType} className={iconClassName} />
-    </button>
+    <Button onPress={onClick} {...commonProps}>
+      <Icon type={iconType} />
+    </Button>
   );
 };
 

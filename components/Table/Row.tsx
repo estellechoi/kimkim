@@ -77,7 +77,10 @@ const Row = <T extends TableRowData>({
   );
 
   return (
-    <div role="row" aria-expanded={ariaExpanded} className={`relative ${colorClassName} ${overlayClassName}`}>
+    <div
+      role="row"
+      aria-expanded={ariaExpanded}
+      className={`relative w-full min-w-content_max_width ${colorClassName} ${overlayClassName}`}>
       <div
         className={`relative ${gridClassName}`}
         onClick={isWholeRowClickable ? onRowClick : undefined}

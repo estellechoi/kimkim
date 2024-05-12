@@ -3,6 +3,7 @@ import Popover from '@/components/Popover';
 import { Button } from 'react-aria-components';
 import ForexPlayGround from '@/components/kits/ForexPlayGround';
 import { useState } from 'react';
+import IconButton from '@/components/IconButton';
 
 type ForexPopoverProps = Readonly<{ id: string }>;
 
@@ -12,16 +13,16 @@ const ForexPopover = ({ id }: ForexPopoverProps) => {
   return (
     <Popover>
       <Popover.Trigger>
-        <Button
-          type="button"
-          className="Transition_500 transition-opacity hover:opacity-80"
+        <IconButton
+          type="popover"
+          iconType="currency_exchange"
+          className="text-body"
           aria-expanded={isOpen}
           aria-controls={id}
-          onPress={() => setIsOpen(!isOpen)}>
-          <Icon type="currency_exchange" className="text-body" />
-        </Button>
+          onClick={() => setIsOpen(!isOpen)}
+        />
       </Popover.Trigger>
-      <Popover.Content id={id} isOpen={isOpen} onOpenChange={setIsOpen} className="px-4 py-6">
+      <Popover.Content id={id} isOpen={isOpen} onOpenChange={setIsOpen} className="px-4 py-9 md:py-8">
         <ForexPlayGround />
       </Popover.Content>
     </Popover>

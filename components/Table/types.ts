@@ -1,4 +1,5 @@
 import type { LoaderStyle } from '@/components/LoadingRows/styles';
+import { ReactNode } from 'react';
 
 export type TableStyle = 'primary';
 export type TableDataType = 'number' | 'jsx';
@@ -22,13 +23,13 @@ export type TableRowData = {
 
 /** field */
 export type TableFieldBase<T> = {
-  label: string | JSX.Element;
+  label: ReactNode;
   value: string;
   type: TableDataType;
   sortValue?: string;
   sortType?: TableSortType;
   sortDisabled?: boolean;
-  tooltipContent?: string | JSX.Element;
+  tooltipContent?: ReactNode;
   tooltipWordBreak?: 'break-all' | 'break-keep';
   align?: TableCellAlign;
   widthPx?: number;
@@ -39,12 +40,4 @@ export type TableFieldBase<T> = {
   loaderType?: TableCellLoaderType;
 };
 
-export interface TableFieldNumber<T> extends TableFieldBase<T> {
-  type: 'number';
-}
-
-export interface TableFieldJsx<T> extends TableFieldBase<T> {
-  type: 'jsx';
-}
-
-export type TableField<T> = TableFieldNumber<T> | TableFieldJsx<T>;
+export type TableField<T> = TableFieldBase<T>;

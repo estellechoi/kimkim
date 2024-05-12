@@ -27,7 +27,6 @@ type TableProps<T extends TableRowData> = {
   onSort?: (isAsc: boolean, sortValue: string) => void;
   showRowClickIcon?: boolean;
   noDataLabel?: string;
-  rowsScrollHeight?: string;
   tooltipContext: TooltipLayer;
   isLoading?: boolean;
 };
@@ -51,7 +50,6 @@ const TableContainer = <T extends TableRowData>({
   onSort,
   showRowClickIcon = false,
   noDataLabel = TEXTS.NO_DATA,
-  rowsScrollHeight,
   isLoading = false,
   tooltipContext,
 }: TableProps<T>) => {
@@ -81,37 +79,26 @@ const TableContainer = <T extends TableRowData>({
     }),
     [type],
   );
-  const { heightClassName, overFlowClassName } = useMemo(
-    () => ({
-      heightClassName: rowsScrollHeight ? 'h-full' : '',
-      overFlowClassName: rowsScrollHeight ? 'overflow-y-auto' : '',
-    }),
-    [rowsScrollHeight],
-  );
 
   return (
-    <div role="treegrid" className={`relative w-full ${heightClassName} overflow-hidden ${gapYClassName} ${bgClassName}`}>
-      {hasField && (
-        <TableFieldRow
-          type={type}
-          fields={fields}
-          rowsScrollHeight={rowsScrollHeight}
-          onToggleAllSubJsx={onToggleAllSubJsx}
-          sortBy={sortBy}
-          sortValue={sortValue}
-          isAsc={isAsc}
-          needRightSpace={needRightSpace}
-          hasAnySubJsx={hasAnySubJsx}
-          hasAnySubJsxOpen={hasAnySubJsxOpen}
-          tooltipContext={tooltipContext}
-        />
-      )}
-
+    <div role="treegrid" className={`relative w-full overflow-hidden ${gapYClassName} ${bgClassName}`}>
       {/* rows */}
-      <div
-        role="rowgroup"
-        className={`relative w-full ${gapYClassName} ${overFlowClassName}`}
-        style={{ height: rowsScrollHeight, scrollbarGutter: 'stable' }}>
+      <div role="rowgroup" className={`relative w-full overflow-x-auto ${gapYClassName}`} style={{ scrollbarGutter: 'stable' }}>
+        {hasField && (
+          <TableFieldRow
+            type={type}
+            fields={fields}
+            onToggleAllSubJsx={onToggleAllSubJsx}
+            sortBy={sortBy}
+            sortValue={sortValue}
+            isAsc={isAsc}
+            needRightSpace={needRightSpace}
+            hasAnySubJsx={hasAnySubJsx}
+            hasAnySubJsxOpen={hasAnySubJsxOpen}
+            tooltipContext={tooltipContext}
+          />
+        )}
+
         {sortedRows.map((row) => (
           <Row
             key={row.id}

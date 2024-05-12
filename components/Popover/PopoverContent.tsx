@@ -14,8 +14,8 @@ const PopoverContent = ({ children, id, isOpen, onOpenChange, className = '' }: 
     <Popover
       aria-id={id}
       placement="bottom right"
-      offset={16}
-      className={`w-fit max-w-[94vw] min-w-36 text-body bg-black rounded-card_sm Elevation_3 ${className}`}
+      offset={20}
+      className={`w-fit max-w-[94vw] min-w-36 text-body bg-black rounded-card_sm border border-solid border-divider Elevation_3 ${className}`}
       isOpen={isOpen}
       onOpenChange={onOpenChange}>
       {children}

@@ -1,21 +1,23 @@
 import Table from '@/components/Table';
 import BigNumber from 'bignumber.js';
-import { TableRowData } from '@/components/Table/types';
+import { TableField, TableRowData } from '@/components/Table/types';
 import NetworkFeeInfoTooltipContent from '@/components/kits/NetworkFeeInfoTooltipContent';
+import useUserAgent from '@/hooks/useUserAgent';
+import { ReactNode, useMemo } from 'react';
 
 export interface KimchiPremiumTableRow extends TableRowData {
   symbol: string;
-  symbolLabel: JSX.Element | string;
+  symbolLabel: ReactNode;
   koreanName: string;
-  walletLabel: JSX.Element;
+  walletLabel: ReactNode;
   price: number;
-  priceLabel: JSX.Element | string;
+  priceLabel: ReactNode;
   premium: BigNumber;
-  premiumLabel: JSX.Element | string;
+  premiumLabel: ReactNode;
   volume: number;
-  volumeLabel: JSX.Element | string;
+  volumeLabel: ReactNode;
   isWatchList: boolean;
-  updateWatchListButton: JSX.Element;
+  updateWatchListButton: ReactNode;
 }
 
 type KimchiPremiumTableProps = {
@@ -24,65 +26,73 @@ type KimchiPremiumTableProps = {
 };
 
 const KimchiPremiumTable = ({ rows, isLoading }: KimchiPremiumTableProps) => {
+  const { isMobile } = useUserAgent();
+
+  const fields = useMemo<readonly TableField<KimchiPremiumTableRow>[]>(() => {
+    const symbolLabel: TableField<KimchiPremiumTableRow> = {
+      label: '코인',
+      value: 'symbolLabel',
+      type: 'jsx',
+      sortType: 'string',
+      sortValue: 'koreanName',
+      widthRatio: 20,
+    };
+
+    const walletLabel: TableField<KimchiPremiumTableRow> = {
+      label: '네트워크 수수료',
+      value: 'walletLabel',
+      type: 'jsx',
+      sortType: 'string',
+      sortValue: 'koreanName',
+      widthRatio: 24,
+      tooltipContent: <NetworkFeeInfoTooltipContent />,
+    };
+
+    const priceLabel: TableField<KimchiPremiumTableRow> = {
+      label: '가격',
+      value: 'priceLabel',
+      type: 'jsx',
+      sortType: 'number',
+      sortValue: 'price',
+      align: 'right',
+    };
+
+    const premiumLabel: TableField<KimchiPremiumTableRow> = {
+      label: '프리미엄',
+      value: 'premiumLabel',
+      type: 'jsx',
+      sortType: 'bignumber',
+      sortValue: 'premium',
+      align: 'right',
+      widthRatio: 14,
+    };
+
+    const volumeLabel: TableField<KimchiPremiumTableRow> = {
+      label: '24시간 거래량',
+      value: 'volumeLabel',
+      type: 'jsx',
+      sortType: 'number',
+      sortValue: 'volume',
+      align: 'right',
+      widthRatio: 14,
+    };
+
+    const updateWatchListButton: TableField<KimchiPremiumTableRow> = {
+      label: '',
+      value: 'updateWatchListButton',
+      type: 'jsx',
+      sortDisabled: true,
+      align: 'right',
+      widthRatio: 6,
+    };
+
+    return isMobile
+      ? [symbolLabel, walletLabel, premiumLabel, priceLabel, volumeLabel, updateWatchListButton]
+      : [symbolLabel, walletLabel, priceLabel, premiumLabel, volumeLabel, updateWatchListButton];
+  }, [isMobile]);
+
   return (
-    <Table<KimchiPremiumTableRow>
-      tooltipContext="base"
-      dSortValue="premium"
-      rows={rows}
-      isLoading={isLoading}
-      fields={[
-        {
-          label: '코인',
-          value: 'symbolLabel',
-          type: 'jsx',
-          sortType: 'string',
-          sortValue: 'koreanName',
-          widthRatio: 20,
-        },
-        {
-          label: '네트워크 수수료',
-          value: 'walletLabel',
-          type: 'jsx',
-          sortType: 'string',
-          sortValue: 'koreanName',
-          widthRatio: 24,
-          tooltipContent: <NetworkFeeInfoTooltipContent />,
-        },
-        {
-          label: '가격',
-          value: 'priceLabel',
-          type: 'jsx',
-          sortType: 'number',
-          sortValue: 'price',
-          align: 'right',
-        },
-        {
-          label: '프리미엄',
-          value: 'premiumLabel',
-          type: 'jsx',
-          sortType: 'bignumber',
-          sortValue: 'premium',
-          align: 'right',
-          widthRatio: 14,
-        },
-        {
-          label: '24시간 거래량',
-          value: 'volumeLabel',
-          type: 'jsx',
-          sortType: 'number',
-          sortValue: 'volume',
-          align: 'right',
-          widthRatio: 14,
-        },
-        {
-          label: '',
-          value: 'updateWatchListButton',
-          type: 'jsx',
-          sortDisabled: true,
-          align: 'right',
-          widthRatio: 6,
-        },
-      ]}>
+    <Table<KimchiPremiumTableRow> tooltipContext="base" dSortValue="premium" rows={rows} isLoading={isLoading} fields={fields}>
       <Table.FieldRow />
     </Table>
   );
