@@ -7,7 +7,6 @@ import ExchangeDropDownPair from '@/components/drop-downs/ExchangeDropDownPair';
 import {
   useFetcHtxWalletStatus,
   useFetchBinaceWalletStatus,
-  useFetchBitgetPrice,
   useFetchBitgetWalletStatus,
   useFetchBybitPrice,
   useFetchBybitWalletStatus,
@@ -43,6 +42,8 @@ import useCoinMarketCapUpdate from '@/hooks/useCoinMarketCapUpdate';
 import Tag from '@/components/Tag';
 import useBithumbPriceData from '@/hooks/useBithumbPriceData';
 import useBithumbWalletStatus from '@/hooks/useBithumbWalletStatus';
+import { useWebSocketBitgetPrice } from '@/data/hooks/webSocket';
+import useBitgetPriceData from '@/hooks/useBitgetPriceData';
 
 type KimchiPremiumSectionProps = {
   krwByUsd: number | null;
@@ -138,17 +139,14 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd, className = '' }: KimchiPrem
    * @description bybit data
    */
   const fetchBitgetPriceData = quoteExchange === Exchanges.BITGET;
+
   const {
     data: bitgetPriceData,
     error: bitgetPriceError,
     isLoading: isBitgetPriceLoading,
-  } = useFetchBitgetPrice(fetchBitgetPriceData ? 0 : null);
+  } = useBitgetPriceData(fetchBitgetPriceData, symbols);
 
   const { data: bitgetWalletStatusData } = useFetchBitgetWalletStatus(fetchBitgetPriceData ? 0 : null);
-
-  // console.log('bitgetPriceData', bitgetPriceData)
-  // console.log('bitgetPriceError', bitgetPriceError)
-  // console.log('bitgetWalletStatusData', bitgetWalletStatusData)
 
   /**
    *
@@ -213,9 +211,9 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd, className = '' }: KimchiPrem
       case Exchanges.BYBIT:
         return bybitPriceData?.data?.result.list?.reduce(reduceQuoteExchangePriceDataFromBybit, []) ?? [];
       case Exchanges.BITGET:
-        return bitgetPriceData?.data?.data.reduce(reduceQuoteExchangePriceDataFromBitget, []) ?? [];
+        return bitgetPriceData?.reduce(reduceQuoteExchangePriceDataFromBitget, []) ?? [];
     }
-  }, [quoteExchange, binancePriceData, htxPriceData, bybitPriceData?.data?.result, bitgetPriceData?.data]);
+  }, [quoteExchange, binancePriceData, htxPriceData, bybitPriceData?.data?.result, bitgetPriceData]);
 
   const mappedBaseExchangeWalletData = useMemo<Record<string, readonly ExchangeWalletData[]>>(() => {
     switch (baseExchange) {

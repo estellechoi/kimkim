@@ -4,9 +4,6 @@ import type {
   BinanceMarketApiData,
   BinanceSystemStatusApiData,
   BinanceTickerApiData,
-  BitgetApiResponse,
-  BitgetWalletStatusApiData,
-  BitgetWalletTickerApiData,
   BybitApiResponse,
   BybitTickerApiData,
   BybitWalletStatusApiData,
@@ -30,6 +27,9 @@ import { BithumbWalletApiData } from '@/pages/api/bithumb/wallet';
 import { BithumbApiResponse } from '@/pages/api/bithumb';
 import { BithumbNetworkInfoApiData } from '@/pages/api/bithumb/network-info';
 import { BithumbTransactionApiData } from '@/pages/api/bithumb/transaction';
+import { BitgetApiResponse } from '@/pages/api/bitget';
+import { BitgetWalletTickerApiData } from '@/pages/api/bitget/ticker';
+import { BitgetWalletStatusApiData } from '@/pages/api/bitget/wallet';
 
 /**
  *
@@ -357,61 +357,11 @@ export const useFetchBybitWalletStatus = (refetchInterval: number | null) => {
  *
  * @description bybit api fetching
  */
-const bitgetApiKey = process.env.NEXT_PUBLIC_BITGET_API_ACCESS_KEY ?? '';
-const bitgetSecretKey = process.env.NEXT_PUBLIC_BITGET_API_SECRET_KEY ?? '';
-
-const bitgetAxiosClient = axios.create({
-  baseURL: 'https://api.bitget.com',
-  headers: {
-    'Content-Type': 'application/json',
-    locale: 'en-US',
-  },
-});
-
-const getBitgetSignature = (
-  secretKey: string,
-  method: 'GET',
-  timestamp: string,
-  path: string,
-  params: Record<string, string>,
-): string => {
-  const paramsJoint = Object.keys(params)
-    .map((key) => `${key}=${params[key]}`)
-    .join('&');
-  const payload = `${timestamp}${method}${path}${paramsJoint.length > 0 ? `?${paramsJoint}` : ''}`;
-
-  const signature = HmacSHA256(payload, secretKey).toString(enc.Base64);
-  return signature;
-};
-
-const getBitgetAuthorizedHeaders = (
-  apiKey: string,
-  secretKey: string,
-  path: string,
-  params: Record<string, string>,
-): Record<string, string> => {
-  const timestamp = new Date().getTime().toString();
-  const signature = getBitgetSignature(secretKey, 'GET', timestamp, path, params);
-
-  return {
-    'ACCESS-KEY': apiKey,
-    'ACCESS-SIGN': signature,
-    'ACCESS-TIMESTAMP': timestamp,
-  };
-};
-
 export const useFetchBitgetPrice = (refetchInterval: number | null) => {
   const queryKey = ['fetchBitgetPrice'];
 
-  const path = '/api/v2/spot/market/tickers';
-
-  const authorizedHeaders = getBitgetAuthorizedHeaders(bitgetApiKey, bitgetSecretKey, path, {});
-  Object.keys(authorizedHeaders).forEach((key) => {
-    bitgetAxiosClient.defaults.headers[key] = authorizedHeaders[key];
-  });
-
   return useQuery<AxiosResponse<BitgetApiResponse<readonly BitgetWalletTickerApiData[]> | undefined>, AxiosError>({
-    queryFn: () => bitgetAxiosClient.get<BitgetApiResponse<readonly BitgetWalletTickerApiData[]> | undefined>(path),
+    queryFn: () => axios.get<BitgetApiResponse<readonly BitgetWalletTickerApiData[]> | undefined>('/api/bitget/ticker'),
     queryKey,
     refetchInterval: refetchInterval ?? 0,
     enabled: refetchInterval !== null,
@@ -421,15 +371,8 @@ export const useFetchBitgetPrice = (refetchInterval: number | null) => {
 export const useFetchBitgetWalletStatus = (refetchInterval: number | null) => {
   const queryKey = ['fetchBitgetWalletStatus'];
 
-  const path = '/api/v2/spot/public/coins';
-
-  const authorizedHeaders = getBitgetAuthorizedHeaders(bitgetApiKey, bitgetSecretKey, path, {});
-  Object.keys(authorizedHeaders).forEach((key) => {
-    bitgetAxiosClient.defaults.headers[key] = authorizedHeaders[key];
-  });
-
   return useQuery<AxiosResponse<BitgetApiResponse<readonly BitgetWalletStatusApiData[]> | undefined>, AxiosError>({
-    queryFn: () => bitgetAxiosClient.get<BitgetApiResponse<readonly BitgetWalletStatusApiData[]> | undefined>(path),
+    queryFn: () => axios.get<BitgetApiResponse<readonly BitgetWalletStatusApiData[]> | undefined>('api/bitget/wallet'),
     queryKey,
     refetchInterval: refetchInterval ?? 0,
     enabled: refetchInterval !== null,

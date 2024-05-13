@@ -140,56 +140,6 @@ export interface BybitWalletStatusApiData {
 
 /**
  *
- * @description bitget api data
- */
-export interface BitgetApiResponse<T> {
-  code: string;
-  msg: string;
-  data: T;
-}
-
-export interface BitgetWalletTickerApiData {
-  symbol: string;
-  high24h: string;
-  open: string;
-  low24h: string;
-  lastPr: string;
-  quoteVolume: string;
-  baseVolume: string;
-  usdtVolume: string;
-  bidPr: string;
-  askPr: string;
-  bidSz: string;
-  askSz: string;
-  openUtc: string;
-  ts: string;
-  changeUtc24h: string;
-  change24h: string;
-}
-
-export interface BitgetWalletStatusApiData {
-  coinId: string;
-  coin: string;
-  transfer: 'true' | 'false';
-  chains: readonly {
-    chain: string;
-    needTag: 'true' | 'false';
-    withdrawable: 'true' | 'false';
-    rechargeable: 'true' | 'false';
-    withdrawFee: string;
-    extraWithdrawFee: string;
-    depositConfirm: string;
-    withdrawConfirm: string;
-    minDepositAmount: string;
-    minWithdrawAmount: string;
-    browserUrl: string;
-    contractAddress: string;
-    withdrawStep: string;
-  }[];
-}
-
-/**
- *
  * @description websocket data
  */
 export interface UpbitTickerWebSocketData {
@@ -342,3 +292,35 @@ export interface HtxTickerWebSocketData {
     lastSize: number; // Last size
   };
 }
+
+export interface BitgetTickerWebSocketData {
+  action: 'snapshot';
+  arg: {
+    instType: 'SPOT';
+    channel: 'ticker';
+    instId: string;
+  };
+  data: readonly {
+    ts: `${number}`;
+    instId: string;
+
+    lastPr: `${number}`;
+    open24h: `${number}`;
+    high24h: `${number}`;
+    low24h: `${number}`;
+    change24h: `${number}`;
+    bidPr: `${number}`;
+    askPr: `${number}`;
+    bidSz: `${number}`;
+    askSz: `${number}`;
+    baseVolume: `${number}`;
+    quoteVolume: `${number}`;
+    openUtc: `${number}`;
+    changeUtc24h: `${number}`;
+  }[];
+  ts: `${number}`;
+}
+
+export const isBitgetTickerWebSocketData = (data: any): data is BitgetTickerWebSocketData => {
+  return data?.action === 'snapshot' && Array.isArray(data?.data);
+};
