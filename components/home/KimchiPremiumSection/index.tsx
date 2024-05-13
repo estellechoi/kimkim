@@ -146,10 +146,6 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd, className = '' }: KimchiPrem
 
   const { data: bitgetWalletStatusData } = useFetchBitgetWalletStatus(fetchBitgetPriceData ? 0 : null);
 
-  // console.log('bitgetPriceData', bitgetPriceData)
-  // console.log('bitgetPriceError', bitgetPriceError)
-  // console.log('bitgetWalletStatusData', bitgetWalletStatusData)
-
   /**
    *
    * @description setup coin metadata
