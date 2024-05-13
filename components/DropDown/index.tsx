@@ -57,6 +57,7 @@ const DropDown = <T extends Key>({
                 <ListBoxItem
                   key={option.key}
                   id={option.key}
+                  textValue={typeof option.key === 'string' ? option.key : option.key.toString()}
                   className={`flex items-center justify-between gap-x-4 w-full truncate ${pyClassName} ${disabledKeys?.includes(option.key) ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer Transition_500 transition-transform hover:translate-x-0.5'}`}>
                   {option.label}
                   <div aria-hidden className="w-4 opacity-0"></div>

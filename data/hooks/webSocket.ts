@@ -1,6 +1,7 @@
 import useWebSocket from 'react-use-websocket';
 import {
   BinanceTickerWebSocketData,
+  BitgetTickerWebSocketData,
   BithumbTransactionWebSocketData,
   HtxTickerWebSocketData,
   UpbitTickerWebSocketData,
@@ -164,6 +165,57 @@ export const useWebSocketHtxPrice = (connect: boolean, symbols: readonly string[
   }, [lastMessage, readyState]);
 
   return useQuery<HtxTickerWebSocketData | undefined>({
+    queryKey,
+    enabled: connect,
+  });
+};
+
+export const useWebSocketBitgetPrice = (connect: boolean, symbols: readonly string[]) => {
+  const queryKey = ['useWebSocketBitgetPrice', symbols.join('/')];
+
+  const args = symbols.map((symbol) => ({
+    instType: 'SPOT',
+    channel: 'ticker',
+    instId: `${symbol}USDT`,
+  }));
+
+  const msg = {
+    op: 'subscribe',
+    args,
+  };
+
+  const { lastMessage, readyState, sendJsonMessage } = useWebSocket<any>(
+    'wss://ws.bitget.com/v2/ws/public',
+    {
+      heartbeat: {
+        message: 'ping',
+        interval: 30000, // ping in every 30s
+      },
+      shouldReconnect: () => true,
+      onOpen: () => {
+        sendJsonMessage(msg);
+      },
+      onError: (event) => {
+        console.log('Bitget WebSocket error', event);
+      },
+    },
+    connect,
+  );
+
+  useEffect(() => {
+    if (readyState !== 1 || !lastMessage?.data) return;
+
+    if (lastMessage.data === 'pong') return; // ignore ping pong message
+
+    const parsedData: BitgetTickerWebSocketData | undefined =
+      typeof lastMessage.data === 'string' ? JSON.parse(lastMessage.data) : undefined;
+
+    if (parsedData) {
+      queryClient.setQueryData<BitgetTickerWebSocketData | undefined>(queryKey, parsedData);
+    }
+  }, [lastMessage, readyState]);
+
+  return useQuery<BitgetTickerWebSocketData | undefined>({
     queryKey,
     enabled: connect,
   });
