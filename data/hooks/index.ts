@@ -1,15 +1,6 @@
 import axios, { AxiosError, type AxiosResponse } from 'axios';
 import { useQuery } from '@tanstack/react-query';
-import type {
-  BinanceMarketApiData,
-  BinanceSystemStatusApiData,
-  BinanceTickerApiData,
-  BybitApiResponse,
-  BybitTickerApiData,
-  BybitWalletStatusApiData,
-  ExchangeRateApiData,
-  ForexApiData,
-} from './types';
+import type { BinanceMarketApiData, BinanceSystemStatusApiData, BinanceTickerApiData, ExchangeRateApiData } from './types';
 import type { UpbitTickerApiData } from '@/pages/api/upbit/ticker';
 import { UpbitMarketApiData } from '@/pages/api/upbit/market';
 import { CoinMarketCapMetadataApiData } from '@/pages/api/cmc/metadata';
@@ -17,9 +8,7 @@ import { CMCResponse } from '@/pages/api/cmc';
 import { Fiats } from '@/constants/app';
 import { HtxApiResponse, HtxMarketApiData } from '@/pages/api/htx/tickers';
 import { UpbitWalletStatusApiData } from '@/pages/api/upbit/wallet';
-import { HmacSHA256, enc } from 'crypto-js';
 import { HtxWalletStatusApiData } from '@/pages/api/htx/wallet';
-import * as crypto from 'crypto';
 import { BinanceWalletStatusApiData } from '@/pages/api/binance/wallet';
 import { CoinMarketCapQuoteLatestApiData } from '@/pages/api/cmc/quote';
 import { BithumbTickerApiData } from '@/pages/api/bithumb/ticker';
@@ -30,6 +19,10 @@ import { BithumbTransactionApiData } from '@/pages/api/bithumb/transaction';
 import { BitgetApiResponse } from '@/pages/api/bitget';
 import { BitgetWalletTickerApiData } from '@/pages/api/bitget/ticker';
 import { BitgetWalletStatusApiData } from '@/pages/api/bitget/wallet';
+import { BybitApiResponse } from '@/pages/api/bybit';
+import { BybitTickerApiData } from '@/pages/api/bybit/ticker';
+import { BybitWalletStatusApiData } from '@/pages/api/bybit/wallet';
+import { ForexApiData } from '@/pages/api/forex';
 
 /**
  *
@@ -50,20 +43,17 @@ export const useFetchExchangeRate = (refetchInterval: number | null, baseCurrenc
   });
 };
 
-export const useFetchForex = (refetchInterval: number | null, baseCurrency?: Fiats.USD | Fiats.KRW) => {
-  const base = baseCurrency ?? Fiats.USD;
-  const currenciesJoint = [Fiats.KRW, Fiats.AUD].join(',');
-  const queryKey = ['fetchExchangeRate', base, currenciesJoint];
+export const useFetchForex = (
+  refetchInterval: number | null,
+  baseCurrency?: Fiats.USD | Fiats.KRW,
+  currencies?: readonly Fiats[],
+) => {
+  const base_currency = baseCurrency ?? Fiats.USD;
+  const currenciesJoint = (currencies?.length ? currencies : [Fiats.KRW, Fiats.AUD]).join(',');
+  const queryKey = ['fetchExchangeRate', base_currency, currenciesJoint];
 
   return useQuery<AxiosResponse<ForexApiData | undefined>, AxiosError>({
-    queryFn: () =>
-      axios.get<ForexApiData | undefined>(`https://api.fxapi.com/v1/latest`, {
-        params: {
-          apikey: process.env.NEXT_PUBLIC_FOREX_API_KEY,
-          base_currency: base,
-          currencies: currenciesJoint,
-        },
-      }),
+    queryFn: () => axios.get<ForexApiData | undefined>('/api/forex', { params: { base_currency, currencies: currenciesJoint } }),
     queryKey,
     refetchInterval: refetchInterval ?? 0,
     enabled: refetchInterval !== null,
@@ -289,45 +279,12 @@ export const useFetcHtxWalletStatus = (refetchInterval: number | null) => {
  *
  * @description bybit api fetching
  */
-const bybitApiKey = process.env.NEXT_PUBLIC_BYBIT_API_ACCESS_KEY ?? '';
-const bybitSecretKey = process.env.NEXT_PUBLIC_BYBIT_API_SECRET_KEY ?? '';
-
 const bybitAxiosClient = axios.create({
   baseURL: 'https://api.bybit.com',
 });
 
-const getBybitSignature = (
-  apiKey: string,
-  secretKey: string,
-  timestamp: string,
-  recvWindow: string,
-  params: Record<string, string>,
-): string => {
-  const paramsJoint = Object.keys(params)
-    .map((key) => `${key}=${params[key]}`)
-    .join('&');
-  const payload = `${timestamp}${apiKey}${recvWindow}${paramsJoint}`;
-
-  const signature = crypto.createHmac('sha256', secretKey).update(payload).digest('hex');
-  return signature;
-};
-
-const getBybitAuthorizedHeaders = (apiKey: string, secretKey: string, params: Record<string, string>): Record<string, string> => {
-  const timestamp = new Date().getTime().toString();
-  const recvWindow = '5000';
-  const signature = getBybitSignature(apiKey, secretKey, timestamp, recvWindow, params);
-
-  return {
-    'X-BAPI-SIGN-TYPE': '2',
-    'X-BAPI-API-KEY': apiKey,
-    'X-BAPI-TIMESTAMP': timestamp,
-    'X-BAPI-RECV-WINDOW': recvWindow,
-    'X-BAPI-SIGN': signature,
-  };
-};
-
 export const useFetchBybitPrice = (refetchInterval: number | null) => {
-  const queryKey = ['fetchBybitPrice'];
+  const queryKey = ['useFetchBybitPrice'];
 
   return useQuery<AxiosResponse<BybitApiResponse<BybitTickerApiData> | undefined>, AxiosError>({
     queryFn: () => bybitAxiosClient.get<BybitApiResponse<BybitTickerApiData> | undefined>('/v5/market/tickers?category=spot'),
@@ -338,15 +295,10 @@ export const useFetchBybitPrice = (refetchInterval: number | null) => {
 };
 
 export const useFetchBybitWalletStatus = (refetchInterval: number | null) => {
-  const queryKey = ['fetchBybitWalletStatus'];
-
-  const authorizedHeaders = getBybitAuthorizedHeaders(bybitApiKey, bybitSecretKey, {});
-  Object.keys(authorizedHeaders).forEach((key) => {
-    bybitAxiosClient.defaults.headers[key] = authorizedHeaders[key];
-  });
+  const queryKey = ['useFetchBybitWalletStatus'];
 
   return useQuery<AxiosResponse<BybitApiResponse<BybitWalletStatusApiData> | undefined>, AxiosError>({
-    queryFn: () => bybitAxiosClient.get<BybitApiResponse<BybitWalletStatusApiData> | undefined>('/v5/asset/coin/query-info'),
+    queryFn: () => axios.get<BybitApiResponse<BybitWalletStatusApiData> | undefined>('/api/bybit/wallet'),
     queryKey,
     refetchInterval: refetchInterval ?? 0,
     enabled: refetchInterval !== null,
