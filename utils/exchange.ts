@@ -1,10 +1,12 @@
 import { ExchangeWalletStatus } from '@/constants/app';
-import { BinanceTickerApiData, BybitTickerItemApiData, BybitWalletStatusItemApiData } from '@/data/hooks/types';
+import { BinanceTickerApiData } from '@/data/hooks/types';
 import { BithumbTickerData } from '@/hooks/useBithumbPriceData';
 import { BithumbWalletData } from '@/hooks/useBithumbWalletStatus';
 import { BinanceWalletStatusApiData } from '@/pages/api/binance/wallet';
 import { BitgetWalletTickerApiData } from '@/pages/api/bitget/ticker';
 import { BitgetWalletStatusApiData } from '@/pages/api/bitget/wallet';
+import { BybitTickerItemApiData } from '@/pages/api/bybit/ticker';
+import { BybitWalletStatusItemApiData } from '@/pages/api/bybit/wallet';
 import { HtxWalletStatusApiData } from '@/pages/api/htx/wallet';
 import { UpbitTickerApiData } from '@/pages/api/upbit/ticker';
 import { UpbitWalletStatusApiData } from '@/pages/api/upbit/wallet';

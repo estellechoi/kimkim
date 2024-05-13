@@ -1,5 +1,3 @@
-import { Fiats } from '@/constants/app';
-
 export interface ExchangeRateApiData {
   result: string;
   documentation: string;
@@ -10,18 +8,6 @@ export interface ExchangeRateApiData {
   time_next_update_utc: string;
   base_code: string;
   conversion_rates: { [currencyCode: string]: number };
-}
-
-export interface ForexApiData {
-  meta: {
-    last_updated_at: string;
-  };
-  data: {
-    [currency: string]: {
-      code: Fiats;
-      value: number;
-    };
-  };
 }
 
 export interface BinanceMarketApiData {
@@ -81,61 +67,6 @@ export interface BinanceTickerApiData {
 export interface BinanceSystemStatusApiData {
   status: 0 | 1; // 0: normal，1：system maintenance
   msg: 'normal' | 'system_maintenance';
-}
-
-/**
- *
- * @description bybit api data
- */
-export interface BybitApiResponse<T> {
-  retCode: number;
-  retMsg: string;
-  retExtInfo: Record<string, unknown>;
-  time: number;
-  result: T;
-}
-
-export interface BybitTickerItemApiData {
-  symbol: string;
-  bid1Price: string;
-  bid1Size: string;
-  ask1Price: string;
-  ask1Size: string;
-  lastPrice: string;
-  prevPrice24h: string;
-  price24hPcnt: string;
-  highPrice24h: string;
-  lowPrice24h: string;
-  turnover24h: string;
-  volume24h: string;
-  usdIndexPrice: string;
-}
-
-export interface BybitTickerApiData {
-  category?: string;
-  list?: readonly BybitTickerItemApiData[];
-}
-
-export interface BybitWalletStatusItemApiData {
-  name: string;
-  coin: string;
-  remainAmount: string;
-  chains: readonly {
-    chainType: string;
-    confirmation: string;
-    withdrawFee: string;
-    depositMin: string;
-    withdrawMin: string;
-    chain: string;
-    chainDeposit: '0' | '1'; // 0: suspend, 1: normal
-    chainWithdraw: '0' | '1'; // 0: suspend, 1: normal
-    minAccuracy: string;
-    withdrawPercentageFee: string;
-  }[];
-}
-
-export interface BybitWalletStatusApiData {
-  rows?: readonly BybitWalletStatusItemApiData[];
 }
 
 /**
