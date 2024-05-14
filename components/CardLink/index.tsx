@@ -1,7 +1,7 @@
 import Link, { type LinkProps } from 'next/link';
 import Card, { type CardColor } from '@/components/Card';
 import Icon, { IconType } from '@/components/Icon';
-import { ElementType, useMemo } from 'react';
+import { ElementType, useCallback, useMemo } from 'react';
 
 const TEXT_COLOR_DICT: Record<CardColor, string> = {
   primary: 'text-ground',
@@ -11,17 +11,18 @@ const TEXT_COLOR_DICT: Record<CardColor, string> = {
   caption: 'text-white',
 };
 
-type CardLinkProps = LinkProps & {
+type CardLinkProps = Omit<LinkProps, 'onClick'> & {
   label: string | JSX.Element;
   color?: CardColor;
   className?: string;
+  onClick?: (href: string) => void;
 };
 
 /**
  *
  * @see https://nextjs.org/docs/pages/api-reference/components/link
  */
-const CardLink = ({ label, color = 'primary', className = '', ...props }: CardLinkProps) => {
+const CardLink = ({ label, color = 'primary', className = '', onClick, ...props }: CardLinkProps) => {
   const hoverAnimationClassName =
     'relative after:absolute after:inset-0 after:transition-colors after:Transition_500 hover:after:bg-black_o10';
   const cardGridClassName = 'flex justify-between items-center gap-x-2 px-card_padding_x py-card_padding_y';
@@ -49,8 +50,12 @@ const CardLink = ({ label, color = 'primary', className = '', ...props }: CardLi
     }
   }, [props]);
 
+  const handleClick = useCallback(() => {
+    onClick?.(typeof props.href === 'string' ? props.href : JSON.stringify(props.href));
+  }, [onClick, props.href]);
+
   return (
-    <LinkElement {...linkProps} className={`group/card-link block ${hoverAnimationClassName} ${className}`}>
+    <LinkElement {...linkProps} className={`group/card-link block ${hoverAnimationClassName} ${className}`} onClick={handleClick}>
       <Card color={color} size="sm" className={`${cardGridClassName}`}>
         {typeof label === 'string' ? <span className={`${fontClassName} ${colorClassName}`}>{label}</span> : label}
         <Icon type="arrow_forward" className={`${hoverIconAnimationClassName} ${colorClassName}`} />

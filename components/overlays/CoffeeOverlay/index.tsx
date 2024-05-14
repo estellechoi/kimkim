@@ -5,13 +5,15 @@ import DescriptionTexts from '@/components/DescriptionTexts/Container';
 import useUserAgent from '@/hooks/useUserAgent';
 import { DIALOG_TITLE, DONATE_ADDRESSES } from './constants';
 import type { OverlayProps } from '@/components/types';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import Coin from '@/components/Coin';
 import CopyHelper from '@/components/CopyHelper';
 import { shortenText } from '@/utils/text';
 import CardLink from '@/components/CardLink';
 import Heading from '@/components/Heading';
 import Icon from '@/components/Icon';
+import useAnalytics from '@/hooks/useAnalytics';
+import { EventCategory } from '@/analytics/constants';
 
 const CoffeeOverlay = (props: Omit<OverlayProps, 'ariaLabel'>) => {
   const { isOpen, onClose } = props;
@@ -27,6 +29,26 @@ const CoffeeOverlay = (props: Omit<OverlayProps, 'ariaLabel'>) => {
     // alternatives: routeChangeComplete
     router.events.on('routeChangeStart', onClose);
   }, [router.events, onClose]);
+
+  const { sendEvent } = useAnalytics();
+
+  useEffect(() => {
+    sendEvent(EventCategory.OPEN_OVERLAY, 'Coffee overlay');
+  }, []);
+
+  const onCopyEmail = useCallback(
+    (text: string) => {
+      sendEvent(EventCategory.COPY_TEXT, text);
+    },
+    [sendEvent],
+  );
+
+  const onClickLinkedInLink = useCallback(
+    (href: string) => {
+      sendEvent(EventCategory.CLICK_EXTERNAL_LINK, href);
+    },
+    [sendEvent],
+  );
 
   const Content = (
     <>
@@ -77,14 +99,20 @@ const CoffeeOverlay = (props: Omit<OverlayProps, 'ariaLabel'>) => {
         연락처
       </Heading>
 
-      <CopyHelper toCopy="kimkim.found@gmail.com" className="mb-5">
+      <CopyHelper toCopy="kimkim.found@gmail.com" className="mb-5" onCopy={onCopyEmail}>
         <div className="flex items-center gap-x-4">
           <Icon type="email" />
           <span className="Font_body_sm">kimkim.found@gmail.com</span>
         </div>
       </CopyHelper>
 
-      <CardLink color="body" label="LinkedIn" href="https://www.linkedin.com/in/yujin-choi-460a931b2/" className="mb-3" />
+      <CardLink
+        color="body"
+        label="LinkedIn"
+        href="https://www.linkedin.com/in/yujin-choi-460a931b2/"
+        className="mb-3"
+        onClick={onClickLinkedInLink}
+      />
     </>
   );
 

@@ -1,7 +1,7 @@
 'use client';
 
 import TextInput from '@/components/TextInput';
-import KimchiPremiumTable, { KimchiPremiumTableRow } from '@/components/tables/KimchiPremiumTable';
+import KimchiPremiumTable, { KimchiPremiumTableRow } from '@/components/kits/KimchiPremiumTable';
 import useWatchListSymbols from '@/hooks/useWatchListSymbols';
 import ExchangeDropDownPair from '@/components/drop-downs/ExchangeDropDownPair';
 import {
@@ -12,7 +12,7 @@ import {
   useFetchBybitWalletStatus,
   useFetchUpbitWalletStatus,
 } from '@/data/hooks';
-import { useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import Card from '@/components/Card';
 import Button from '@/components/Button';
 import { BaseExchange, Exchanges, QuoteExchange } from '@/constants/app';
@@ -42,8 +42,11 @@ import useCoinMarketCapUpdate from '@/hooks/useCoinMarketCapUpdate';
 import Tag from '@/components/Tag';
 import useBithumbPriceData from '@/hooks/useBithumbPriceData';
 import useBithumbWalletStatus from '@/hooks/useBithumbWalletStatus';
-import { useWebSocketBitgetPrice } from '@/data/hooks/webSocket';
 import useBitgetPriceData from '@/hooks/useBitgetPriceData';
+import IconButton from '@/components/IconButton';
+import useAnalytics from '@/hooks/useAnalytics';
+import { EventCategory } from '@/analytics/constants';
+import ForexPopover from '@/components/kits/ForexPopover';
 
 type KimchiPremiumSectionProps = {
   krwByUsd: number | null;
@@ -54,6 +57,24 @@ type KimchiPremiumSectionProps = {
 const KimchiPremiumSection = ({ krwByUsd, audByUsd, className = '' }: KimchiPremiumSectionProps) => {
   const [baseExchange, setBaseExchange] = useState<BaseExchange>(Exchanges.UPBIT);
   const [quoteExchange, setQuoteExchange] = useState<QuoteExchange>(Exchanges.BINANCE);
+
+  const { sendEvent } = useAnalytics();
+
+  const onChangeBaseExchange = useCallback(
+    (exchange: BaseExchange) => {
+      setBaseExchange(exchange);
+      sendEvent(EventCategory.CHANGE_BASE_EXCHANGE, exchange);
+    },
+    [sendEvent],
+  );
+
+  const onChangeQuoteExchange = useCallback(
+    (exchange: QuoteExchange) => {
+      setQuoteExchange(exchange);
+      sendEvent(EventCategory.CHANGE_QUOTE_EXCHANGE, exchange);
+    },
+    [sendEvent],
+  );
 
   /**
    *
@@ -185,7 +206,12 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd, className = '' }: KimchiPrem
    *
    * @description watchlist
    */
-  const { watchListSymbols, onToggleWatchList } = useWatchListSymbols();
+  const { watchListSymbols, onToggleWatchList, clearWatchList } = useWatchListSymbols();
+
+  const onClickClearWatchList = useCallback(() => {
+    clearWatchList();
+    sendEvent(EventCategory.CLICK_BUTTON, 'Clear watchlist');
+  }, [clearWatchList, sendEvent]);
 
   /**
    *
@@ -264,10 +290,13 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd, className = '' }: KimchiPrem
    *
    * @description filter table rows
    */
-
   const [premiumSearchKeyword, setPremiumSearchKeyword] = useState<string>('');
 
-  const premiumSearchedRows = useMemo<readonly KimchiPremiumTableRow[]>(() => {
+  useEffect(() => {
+    sendEvent(EventCategory.SEARCH, premiumSearchKeyword, 'Kimchi premium table search');
+  }, [premiumSearchKeyword]);
+
+  const searchedRows = useMemo<readonly KimchiPremiumTableRow[]>(() => {
     if (premiumSearchKeyword === '') return premiumTableRows;
 
     return premiumTableRows.filter((row) => {
@@ -280,37 +309,22 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd, className = '' }: KimchiPrem
 
   const [showAllPremiumRows, setShowAllPremiumRows] = useState<boolean>(false);
 
-  const visiblePremiumRows = useMemo<readonly KimchiPremiumTableRow[]>(() => {
-    const premiumBasedSortedRows = [...premiumSearchedRows].sort((a, b) => (a.premium.gt(b.premium) ? -1 : 1));
-    return showAllPremiumRows ? premiumBasedSortedRows : premiumBasedSortedRows.slice(0, 15);
-  }, [premiumSearchedRows, showAllPremiumRows]);
+  const visibleRows = useMemo<readonly KimchiPremiumTableRow[]>(() => {
+    return showAllPremiumRows ? searchedRows : searchedRows.slice(0, 15);
+  }, [searchedRows, showAllPremiumRows]);
 
   const hiddenRowsLength = useMemo<number>(
-    () => premiumSearchedRows.length - visiblePremiumRows.length,
-    [premiumSearchedRows.length, visiblePremiumRows.length],
+    () => searchedRows.length - visibleRows.length,
+    [searchedRows.length, visibleRows.length],
   );
 
   /**
    *
-   * @description watchlist table rows
+   * @description filter watchlist rows
    */
-  const watchListTableRows = useMemo(
-    () => premiumTableRows.filter((row) => watchListSymbols.has(row.symbol)),
-    [premiumTableRows, watchListSymbols],
-  );
-
-  const [watchListSearchKeyword, setWatchListSearchKeyword] = useState<string>('');
-
-  const watchListFilteredRows = useMemo<readonly KimchiPremiumTableRow[]>(() => {
-    if (watchListSearchKeyword === '') return premiumTableRows;
-
-    return watchListTableRows.filter((row) => {
-      return (
-        row.symbol.toLowerCase().includes(watchListSearchKeyword.toLowerCase()) ||
-        row.koreanName.toLowerCase().includes(watchListSearchKeyword.toLowerCase())
-      );
-    });
-  }, [watchListTableRows, watchListSearchKeyword]);
+  const watchlistRows = useMemo<readonly KimchiPremiumTableRow[]>(() => {
+    return premiumTableRows.filter((row) => watchListSymbols.has(row.symbol));
+  }, [premiumTableRows, watchListSymbols]);
 
   /**
    *
@@ -343,53 +357,49 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd, className = '' }: KimchiPrem
     [isBaseExchangeDataLoading, isQuoteExchangeDataLoading],
   );
 
+  const onSortKimchiPremiumTable = useCallback(
+    (isAsc: boolean, sortValue: string) => {
+      sendEvent(EventCategory.SORT_TABLE, `${sortValue} by ${isAsc ? 'asc' : 'desc'}`, 'Kimchi premium table');
+    },
+    [sendEvent],
+  );
+
   return (
-    <div className={`w-full max-w-content_max_width mx-auto flex flex-col items-center gap-y-20 ${className}`}>
-      {watchListTableRows.length > 0 && (
-        <section className="w-full max-w-content_max_width space-y-2">
-          <div className="flex justify-between items-center gap-x-10">
-            <div className="text-caption Font_label_12px p-4">
-              내 즐겨찾기 {errorDataLabel && <Tag size="sm" color="warning" label={errorDataLabel} className="ml-2" />}
+    <div className={`w-full max-w-content_max_width mx-auto flex flex-col items-center gap-y-0 ${className}`}>
+      <div className="w-full flex gap-2 md:gap-4 px-4 md:justify-end items-center md:pr-0.5 animate-fade_in_x_reverse mb-5">
+        <ExchangeDropDownPair
+          baseExchange={baseExchange}
+          onBaseExchangeChange={onChangeBaseExchange}
+          quoteExchange={quoteExchange}
+          onQuoteExchangeChange={onChangeQuoteExchange}
+          className="md:order-2"
+        />
+        <ForexPopover id="forex-popover-at-home" className="grow-0 shrink-0 basis-auto" />
+      </div>
+
+      {watchlistRows.length > 0 && (
+        <section className="w-full animate-fade_in_x_reverse mb-10">
+          <div className="flex justify-between items-center gap-4 pr-0.5">
+            <div className="text-caption Font_label_12px px-4 py-4 md:py-0">
+              관심 코인 {errorDataLabel && <Tag size="sm" color="warning" label={errorDataLabel} className="ml-2" />}
             </div>
 
-            <div className="flex items-center gap-x-4">
-              <ExchangeDropDownPair
-                baseExchange={baseExchange}
-                onBaseExchangeChange={setBaseExchange}
-                quoteExchange={quoteExchange}
-                onQuoteExchangeChange={setQuoteExchange}
-              />
-              <TextInput
-                form={null}
-                label="코인 검색"
-                type="search"
-                className="w-80"
-                value={watchListSearchKeyword}
-                onChange={(value, isValid) => setWatchListSearchKeyword(value)}>
-                <TextInput.Icon type="search" />
-              </TextInput>
-            </div>
+            <IconButton iconType="delete" className="text-caption" onClick={onClickClearWatchList} />
           </div>
 
-          <Card color="glass" className="w-full space-y-4">
-            <KimchiPremiumTable rows={watchListFilteredRows} isLoading={isTableLoading} />
+          <Card color="glass" className="w-full space-y-4 mt-2">
+            <KimchiPremiumTable rows={watchlistRows} isLoading={isTableLoading} />
           </Card>
         </section>
       )}
 
-      <section className="w-full max-w-content_max_width">
+      <section className="w-full animate-fade_in_x_reverse">
         <div className="flex flex-col justify-between gap-4 md:flex-row md:gap-10 md:items-center">
           <div className="text-caption Font_label_12px px-4 py-4 md:py-0">
             김치 프리미엄 {errorDataLabel && <Tag size="sm" color="warning" label={errorDataLabel} className="ml-2" />}
           </div>
 
           <div className="flex flex-col items-stretch gap-4 p-4 md:flex-row md:items-center md:p-0">
-            <ExchangeDropDownPair
-              baseExchange={baseExchange}
-              onBaseExchangeChange={setBaseExchange}
-              quoteExchange={quoteExchange}
-              onQuoteExchangeChange={setQuoteExchange}
-            />
             <TextInput
               form={null}
               label="코인 검색"
@@ -403,7 +413,7 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd, className = '' }: KimchiPrem
         </div>
 
         <Card color="glass" className="w-full space-y-4 mt-2">
-          <KimchiPremiumTable rows={visiblePremiumRows} isLoading={isTableLoading} />
+          <KimchiPremiumTable rows={visibleRows} isLoading={isTableLoading} onSort={onSortKimchiPremiumTable} />
         </Card>
 
         {(showAllPremiumRows || hiddenRowsLength > 0) && (

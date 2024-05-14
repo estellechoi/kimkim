@@ -23,9 +23,10 @@ export interface KimchiPremiumTableRow extends TableRowData {
 type KimchiPremiumTableProps = {
   rows: readonly KimchiPremiumTableRow[];
   isLoading?: boolean;
+  onSort?: (isAsc: boolean, sortValue: string) => void;
 };
 
-const KimchiPremiumTable = ({ rows, isLoading }: KimchiPremiumTableProps) => {
+const KimchiPremiumTable = ({ rows, isLoading, onSort }: KimchiPremiumTableProps) => {
   const { isMobile } = useUserAgent();
 
   const fields = useMemo<readonly TableField<KimchiPremiumTableRow>[]>(() => {
@@ -92,7 +93,13 @@ const KimchiPremiumTable = ({ rows, isLoading }: KimchiPremiumTableProps) => {
   }, [isMobile]);
 
   return (
-    <Table<KimchiPremiumTableRow> tooltipContext="base" dSortValue="premium" rows={rows} isLoading={isLoading} fields={fields}>
+    <Table<KimchiPremiumTableRow>
+      tooltipContext="base"
+      dSortValue="premium"
+      rows={rows}
+      isLoading={isLoading}
+      fields={fields}
+      onSort={onSort}>
       <Table.FieldRow />
     </Table>
   );

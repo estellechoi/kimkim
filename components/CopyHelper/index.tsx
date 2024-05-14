@@ -5,11 +5,12 @@ import { useCopyClipboard } from './hook';
 interface BaseProps {
   toCopy: string;
   iconPosition?: 'left' | 'right';
+  onCopy?: (text: string) => void;
 }
 
 type CopyHelperProps = BaseProps & Omit<ButtonHTMLAttributes<HTMLButtonElement>, keyof BaseProps>;
 
-const CopyHelper = ({ children, toCopy, iconPosition = 'right', className = '' }: CopyHelperProps) => {
+const CopyHelper = ({ children, toCopy, iconPosition = 'right', onCopy, className = '' }: CopyHelperProps) => {
   const [isCopied, copy] = useCopyClipboard();
 
   const CopiedIcon = <Icon type="success" />;
@@ -21,7 +22,10 @@ const CopyHelper = ({ children, toCopy, iconPosition = 'right', className = '' }
       type="button"
       aria-label="Copy"
       className={`group/copy relative shrink-0 inline-flex justify-start items-center gap-x-2 Transition_500 transition-opacity hover:opacity-80 ${className}`}
-      onClick={() => copy(toCopy)}>
+      onClick={() => {
+        copy(toCopy);
+        onCopy?.(toCopy);
+      }}>
       {iconPosition === 'left' && (isCopied ? CopiedIcon : CopyIcon)}
       {children}
       {iconPosition === 'right' && (isCopied ? CopiedIcon : CopyIcon)}

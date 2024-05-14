@@ -14,7 +14,7 @@ export interface PopoverProps {
 
 const Popover = ({ children, className = '' }: PopoverProps) => {
   return (
-    <div className={className}>
+    <div className={`w-fit ${className}`}>
       <DialogTrigger>
         {getPopoverTrigger(children)}
         {getPopoverContent(children)}

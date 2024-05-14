@@ -1,31 +1,30 @@
 'use client';
 
-import { LOCAL_STORAGE_KEYS } from '@/constants/app';
-import { useCallback, useMemo, useState } from 'react';
+import LocalStorage from '@/utils/LocalStorage';
+import { useCallback, useState } from 'react';
 
 const useWatchListSymbols = () => {
-  const storageWatchListSymbols = useMemo(
-    () => localStorage.getItem(LOCAL_STORAGE_KEYS.WATCH_LIST_SYMBOLS)?.split(',') ?? [],
-    [],
-  );
-
-  const [watchListSymbols, setWatchListSymbols] = useState<Set<string>>(new Set(storageWatchListSymbols));
+  const [watchListSymbols, setWatchListSymbols] = useState<Set<string>>(LocalStorage.getWatchListSymbols());
 
   const onToggleWatchList = useCallback(
     (symbol: string) => {
-      const newWatchListSymbols = new Set(watchListSymbols);
+      const prevSymbols = Array.from(watchListSymbols);
 
-      if (newWatchListSymbols.has(symbol)) {
-        newWatchListSymbols.delete(symbol);
-      } else {
-        newWatchListSymbols.add(symbol);
-      }
-      setWatchListSymbols(newWatchListSymbols);
+      const newSymbols = watchListSymbols.has(symbol) ? prevSymbols.filter((item) => item !== symbol) : [...prevSymbols, symbol];
+      const newSet = new Set(newSymbols);
+
+      setWatchListSymbols(newSet);
+      LocalStorage.setWatchListSymbols(newSet);
     },
     [watchListSymbols],
   );
 
-  return { watchListSymbols, onToggleWatchList };
+  const clearWatchList = useCallback(() => {
+    setWatchListSymbols(new Set());
+    LocalStorage.setWatchListSymbols(null);
+  }, []);
+
+  return { watchListSymbols, onToggleWatchList, clearWatchList };
 };
 
 export default useWatchListSymbols;
