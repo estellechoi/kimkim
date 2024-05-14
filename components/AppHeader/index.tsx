@@ -1,4 +1,3 @@
-// import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import AppLogo from '@/components/AppLogo';
 import useAppHeaderClassName from './useAppHeaderClassName';
