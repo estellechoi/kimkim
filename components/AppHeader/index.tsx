@@ -10,14 +10,12 @@ import Currency from '@/components/Currency';
 import ExchangeRatePolling from '@/components/pollings/ExchangeRatePolling';
 import USDTPricePolling from '@/components/pollings/USDTPricePolling';
 import Coin from '@/components/Coin';
-import Icon from '@/components/Icon';
 import useModal from '@/hooks/useModal';
 import { Suspense, useCallback } from 'react';
 import CoffeeOverlay from '@/components/overlays/CoffeeOverlay';
 import USDTBithumbPricePolling from '@/components/pollings/USDTBithumbPricePolling';
 import ExchangeLogo from '@/components/ExchangeLogo';
-import ForexPopover from '@/components/kits/ForexPopover';
-import IconButton from '../IconButton';
+import IconButton from '@/components/IconButton';
 
 type AppHeaderProps = { className?: string };
 
@@ -54,12 +52,14 @@ const AppHeader = ({ className = '' }: AppHeaderProps) => {
 
       <div className={`grow shrink ${appHeaderClassName}`}>
         <Link href="/">
-          <AppLogo size="md" color="light" />
+          <AppLogo size="sm" color="light" className="md:hidden" />
+          <AppLogo size="md" color="light" className="hidden md:block" />
         </Link>
 
         <div className="flex items-center gap-x-2 md:gap-x-6">
           <DropDown<Fiats>
-            placeholder="Select chain"
+            color="ground"
+            placeholder="Select currency"
             defaultKey={selectedCurrency}
             disabledKeys={[Fiats.USD, Fiats.AUD]}
             options={Object.values(Fiats).map((fiat) => ({
@@ -75,11 +75,9 @@ const AppHeader = ({ className = '' }: AppHeaderProps) => {
           />
 
           <div className="flex items-center gap-x-0 md:gap-x-2">
-            <ForexPopover id="forex-popover-at-header" />
-
             <IconButton
               iconType="coffee"
-              className="text-body"
+              className="text-caption"
               aria-expanded={coffeeModal.isOpen}
               aria-controls={coffeeModal.id}
               onClick={openCoffeeModal}

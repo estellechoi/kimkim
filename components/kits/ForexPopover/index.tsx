@@ -1,22 +1,20 @@
-import Icon from '@/components/Icon';
 import Popover from '@/components/Popover';
-import { Button } from 'react-aria-components';
 import ForexPlayGround from '@/components/kits/ForexPlayGround';
 import { useState } from 'react';
 import IconButton from '@/components/IconButton';
 
-type ForexPopoverProps = Readonly<{ id: string }>;
+type ForexPopoverProps = Readonly<{ id: string; className?: string }>;
 
-const ForexPopover = ({ id }: ForexPopoverProps) => {
+const ForexPopover = ({ id, className = '' }: ForexPopoverProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
-    <Popover>
+    <Popover className={className}>
       <Popover.Trigger>
         <IconButton
           type="popover"
           iconType="currency_exchange"
-          className="text-body"
+          className="text-caption"
           aria-expanded={isOpen}
           aria-controls={id}
           onClick={() => setIsOpen(!isOpen)}

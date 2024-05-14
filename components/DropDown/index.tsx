@@ -1,11 +1,18 @@
 import { Button, Key, ListBox, ListBoxItem, Popover, Select, SelectValue } from 'react-aria-components';
 import Icon from '@/components/Icon';
+import { useMemo } from 'react';
 
 type DropDownSize = 'sm' | 'md';
+type DropDownColor = 'ground' | 'body';
 
 const DROP_DOWN_SIZE_CLASSNAMES_DICT: Record<DropDownSize, { px: string; py: string; font: string }> = {
   sm: { px: 'px-2', py: 'py-1.5', font: 'Font_label_12px' },
   md: { px: 'px-card_padding_x', py: 'py-2.5', font: 'Font_label_14px' },
+};
+
+const DROP_DOWN_COLOR_CLASSNAME_DICT: Record<DropDownColor, { textClassName: string; bgClassName: string }> = {
+  ground: { textClassName: 'text-body', bgClassName: 'bg-ground' },
+  body: { textClassName: 'text-ground', bgClassName: 'bg-body' },
 };
 
 type DropDownProps<T extends Key> = {
@@ -15,6 +22,7 @@ type DropDownProps<T extends Key> = {
   placeholder: string;
   onChange?: (key: T) => void;
   size?: DropDownSize;
+  color?: DropDownColor;
   className?: string;
 };
 
@@ -25,9 +33,11 @@ const DropDown = <T extends Key>({
   placeholder,
   onChange,
   size = 'md',
+  color = 'body',
   className = '',
 }: DropDownProps<T>) => {
-  const { px: pxClassName, py: pyClassName, font: fontClassName } = DROP_DOWN_SIZE_CLASSNAMES_DICT[size];
+  const { px: pxClassName, py: pyClassName, font: fontClassName } = useMemo(() => DROP_DOWN_SIZE_CLASSNAMES_DICT[size], [size]);
+  const { textClassName, bgClassName } = useMemo(() => DROP_DOWN_COLOR_CLASSNAME_DICT[color], [color]);
 
   return (
     <Select
@@ -35,12 +45,12 @@ const DropDown = <T extends Key>({
       disabledKeys={disabledKeys}
       defaultSelectedKey={defaultKey}
       placeholder={placeholder}
-      className={`Component flex flex-col ${className}`}
+      className={`flex flex-col ${className}`}
       onSelectionChange={(key) => onChange?.(key as T)}>
       {({ isOpen }) => (
         <>
           <Button
-            className={`group/select-button min-w-36 flex items-center justify-between gap-x-4 ${fontClassName} bg-body text-ground rounded-button ${pxClassName} ${pyClassName}`}>
+            className={`group/select-button min-w-36 flex items-center justify-between gap-x-4 ${fontClassName} ${bgClassName} ${textClassName} rounded-button ${pxClassName} ${pyClassName}`}>
             <SelectValue
               title={placeholder}
               defaultValue={defaultKey}
@@ -51,7 +61,7 @@ const DropDown = <T extends Key>({
 
           <Popover
             placement="bottom right"
-            className={`min-w-36 ${fontClassName} bg-body text-ground rounded-card_sm ${pxClassName} ${pyClassName}`}>
+            className={`min-w-36 ${fontClassName} ${bgClassName} ${textClassName} rounded-card_sm ${pxClassName} ${pyClassName}`}>
             <ListBox className="w-full space-y-0">
               {options.map((option) => (
                 <ListBoxItem

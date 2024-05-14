@@ -7,6 +7,8 @@ import { DIALOG_TITLE, THRD_PARTY_SERVICES } from './constants';
 import type { OverlayProps } from '@/components/types';
 import CardLink from '@/components/CardLink';
 import { useEffect } from 'react';
+import useAnalytics from '@/hooks/useAnalytics';
+import { EventCategory } from '@/analytics/constants';
 
 const TermsAndPolicyOverlay = (props: Omit<OverlayProps, 'ariaLabel'>) => {
   const { isOpen, onClose } = props;
@@ -22,6 +24,12 @@ const TermsAndPolicyOverlay = (props: Omit<OverlayProps, 'ariaLabel'>) => {
     // alternatives: routeChangeComplete
     router.events.on('routeChangeStart', onClose);
   }, [router.events, onClose]);
+
+  const { sendEvent } = useAnalytics();
+
+  useEffect(() => {
+    sendEvent(EventCategory.OPEN_OVERLAY, 'Terms and policy overlay');
+  }, []);
 
   const Content = (
     <>

@@ -3,7 +3,7 @@ import LOGO_LIGHT_URL from '@/resources/logos/logo_kimkim_white.svg';
 import LOGO_DARK_URL from '@/resources/logos/logo_kimkim_black.svg';
 
 type AppLogoColor = 'light' | 'dark';
-type AppLogoSize = 'md' | 'lg';
+type AppLogoSize = 'sm' | 'md' | 'lg';
 
 const LOGO_IMG_URL_DICT: Record<AppLogoColor, string> = {
   dark: LOGO_DARK_URL.src,
@@ -11,6 +11,7 @@ const LOGO_IMG_URL_DICT: Record<AppLogoColor, string> = {
 };
 
 const LOGO_SIZE_CLASS_DICT: Record<AppLogoSize, { className: string; px: number }> = {
+  sm: { className: 'w-12', px: 48 },
   md: { className: 'w-16', px: 64 },
   lg: { className: 'w-[5.75rem]', px: 92 },
 };

@@ -39,7 +39,6 @@ const ExchangeLogo = ({ exchange, size = 'md', logoURL: injectedLogoURL }: Excha
   return !isError && renderingLogoURL ? (
     <div className="Component grow-0 shrink-0 relative">
       <Image
-        priority
         alt={`${ExchangeLogo} logo`}
         src={renderingLogoURL}
         {...pxSizes}

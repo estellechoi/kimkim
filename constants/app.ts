@@ -21,11 +21,6 @@ export const MAX_DECIMALS = 18;
 
 export const COMPACT_DECIMALS = 4;
 
-export const LOCAL_STORAGE_KEYS = {
-  LAST_USED_WALLET: 'user_last_used_wallet',
-  WATCH_LIST_SYMBOLS: 'watch_list_symbols',
-};
-
 export const TEXTS = {
   NO_DATA: 'No data found',
 };

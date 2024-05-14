@@ -1,7 +1,7 @@
 import Coin from '@/components/Coin';
 import Icon from '@/components/Icon';
 import AppSymbolSVG from '@/components/svgs/AppSymbolSVG';
-import { KimchiPremiumTableRow } from '@/components/tables/KimchiPremiumTable';
+import { KimchiPremiumTableRow } from '@/components/kits/KimchiPremiumTable';
 import { formatKRW, formatNumber } from '@/utils/number';
 import BigNumber from 'bignumber.js';
 import { useCallback } from 'react';
