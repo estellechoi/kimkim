@@ -35,7 +35,7 @@ export const reduceBaseExchangePriceDataFromUpbit = (
   if (data.market.startsWith('KRW-')) {
     const symbol = data.market.replace('KRW-', '');
     const lastPrice = data.trade_price;
-    const volume = BigNumber(data.acc_trade_volume_24h).times(lastPrice).toNumber();
+    const volume = BigNumber(data.acc_trade_price_24h).toNumber();
     return [...acc, { symbol, lastPrice, volume }];
   }
 

@@ -23,6 +23,9 @@ import { BybitApiResponse } from '@/pages/api/bybit';
 import { BybitTickerApiData } from '@/pages/api/bybit/ticker';
 import { BybitWalletStatusApiData } from '@/pages/api/bybit/wallet';
 import { ForexApiData } from '@/pages/api/forex';
+import { UpbitCandleApiData } from '@/pages/api/upbit/candles';
+import { BithumbCandleApiData } from '@/pages/api/bithumb/candles';
+import { UpbitTradeApiData } from '@/pages/api/upbit/trade';
 
 /**
  *
@@ -139,6 +142,30 @@ export const useFetchUpbitPrice = (refetchInterval: number | null, symbols: read
   });
 };
 
+export const useFetchUpbitTrade = (refetchInterval: number | null, { symbol }: { symbol: string }) => {
+  const market = `KRW-${symbol}`;
+  const queryKey = ['useFetchUpbitTrade', market];
+
+  return useQuery<AxiosResponse<readonly UpbitTradeApiData[] | undefined>, AxiosError>({
+    queryFn: () => axios.get<readonly UpbitTradeApiData[] | undefined>('/api/upbit/trade', { params: { market } }),
+    queryKey,
+    refetchInterval: refetchInterval ?? 0,
+    enabled: refetchInterval !== null,
+  });
+};
+
+export const useFetchUpbitCandles = (refetchInterval: number | null, { symbol }: { symbol: string }) => {
+  const market = `KRW-${symbol}`;
+  const queryKey = ['useFetchUpbitCandles', market];
+
+  return useQuery<AxiosResponse<readonly UpbitCandleApiData[] | undefined>, AxiosError>({
+    queryFn: () => axios.get<readonly UpbitCandleApiData[] | undefined>('/api/upbit/candles', { params: { market, count: '1' } }),
+    queryKey,
+    refetchInterval: refetchInterval ?? 0,
+    enabled: refetchInterval !== null,
+  });
+};
+
 /**
  *
  * @description bithumb open api fetching
@@ -181,12 +208,28 @@ export const useFetchBithumbNetworkInfo = (refetchInterval: number | null) => {
 };
 
 export const useFetchBithumbTrade = (refetchInterval: number | null, { symbol }: { symbol: string }) => {
-  const queryKey = ['useFetchBithumbTrade', symbol];
+  const market = `${symbol}_KRW`;
+  const queryKey = ['useFetchBithumbTrade', market];
 
   return useQuery<AxiosResponse<BithumbApiResponse<readonly [BithumbTransactionApiData]> | undefined>, AxiosError>({
     queryFn: () =>
       axios.get<BithumbApiResponse<readonly [BithumbTransactionApiData]> | undefined>('/api/bithumb/transaction', {
-        params: { symbol },
+        params: { market },
+      }),
+    queryKey,
+    refetchInterval: refetchInterval ?? 0,
+    enabled: refetchInterval !== null,
+  });
+};
+
+export const useFetchBithumbCandles = (refetchInterval: number | null, { symbol }: { symbol: string }) => {
+  const market = `${symbol}_KRW`;
+  const queryKey = ['useFetchBithumbCandles', market];
+
+  return useQuery<AxiosResponse<BithumbApiResponse<readonly BithumbCandleApiData[]> | undefined>, AxiosError>({
+    queryFn: () =>
+      axios.get<BithumbApiResponse<readonly BithumbCandleApiData[]> | undefined>('/api/bithumb/candles', {
+        params: { market },
       }),
     queryKey,
     refetchInterval: refetchInterval ?? 0,
