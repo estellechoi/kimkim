@@ -10,6 +10,7 @@ import { useAtom } from 'jotai';
 import { tokenKoreanNameMapAtom } from '@/store/states';
 import { BaseExchange, QuoteExchange } from '@/constants/app';
 import ExchangeNetworkLabel from '@/components/labels/ExchangeNetworkLabel';
+import KoreanCoinLabel from '@/components/kits/KoreanCoinLabel';
 
 type UseGetPremiumTableRowsProps = {
   watchListSymbols: Set<string>;
@@ -52,15 +53,7 @@ const useGetPremiumTableRows = ({ watchListSymbols, onToggleWatchList, krwByUsd,
             </div>
           );
 
-          const symbolLabel = (
-            <div className="flex items-center gap-x-2">
-              <Coin symbol={symbol} size="sm" />
-              <div className="inline-flex items-center gap-x-2 Font_label_14px">
-                {koreanName}
-                <span className="Font_caption_xs text-caption">{symbol}</span>
-              </div>
-            </div>
-          );
+          const symbolLabel = <KoreanCoinLabel symbol={symbol} />;
 
           const quoteExchangeItem = quoteExchangeData.find(({ symbol: quoteExchangeSymbol }) => quoteExchangeSymbol === symbol);
 

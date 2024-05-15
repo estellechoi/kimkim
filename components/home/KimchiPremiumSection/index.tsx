@@ -47,6 +47,7 @@ import IconButton from '@/components/IconButton';
 import useAnalytics from '@/hooks/useAnalytics';
 import { EventCategory } from '@/analytics/constants';
 import ForexPopover from '@/components/kits/ForexPopover';
+import VolumeMatch from '@/components/kits/VolumeMatch';
 
 type KimchiPremiumSectionProps = {
   krwByUsd: number | null;
@@ -389,6 +390,20 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd, className = '' }: KimchiPrem
 
           <Card color="glass" className="w-full space-y-4 mt-2">
             <KimchiPremiumTable rows={watchlistRows} isLoading={isTableLoading} />
+          </Card>
+        </section>
+      )}
+
+      {watchlistRows.length > 0 && (
+        <section className="w-full animate-fade_in_x_reverse mb-10">
+          <div className="text-caption Font_label_12px px-4 py-4 md:py-0">관심 코인 추세</div>
+
+          <Card color="glass" className="w-full px-4 pt-6 py-5 mt-5">
+            <ul className="flex flex-col items-stretch gap-y-5">
+              {Array.from(watchListSymbols).map((symbol) => (
+                <VolumeMatch key={symbol} exchange={baseExchange} symbol={symbol} />
+              ))}
+            </ul>
           </Card>
         </section>
       )}
