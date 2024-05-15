@@ -3,7 +3,7 @@
 import TextInput from '@/components/TextInput';
 import KimchiPremiumTable, { KimchiPremiumTableRow } from '@/components/kits/KimchiPremiumTable';
 import useWatchListSymbols from '@/hooks/useWatchListSymbols';
-import ExchangeDropDownPair from '@/components/drop-downs/ExchangeDropDownPair';
+import ExchangeDropDownPair from '@/components/kits/ExchangeDropDownPair';
 import {
   useFetcHtxWalletStatus,
   useFetchBinaceWalletStatus,
