@@ -16,7 +16,7 @@ const useUpbitPriceData = (enabled: boolean) => {
     data: upbitPriceData,
     error: upbitPriceError,
     isLoading: isUpbitPriceLoading,
-  } = useFetchUpbitPrice(fetch ? 3000 : null, symbols);
+  } = useFetchUpbitPrice(fetch ? 6000 : null, symbols);
 
   const { data: webSocketUpbitPriceData } = useWebSocketUpbitPrice(fetch, symbols);
 

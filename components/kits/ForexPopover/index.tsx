@@ -15,6 +15,7 @@ const ForexPopover = ({ id, className = '' }: ForexPopoverProps) => {
           type="popover"
           iconType="currency_exchange"
           className="text-caption"
+          label="환율"
           aria-expanded={isOpen}
           aria-controls={id}
           onClick={() => setIsOpen(!isOpen)}

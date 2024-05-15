@@ -12,7 +12,7 @@ const useBinancePriceData = (enabled: boolean, symbols: readonly string[]) => {
   const [binanceMarketData] = useAtom(binanceMarketDataAtom);
   const binanceSymbols = symbols.filter((symbol) => binanceMarketData?.[symbol]);
 
-  const [binancePriceDataInterval, setBinancePriceInterval] = useState<number | null>(3000);
+  const [binancePriceDataInterval, setBinancePriceInterval] = useState<number | null>(6000);
 
   const fetchBinancePriceData = enabled && binanceSymbols.length > 0;
   const {
@@ -27,7 +27,7 @@ const useBinancePriceData = (enabled: boolean, symbols: readonly string[]) => {
     if (binancePriceError?.response?.status === 429 || binancePriceError?.response?.status === 418) {
       setBinancePriceInterval(null);
       const retryAfter = binancePriceError?.response?.headers['Retry-After'];
-      retryTimer = setTimeout(() => setBinancePriceInterval(3000), parseInt(retryAfter) * 1000);
+      retryTimer = setTimeout(() => setBinancePriceInterval(6000), parseInt(retryAfter) * 1000);
     }
 
     return () => clearTimeout(retryTimer);

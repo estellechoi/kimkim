@@ -81,7 +81,7 @@ const TableContainer = <T extends TableRowData>({
   );
 
   return (
-    <div role="treegrid" className={`relative w-full overflow-hidden ${gapYClassName} ${bgClassName}`}>
+    <div role="treegrid" className={`Component relative w-full overflow-hidden ${gapYClassName} ${bgClassName}`}>
       {/* rows */}
       <div role="rowgroup" className={`relative w-full overflow-x-auto ${gapYClassName}`} style={{ scrollbarGutter: 'stable' }}>
         {hasField && (

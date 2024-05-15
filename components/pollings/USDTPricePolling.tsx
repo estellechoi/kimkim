@@ -20,7 +20,7 @@ const TEXT_FORMATTER_DICT: Record<Fiats, FormatCurrencyFunction> = {
 const USDTPricePolling = ({ className = '' }: USDTPricePollingProps) => {
   const stableCoinSymbol = 'USDT';
 
-  const { data: coinMarketCapPriceData } = useFetchCoinMarketCapPrice(3000, [stableCoinSymbol]);
+  const { data: coinMarketCapPriceData } = useFetchCoinMarketCapPrice(6000, [stableCoinSymbol]);
 
   const [currencyExchangeRate] = useAtom(currencyExchangeRateAtom);
   const [selectedCurrency] = useAtom(selectedCurrencyAtom);
