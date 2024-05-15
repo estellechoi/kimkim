@@ -1,9 +1,9 @@
 import { BaseExchange, Exchanges } from '@/constants/app';
 import useBithumbVolume from '@/hooks/useBithumbVolume';
 import useUpbitVolume from '@/hooks/useUpbitVolume';
-import { formatKRW, formatNumber } from '@/utils/number';
+import { formatKRW } from '@/utils/number';
 import { useMemo } from 'react';
-import KoreanCoinLabel from '../KoreanCoinLabel';
+import KoreanCoinLabel from '@/components/kits/KoreanCoinLabel';
 
 type VolumeMatchProps = Readonly<{
   exchange: BaseExchange;

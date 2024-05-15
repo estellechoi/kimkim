@@ -3,7 +3,7 @@ import AlertBox from '@/components/AlertBox';
 import Icon from '@/components/Icon';
 import Link from 'next/link';
 import TermsAndPolicyButton from './TermsAndPolicyButton';
-import AppLogo from '../AppLogo';
+import AppLogo from '@/components/AppLogo';
 
 const AppFooter = () => {
   return (
