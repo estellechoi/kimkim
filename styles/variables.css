@@ -105,6 +105,8 @@
     /* blue */
     --color-blue200: #8BB5FF;
     --color-blue400: #0094FF;
+    --color-blue900: #001A3D;
+
     /* sky */
     --color-sky400: #E0F9FF;
     --color-sky400-o50: rgba(224, 249, 255, 0.5);
@@ -120,11 +122,14 @@
     --color-red400-o10: rgba(250, 43, 57, 0.10);
     --color-red400-o0: rgba(250, 43, 57, 0.0);
     --color-red700: #7D0A0A;
+    --color-red900: #260000;
+    /* yellow */
+    --color-yellow700: #F79022;
+    --color-yellow900: #4A2600;
     /* gree */
     --color-green400: #01BF08;
     --color-green500: rgb(14, 203, 129);
-     /* rgb(0, 255, 0); */
-    /* rgb(64, 182, 107) */
+    --color-green900: #001A00;
 }
 
 :root {

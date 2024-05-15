@@ -20,7 +20,7 @@ const TEXT_FORMATTER_DICT: Record<Fiats, FormatCurrencyFunction> = {
 const USDTBithumbPricePolling = ({ className = '' }: USDTBithumbPricePollingProps) => {
   const stableCoinSymbol = 'USDT';
 
-  const { data: bithumbTradeData } = useFetchBithumbTrade(3000, { symbol: stableCoinSymbol });
+  const { data: bithumbTradeData } = useFetchBithumbTrade(6000, { symbol: stableCoinSymbol });
 
   const [currencyExchangeRate] = useAtom(currencyExchangeRateAtom);
   const [selectedCurrency] = useAtom(selectedCurrencyAtom);

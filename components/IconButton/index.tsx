@@ -6,14 +6,15 @@ type IconButtonProps = React.RefAttributes<HTMLButtonElement> &
   Readonly<{
     type?: 'button' | 'popover';
     iconType: IconType;
+    label?: string;
     onClick?: () => void;
     className?: string;
   }>;
 
-const IconButton = ({ type = 'button', iconType, className = '', onClick, ...props }: IconButtonProps) => {
+const IconButton = ({ type = 'button', iconType, label, className = '', onClick, ...props }: IconButtonProps) => {
   const commonProps = useMemo(
     () => ({
-      className: `grow-0 shrink-0 w-fit h-fit p-3 bg-transparent rounded-full Transition_500 transition-colors hover:bg-white_o10 ${className}`,
+      className: `grow-0 shrink-0 w-fit h-fit flex items-center gap-x-2 p-3 bg-transparent rounded-full Transition_500 transition-colors hover:bg-white_o10 ${className}`,
       ...props,
     }),
     [props, className],
@@ -23,6 +24,7 @@ const IconButton = ({ type = 'button', iconType, className = '', onClick, ...pro
     return (
       <button type="button" onClick={onClick} {...commonProps}>
         <Icon type={iconType} />
+        {label && <span className="Font_button_xs pr-1">{label}</span>}
       </button>
     );
   }
@@ -30,6 +32,7 @@ const IconButton = ({ type = 'button', iconType, className = '', onClick, ...pro
   return (
     <Button onPress={onClick} {...commonProps}>
       <Icon type={iconType} />
+      {label && <span className="Font_button_xs pr-1">{label}</span>}
     </Button>
   );
 };

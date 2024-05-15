@@ -151,7 +151,7 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd, className = '' }: KimchiPrem
     data: bybitPriceData,
     error: bybitPriceError,
     isLoading: isBybitPriceLoading,
-  } = useFetchBybitPrice(fetchBybitPriceData ? 3000 : null);
+  } = useFetchBybitPrice(fetchBybitPriceData ? 6000 : null);
 
   const { data: bybitWalletStatusData } = useFetchBybitWalletStatus(fetchBybitPriceData ? 0 : null);
 
@@ -384,7 +384,7 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd, className = '' }: KimchiPrem
               관심 코인 {errorDataLabel && <Tag size="sm" color="warning" label={errorDataLabel} className="ml-2" />}
             </div>
 
-            <IconButton iconType="delete" className="text-caption" onClick={onClickClearWatchList} />
+            <IconButton iconType="delete" className="text-caption" label="모두 지우기" onClick={onClickClearWatchList} />
           </div>
 
           <Card color="glass" className="w-full space-y-4 mt-2">

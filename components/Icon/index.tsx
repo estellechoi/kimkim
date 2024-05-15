@@ -27,9 +27,12 @@ import {
   MdInfo,
   MdMoreHoriz,
   MdDelete,
+  MdWarning,
+  MdDangerous,
 } from 'react-icons/md';
 import { FaGithub } from 'react-icons/fa';
 import { BsCurrencyExchange } from 'react-icons/bs';
+import { RiKakaoTalkFill } from 'react-icons/ri';
 
 export type IconSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 export type IconType =
@@ -64,7 +67,10 @@ export type IconType =
   | 'info'
   | 'more'
   | 'currency_exchange'
-  | 'delete';
+  | 'delete'
+  | 'warning'
+  | 'danger'
+  | 'kakaotalk';
 
 const ICON_SIZE_CLASS_DICT: Record<IconSize, string> = {
   xs: 'w-2 h-2',
@@ -107,6 +113,9 @@ const ICON_DICT: Record<IconType, React.ElementType> = {
   more: MdMoreHoriz,
   currency_exchange: BsCurrencyExchange,
   delete: MdDelete,
+  warning: MdWarning,
+  danger: MdDangerous,
+  kakaotalk: RiKakaoTalkFill,
 };
 
 type IconProps = {
