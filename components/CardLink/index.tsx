@@ -56,7 +56,7 @@ const CardLink = ({ label, color = 'primary', className = '', onClick, ...props 
 
   return (
     <LinkElement {...linkProps} className={`group/card-link block ${hoverAnimationClassName} ${className}`} onClick={handleClick}>
-      <Card color={color} size="sm" className={`${cardGridClassName}`}>
+      <Card color={color} size="sm" className={`${cardGridClassName} !rounded-card_sm`}>
         {typeof label === 'string' ? <span className={`${fontClassName} ${colorClassName}`}>{label}</span> : label}
         <Icon type="arrow_forward" className={`${hoverIconAnimationClassName} ${colorClassName}`} />
       </Card>

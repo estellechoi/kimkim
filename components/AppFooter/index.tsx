@@ -7,7 +7,7 @@ import AppLogo from '@/components/AppLogo';
 
 const AppFooter = () => {
   return (
-    <footer className="relative flex flex-col items-center px-app_header_padding_x py-app_header_padding_y bg-ground_variant_dark text-body">
+    <footer className="relative flex flex-col items-center px-4 md:px-app_header_padding_x py-app_header_padding_y bg-ground_variant_dark text-body">
       <h2 className="sr-only">Summary of the App</h2>
 
       <div className="max-w-content_max_width grid grid-cols-1 gap-y-0">
@@ -33,8 +33,8 @@ const AppFooter = () => {
           </div>
 
           <div className="basis-1/2 space-y-4">
-            <div className="Font_caption_xs text-body">커뮤니티</div>
-            <ul className="flex items-center gap-4">
+            <div className="Font_caption_xs text-body hidden md:block">커뮤니티</div>
+            <ul className="flex justify-center items-center gap-4 md:justify-start">
               <li>
                 <A href="https://open.kakao.com/o/gtrIKPrg">
                   <Icon size="xl" type="kakaotalk" className="text-body" />
@@ -45,7 +45,7 @@ const AppFooter = () => {
         </div>
 
         <div className="flex items-center justify-between gap-x-2 mt-20">
-          <div className="Font_caption_xs text-caption">© 2024 KimKim</div>
+          <div className="Font_caption_xs text-caption px-3">© 2024 KimKim</div>
           <TermsAndPolicyButton />
         </div>
       </div>

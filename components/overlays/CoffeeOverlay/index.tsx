@@ -1,8 +1,6 @@
 import { useRouter } from 'next/router';
 import AnimatedModal from '@/components/AnimatedModal';
-import BottomSheet from '@/components/BottomSheet';
 import DescriptionTexts from '@/components/DescriptionTexts/Container';
-import useUserAgent from '@/hooks/useUserAgent';
 import { DIALOG_TITLE, DONATE_ADDRESSES } from './constants';
 import type { OverlayProps } from '@/components/types';
 import { useCallback, useEffect } from 'react';
@@ -17,7 +15,6 @@ import { EventCategory } from '@/analytics/constants';
 
 const CoffeeOverlay = (props: Omit<OverlayProps, 'ariaLabel'>) => {
   const { isOpen, onClose } = props;
-  const { isMobile } = useUserAgent();
 
   const router = useRouter();
 
@@ -100,7 +97,7 @@ const CoffeeOverlay = (props: Omit<OverlayProps, 'ariaLabel'>) => {
       </Heading>
 
       <CopyHelper toCopy="kimkim.found@gmail.com" className="mb-5" onCopy={onCopyEmail}>
-        <div className="flex items-center gap-x-4">
+        <div className="flex justify-start items-center gap-x-4">
           <Icon type="email" />
           <span className="Font_body_sm">kimkim.found@gmail.com</span>
         </div>
@@ -116,12 +113,7 @@ const CoffeeOverlay = (props: Omit<OverlayProps, 'ariaLabel'>) => {
     </>
   );
 
-  return isMobile ? (
-    <BottomSheet {...props} ariaLabel={DIALOG_TITLE} className="h-[80vh] Padding_modal space-y-modal_gap">
-      <BottomSheet.Title>{DIALOG_TITLE}</BottomSheet.Title>
-      <BottomSheet.Content>{Content}</BottomSheet.Content>
-    </BottomSheet>
-  ) : (
+  return (
     <AnimatedModal ariaLabel={DIALOG_TITLE} className="h-[80vh] Padding_modal space-y-modal_gap" {...props}>
       <AnimatedModal.Title>{DIALOG_TITLE}</AnimatedModal.Title>
       <AnimatedModal.Content isOpen={isOpen}>{Content}</AnimatedModal.Content>

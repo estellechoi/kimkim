@@ -1,8 +1,6 @@
 import { useRouter } from 'next/router';
 import AnimatedModal from '@/components/AnimatedModal';
-import BottomSheet from '@/components/BottomSheet';
 import DescriptionTexts from '@/components/DescriptionTexts/Container';
-import useUserAgent from '@/hooks/useUserAgent';
 import { DIALOG_TITLE, THRD_PARTY_SERVICES } from './constants';
 import type { OverlayProps } from '@/components/types';
 import CardLink from '@/components/CardLink';
@@ -12,7 +10,6 @@ import { EventCategory } from '@/analytics/constants';
 
 const TermsAndPolicyOverlay = (props: Omit<OverlayProps, 'ariaLabel'>) => {
   const { isOpen, onClose } = props;
-  const { isMobile } = useUserAgent();
 
   const router = useRouter();
 
@@ -49,12 +46,7 @@ const TermsAndPolicyOverlay = (props: Omit<OverlayProps, 'ariaLabel'>) => {
     </>
   );
 
-  return isMobile ? (
-    <BottomSheet {...props} ariaLabel={DIALOG_TITLE} className="h-[80vh] Padding_modal space-y-modal_gap">
-      <BottomSheet.Title>{DIALOG_TITLE}</BottomSheet.Title>
-      <BottomSheet.Content>{Content}</BottomSheet.Content>
-    </BottomSheet>
-  ) : (
+  return (
     <AnimatedModal ariaLabel={DIALOG_TITLE} className="h-[80vh] Padding_modal space-y-modal_gap" {...props}>
       <AnimatedModal.Title>{DIALOG_TITLE}</AnimatedModal.Title>
       <AnimatedModal.Content isOpen={isOpen}>{Content}</AnimatedModal.Content>

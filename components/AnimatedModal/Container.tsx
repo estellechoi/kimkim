@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { cloneElement, type ReactNode } from 'react';
 import OverlayBackdrop from '@/components/OverlayBackdrop';
 import getReactElements from '@/components/utils/getReactElements';
 import type { OverlayProps } from '@/components/types';
@@ -41,7 +41,7 @@ const AnimatedModal = ({ id, isOpen, onClose, size = 'md', ariaLabel, children, 
         aria-modal
         aria-label={ariaLabel}
         className={`Component fixed z-top_context top-0 right-0 h-screen md:top-modal_margin_y md:right-modal_margin_x md:h-modal_height rounded-tl-card_md rounded-bl-card_md md:rounded-card_md bg-ground_variant_dark Elevation_box_3 ${widthClassName} ${animateClassName} ${className}`}>
-        {getTitle(children)}
+        {getTitle(children).map((child) => cloneElement(child, { onClose }))}
         {getContent(children)}
         {getBottomBar(children)}
       </div>

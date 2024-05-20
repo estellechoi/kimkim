@@ -22,9 +22,9 @@ const useTouchDraggableRef = <T extends HTMLElement>(options?: UseTouchDraggable
     setTouchStart(null);
 
     const timer = setTimeout(() => {
-      ref?.current?.style.setProperty('transform', null);
-      ref?.current?.style.setProperty('transition', null);
-      ref?.current?.classList.remove('will-change-transform');
+      ref.current?.style.setProperty('transform', null);
+      ref.current?.style.setProperty('transition', null);
+      ref.current?.classList.remove('will-change-transform');
     }, 500);
 
     return () => {
@@ -36,8 +36,8 @@ const useTouchDraggableRef = <T extends HTMLElement>(options?: UseTouchDraggable
     const { clientX: x, clientY: y } = event.touches[0];
     setTouchStart({ x, y });
 
-    ref?.current?.classList.add('will-change-transform');
-    ref?.current?.style.setProperty('transition', 'none', 'important');
+    ref.current?.classList.add('will-change-transform');
+    ref.current?.style.setProperty('transition', 'none', 'important');
   }, []);
 
   const handleTouchMove: TouchEventHandler<T> = useCallback(
@@ -53,7 +53,7 @@ const useTouchDraggableRef = <T extends HTMLElement>(options?: UseTouchDraggable
       const moveX = options?.x?.scope ? Math.max(options.x.scope[0], Math.min(options.x.scope[1], enabledDeltaX)) : enabledDeltaX;
       const moveY = options?.y?.scope ? Math.max(options.y.scope[0], Math.min(options.y.scope[1], enabledDeltaY)) : enabledDeltaY;
 
-      ref?.current?.style.setProperty('transform', `translate(${moveX}px, ${moveY}px)`, 'important');
+      ref.current?.style.setProperty('transform', `translate(${moveX}px, ${moveY}px)`, 'important');
     },
     [touchStart, options],
   );
@@ -65,7 +65,7 @@ const useTouchDraggableRef = <T extends HTMLElement>(options?: UseTouchDraggable
       const { clientX, clientY } = event.changedTouches[0];
       const delta = { x: clientX - touchStart.x, y: clientY - touchStart.y };
 
-      ref?.current?.style.setProperty('transition', 'transform 0.5s cubic-bezier(.19,1,.22,1)', 'important');
+      ref.current?.style.setProperty('transition', 'transform 0.5s cubic-bezier(.19,1,.22,1)', 'important');
 
       const isMoved = {
         x: !!options?.x?.moveThreshold && Math.abs(delta.x) > options.x.moveThreshold,
@@ -73,7 +73,7 @@ const useTouchDraggableRef = <T extends HTMLElement>(options?: UseTouchDraggable
       };
 
       if (!isMoved.x && !isMoved.y) {
-        ref?.current?.style.setProperty('transform', 'translate(0, 0)', 'important');
+        ref.current?.style.setProperty('transform', 'translate(0, 0)', 'important');
         resetTouchStates();
       }
 
