@@ -1,7 +1,7 @@
 import ReactGA from 'react-ga4';
 import type { GaOptions, UaEventOptions } from 'react-ga4/types/ga4';
 import { EventCategory } from '@/analytics/constants';
-import { Analytics } from '../types';
+import { Analytics } from '@/analytics/types';
 
 export default class GoogleAnalytics extends Analytics {
   public track(callback: (tracker?: any) => void) {
