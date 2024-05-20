@@ -15,6 +15,7 @@ import CoffeeOverlay from '@/components/overlays/CoffeeOverlay';
 import USDTBithumbPricePolling from '@/components/pollings/USDTBithumbPricePolling';
 import ExchangeLogo from '@/components/ExchangeLogo';
 import IconButton from '@/components/IconButton';
+import ForexPopover from '@/components/kits/ForexPopover';
 
 type AppHeaderProps = { className?: string };
 
@@ -35,7 +36,7 @@ const AppHeader = ({ className = '' }: AppHeaderProps) => {
 
   return (
     <header className={`h-app_header_height flex flex-col items-stretch ${className}`}>
-      <div className="grow-0 shrink-0 bg-ground_variant_dark flex flex-wrap items-center gap-x-6 md:gap-x-8 px-app_header_padding_x py-2">
+      <div className="grow-0 shrink-0 bg-ground_variant_dark flex flex-wrap items-center gap-x-6 md:gap-x-8 px-4 md:px-app_header_padding_x py-2">
         <ExchangeRatePolling className="hidden md:flex" />
 
         <div className="flex items-center gap-x-2">
@@ -74,6 +75,8 @@ const AppHeader = ({ className = '' }: AppHeaderProps) => {
           />
 
           <div className="flex items-center gap-x-0 md:gap-x-2">
+            <ForexPopover id="forex-popover-at-header" />
+
             <IconButton
               iconType="coffee"
               className="text-caption"

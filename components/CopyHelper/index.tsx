@@ -21,7 +21,7 @@ const CopyHelper = ({ children, toCopy, iconPosition = 'right', onCopy, classNam
     <button
       type="button"
       aria-label="Copy"
-      className={`group/copy relative shrink-0 inline-flex justify-start items-center gap-x-2 Transition_500 transition-opacity hover:opacity-80 ${className}`}
+      className={`group/copy relative shrink-0 w-fit flex justify-start items-center gap-x-2 Transition_500 transition-opacity hover:opacity-80 ${className}`}
       onClick={() => {
         copy(toCopy);
         onCopy?.(toCopy);

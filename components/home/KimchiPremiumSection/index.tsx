@@ -46,8 +46,8 @@ import useBitgetPriceData from '@/hooks/useBitgetPriceData';
 import IconButton from '@/components/IconButton';
 import useAnalytics from '@/hooks/useAnalytics';
 import { EventCategory } from '@/analytics/constants';
-import ForexPopover from '@/components/kits/ForexPopover';
 import VolumeMatch from '@/components/kits/VolumeMatch';
+import TabSelector from '@/components/TabSelector';
 
 type KimchiPremiumSectionProps = {
   krwByUsd: number | null;
@@ -365,21 +365,23 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd, className = '' }: KimchiPrem
     [sendEvent],
   );
 
+  type VolumeMatchPeriodMilliSeconds = 30000 | 60000 | 600000;
+  const [volumeMatchPeriodMilliseconds, setVolumeMatchPeriodMilliseconds] = useState<VolumeMatchPeriodMilliSeconds>(30000);
+
   return (
     <div className={`w-full max-w-content_max_width mx-auto flex flex-col items-center gap-y-0 ${className}`}>
-      <div className="w-full flex gap-2 md:gap-4 px-4 md:justify-end items-center md:pr-0.5 animate-fade_in_x_reverse mb-5">
+      <div className="w-full flex gap-2 md:gap-4 px-4 justify-center md:justify-end items-center md:pr-0.5 animate-fade_in_x_reverse mb-5">
         <ExchangeDropDownPair
           baseExchange={baseExchange}
           onBaseExchangeChange={onChangeBaseExchange}
           quoteExchange={quoteExchange}
           onQuoteExchangeChange={onChangeQuoteExchange}
-          className="md:order-2"
+          className="w-full md:w-auto"
         />
-        <ForexPopover id="forex-popover-at-home" className="grow-0 shrink-0 basis-auto" />
       </div>
 
       {watchlistRows.length > 0 && (
-        <section className="w-full animate-fade_in_x_reverse mb-10">
+        <section className="w-full animate-fade_in_x_reverse mb-20 md:mb-10">
           <div className="flex justify-between items-center gap-4 pr-0.5">
             <div className="text-caption Font_label_12px px-4 py-4 md:py-0">
               관심 코인 {errorDataLabel && <Tag size="sm" color="warning" label={errorDataLabel} className="ml-2" />}
@@ -395,13 +397,35 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd, className = '' }: KimchiPrem
       )}
 
       {watchlistRows.length > 0 && (
-        <section className="w-full animate-fade_in_x_reverse mb-10">
-          <div className="text-caption Font_label_12px px-4 py-4 md:py-0">관심 코인 추세</div>
+        <section className="w-full animate-fade_in_x_reverse mb-20 md:mb-10">
+          <div className="flex justify-between gap-10 items-center">
+            <div className="text-caption Font_label_12px px-4">관심 코인 추세</div>
 
-          <Card color="glass" className="w-full px-4 pt-6 py-5 mt-5">
-            <ul className="flex flex-col items-stretch gap-y-5">
+            <div className="flex justify-end px-4 md:px-0">
+              <TabSelector<VolumeMatchPeriodMilliSeconds>
+                label="Select period"
+                type="fill"
+                tabs={[
+                  { key: 30000, title: '30초' },
+                  { key: 60000, title: '1분' },
+                  { key: 600000, title: '10분' },
+                ]}
+                selectedKey={volumeMatchPeriodMilliseconds}
+                onChange={setVolumeMatchPeriodMilliseconds}
+                className="min-w-[12rem]"
+              />
+            </div>
+          </div>
+
+          <Card color="glass" className="w-full px-4 pt-6 py-5 mt-2">
+            <ul className="flex flex-col items-stretch gap-y-8 md:gap-y-5">
               {Array.from(watchListSymbols).map((symbol) => (
-                <VolumeMatch key={symbol} exchange={baseExchange} symbol={symbol} />
+                <VolumeMatch
+                  key={symbol}
+                  exchange={baseExchange}
+                  symbol={symbol}
+                  periodMilliseconds={volumeMatchPeriodMilliseconds}
+                />
               ))}
             </ul>
           </Card>
@@ -409,12 +433,12 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd, className = '' }: KimchiPrem
       )}
 
       <section className="w-full animate-fade_in_x_reverse">
-        <div className="flex flex-col justify-between gap-4 md:flex-row md:gap-10 md:items-center">
+        <div className="flex flex-col justify-between md:flex-row md:gap-10 md:items-center">
           <div className="text-caption Font_label_12px px-4 py-4 md:py-0">
             김치 프리미엄 {errorDataLabel && <Tag size="sm" color="warning" label={errorDataLabel} className="ml-2" />}
           </div>
 
-          <div className="flex flex-col items-stretch gap-4 p-4 md:flex-row md:items-center md:p-0">
+          <div className="flex flex-col items-stretch gap-4 px-4 md:flex-row md:items-center md:px-0">
             <TextInput
               form={null}
               label="코인 검색"

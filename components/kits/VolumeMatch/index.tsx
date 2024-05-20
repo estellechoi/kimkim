@@ -8,12 +8,13 @@ import KoreanCoinLabel from '@/components/kits/KoreanCoinLabel';
 type VolumeMatchProps = Readonly<{
   exchange: BaseExchange;
   symbol: string;
+  periodMilliseconds?: number;
   className?: string;
 }>;
 
-const VolumeMatch = ({ exchange, symbol, className }: VolumeMatchProps) => {
-  const upbitVolumes = useUpbitVolume(exchange === Exchanges.UPBIT, symbol);
-  const bithumbVolumes = useBithumbVolume(exchange === Exchanges.BITHUMB, symbol);
+const VolumeMatch = ({ exchange, symbol, periodMilliseconds, className }: VolumeMatchProps) => {
+  const upbitVolumes = useUpbitVolume(exchange === Exchanges.UPBIT, symbol, periodMilliseconds);
+  const bithumbVolumes = useBithumbVolume(exchange === Exchanges.BITHUMB, symbol, periodMilliseconds);
 
   const { askVolume, bidVolume } = useMemo(() => {
     switch (exchange) {
@@ -25,7 +26,7 @@ const VolumeMatch = ({ exchange, symbol, className }: VolumeMatchProps) => {
   }, [exchange, upbitVolumes, bithumbVolumes]);
 
   const bidPercentage = useMemo(() => {
-    if (askVolume === 0 && bidVolume === 0) return 0;
+    if (askVolume === 0 && bidVolume === 0) return 50;
     if (askVolume === 0) return 100;
     return (bidVolume / (bidVolume + askVolume)) * 100;
   }, [bidVolume, askVolume]);
@@ -36,18 +37,18 @@ const VolumeMatch = ({ exchange, symbol, className }: VolumeMatchProps) => {
     return {
       backgroundClassName: bidPercentage === 50 ? 'bg-caption' : bidPercentage > 50 ? 'bg-semantic_bull' : 'bg-semantic_bear',
       textClassName: bidPercentage === 50 ? 'text-caption' : bidPercentage > 50 ? 'text-semantic_bull' : 'text-semantic_bear',
-      text: bidPercentage === 50 ? '-' : bidPercentage > 50 ? '매수' : '매도',
+      text: bidPercentage === 50 ? '중립' : bidPercentage > 50 ? '매수' : '매도',
     };
   }, [bidPercentage]);
 
   return (
-    <div className={`flex flex-col md:flex-row items-stretch md:items-center gap-8 md:gap-10 ${className}`}>
+    <div className={`flex flex-col md:flex-row items-stretch md:items-center gap-y-4 gap-x-10 ${className}`}>
       <div className="grow-0 shrink-0 basis-auto flex justify-between md:justify-start items-center gap-x-4">
         <div className="w-[220px]">
           <KoreanCoinLabel symbol={symbol} />
         </div>
 
-        <div className="flex flex-col items-center gap-2">
+        <div className="flex md:flex-col items-center gap-2">
           <div className={`w-3 h-3 rounded-full ${bidAskTrend.backgroundClassName}`}></div>
           <div className={`Font_caption_xs_num ${bidAskTrend.textClassName}`}>{bidAskTrend.text}</div>
         </div>

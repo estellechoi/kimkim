@@ -7,14 +7,14 @@ export type CardSize = 'sm' | 'md';
 const CARD_BG_COLOR_DICT: Record<CardColor, string> = {
   primary: 'bg-primary text-white',
   on_primary: 'bg-ground text-ground',
-  glass: 'Bg_glass border border-solid border-primary_line_dark',
+  glass: 'Bg_glass border border-solid border-transparent md:border-primary_line_dark',
   caption: 'bg-caption text-white',
   body: 'bg-body text-ground',
 };
 
 const CARD_RADIUS_CLASS_DICT: Record<CardSize, string> = {
-  sm: 'rounded-card_sm',
-  md: 'rounded-card_md',
+  sm: 'md:rounded-card_sm',
+  md: 'md:rounded-card_md',
 };
 
 type CardProps = { children: ReactNode; color?: CardColor; size?: CardSize; className?: string };
