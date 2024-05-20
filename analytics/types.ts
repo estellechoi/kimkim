@@ -1,4 +1,4 @@
-import type { EventCategory } from './constants';
+import type { EventCategory } from '@/analytics/constants';
 
 export abstract class Analytics {
   public readonly name: string;
