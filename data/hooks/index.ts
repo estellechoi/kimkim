@@ -118,11 +118,11 @@ export const useFetchUpbitMarket = (refetchInterval: number | null) => {
   });
 };
 
-export const useFetchUpbitWalletStatus = (refetchInterval: number | null) => {
-  const queryKey = ['fetchUpbitWalletStatus'];
+export const useFetchUpbitNetwork = (refetchInterval: number | null) => {
+  const queryKey = ['useFetchUpbitNetwork'];
 
   return useQuery<AxiosResponse<readonly UpbitWalletStatusApiData[] | undefined>, AxiosError>({
-    queryFn: () => axios.get<readonly UpbitWalletStatusApiData[] | undefined>('/api/upbit/wallet'),
+    queryFn: () => axios.get<readonly UpbitWalletStatusApiData[] | undefined>('/api/upbit/network'),
     queryKey,
     refetchInterval: refetchInterval ?? 0,
     enabled: refetchInterval !== null,

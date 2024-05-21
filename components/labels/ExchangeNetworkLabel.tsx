@@ -40,18 +40,18 @@ const ExchangeNetworkFeeLabel = ({ network, fundType, feeCurrencyPriceKrw }: Exc
 
   return (
     <div key={network.networkType} className="flex items-center gap-x-2">
-      <span>{network.networkType}</span>
+      <span className="truncate">{network.networkType}</span>
 
       <StatusDot
         status={network.status && workingStatuses.includes(network.status) ? 'success' : 'error'}
-        // label={networks?.status}
+      // label={networks?.status}
       />
 
       {workingStatuses.includes(network.status) && network.withdrawFee !== undefined && (
         <span className="flex items-baseline gap-x-0.5 Font_caption_xs_num text-semantic_success">
           {/* <span>{formatNumber(network.withdrawFee)}</span> */}
           {/* <span className="Font_caption_xs">{network.withdrawFeeCurrency}</span> */}
-          <span>
+          <span className="text-nowrap">
             {network.withdrawFeeType === 'fixed'
               ? formatKRW(getWithdrawFeeKrw(network.withdrawFee))
               : `${formatNumber(network.withdrawFee)}%`}
@@ -82,26 +82,26 @@ const ExchangeNetworkLabel = ({ exchange, networks, fundType, feeCurrencyPriceKr
   const sortedNetworks = useMemo<readonly ExchangeWalletData[] | undefined>(() => {
     return networks
       ? [...networks].sort((a, b) => {
-          const compare = a.status.localeCompare(b.status);
+        const compare = a.status.localeCompare(b.status);
 
-          if (compare !== 0) return compare;
-          if (a.withdrawFee === undefined || b.withdrawFee === undefined) return compare;
+        if (compare !== 0) return compare;
+        if (a.withdrawFee === undefined || b.withdrawFee === undefined) return compare;
 
-          const aWithdrawFeeKrw = getWithdrawFeeKrw(a.withdrawFee);
-          const bWithdrawFeeKrw = getWithdrawFeeKrw(b.withdrawFee);
+        const aWithdrawFeeKrw = getWithdrawFeeKrw(a.withdrawFee);
+        const bWithdrawFeeKrw = getWithdrawFeeKrw(b.withdrawFee);
 
-          if (aWithdrawFeeKrw === undefined || bWithdrawFeeKrw === undefined) return compare;
+        if (aWithdrawFeeKrw === undefined || bWithdrawFeeKrw === undefined) return compare;
 
-          return aWithdrawFeeKrw.gt(bWithdrawFeeKrw) ? 1 : -1;
-        })
+        return aWithdrawFeeKrw.gt(bWithdrawFeeKrw) ? 1 : -1;
+      })
       : undefined;
   }, [networks, getWithdrawFeeKrw]);
 
   return (
     <div className="flex items-start gap-x-2 Font_caption_xs text-caption">
-      <div className="flex items-center gap-x-2">
+      <div className="grow-0 shrink-0 basis-auto flex items-center gap-x-2">
         <ExchangeLogo size="sm" exchange={exchange} />
-        <span>{label}</span>
+        <span className="text-nowrap">{label}</span>
       </div>
 
       <div className="flex flex-col">
