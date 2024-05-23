@@ -84,13 +84,13 @@ function MyApp({ Component, pageProps }: AppProps<{ dehydratedState: DehydratedS
 
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://kimkim.space" />
+        <meta property="og:url" content="https://kimkim.app" />
         <meta property="og:title" content="KimKim" />
         <meta property="og:description" content="실시간 김치 프리미엄" />
         <meta property="og:image" content="/images/open_graph_thumbnail.png" />
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://kimkim.space" />
+        <meta property="twitter:url" content="https://kimkim.app" />
         <meta property="twitter:title" content="KimKim" />
         <meta property="twitter:description" content="실시간 김치 프리미엄" />
         <meta property="twitter:image" content="https://app.nomos.ms//images/open_graph_thumbnail.png" />
