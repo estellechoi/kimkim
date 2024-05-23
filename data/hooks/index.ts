@@ -31,6 +31,7 @@ import { ForexApiData } from '@/pages/api/forex';
 import { UpbitCandleApiData } from '@/pages/api/upbit/candles';
 import { BithumbCandleApiData } from '@/pages/api/bithumb/candles';
 import { UpbitTradeApiData } from '@/pages/api/upbit/trade';
+import kimkimAxios, { getKimKimApiSignature, kimkimApiKey, kimkimSecretKey } from '@/data/hooks/kimkimAxios';
 
 /**
  *
@@ -127,7 +128,12 @@ export const useFetchUpbitNetwork = (refetchInterval: number | null) => {
   const queryKey = ['useFetchUpbitNetwork'];
 
   return useQuery<AxiosResponse<readonly UpbitWalletStatusApiData[] | undefined>, AxiosError>({
-    queryFn: () => axios.get<readonly UpbitWalletStatusApiData[] | undefined>('https://kimkim.space/api/upbit/wallet'),
+    queryFn: async () => {
+      const signature = await getKimKimApiSignature(kimkimApiKey, kimkimSecretKey);
+      return kimkimAxios.get<readonly UpbitWalletStatusApiData[] | undefined>('/api/upbit/wallet', {
+        headers: { 'x-kimkim-signature': signature },
+      });
+    },
     queryKey,
     refetchInterval: refetchInterval ?? 0,
     enabled: refetchInterval !== null,
