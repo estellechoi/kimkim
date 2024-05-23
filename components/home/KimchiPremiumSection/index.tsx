@@ -10,7 +10,7 @@ import {
   useFetchBitgetWalletStatus,
   useFetchBybitPrice,
   useFetchBybitWalletStatus,
-  useFetchUpbitWalletStatus,
+  useFetchUpbitNetwork,
 } from '@/data/hooks';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Card from '@/components/Card';
@@ -90,9 +90,7 @@ const KimchiPremiumSection = ({ krwByUsd, audByUsd, className = '' }: KimchiPrem
     symbols: upbitSymbols,
   } = useUpbitPriceData(fetchUpbitPriceData);
 
-  const { data: upbitWalletStatusData, error: upbitWalletStatusError } = useFetchUpbitWalletStatus(
-    fetchUpbitPriceData ? 0 : null,
-  );
+  const { data: upbitWalletStatusData, error: upbitWalletStatusError } = useFetchUpbitNetwork(fetchUpbitPriceData ? 0 : null);
 
   /**
    *

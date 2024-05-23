@@ -10,6 +10,17 @@ export interface ExchangeRateApiData {
   conversion_rates: { [currencyCode: string]: number };
 }
 
+export interface UpbitWalletStatusApiData {
+  block_elapsed_minutes: number;
+  block_height: number;
+  block_state: 'normal' | 'delayed' | 'inactive';
+  block_updated_at: string;
+  currency: string;
+  net_type: string;
+  network_name: string;
+  wallet_state: 'working' | 'withdraw_only' | 'deposit_only' | 'paused' | 'unsupported';
+}
+
 export interface BinanceMarketApiData {
   timezone: string;
   serverTime: number;

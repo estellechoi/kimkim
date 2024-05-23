@@ -1,13 +1,18 @@
 import axios, { AxiosError, type AxiosResponse } from 'axios';
 import { useQuery } from '@tanstack/react-query';
-import type { BinanceMarketApiData, BinanceSystemStatusApiData, BinanceTickerApiData, ExchangeRateApiData } from './types';
+import type {
+  BinanceMarketApiData,
+  BinanceSystemStatusApiData,
+  BinanceTickerApiData,
+  ExchangeRateApiData,
+  UpbitWalletStatusApiData,
+} from './types';
 import type { UpbitTickerApiData } from '@/pages/api/upbit/ticker';
 import { UpbitMarketApiData } from '@/pages/api/upbit/market';
 import { CoinMarketCapMetadataApiData } from '@/pages/api/cmc/metadata';
 import { CMCResponse } from '@/pages/api/cmc';
 import { Fiats } from '@/constants/app';
 import { HtxApiResponse, HtxMarketApiData } from '@/pages/api/htx/tickers';
-import { UpbitWalletStatusApiData } from '@/pages/api/upbit/wallet';
 import { HtxWalletStatusApiData } from '@/pages/api/htx/wallet';
 import { BinanceWalletStatusApiData } from '@/pages/api/binance/wallet';
 import { CoinMarketCapQuoteLatestApiData } from '@/pages/api/cmc/quote';
@@ -26,6 +31,7 @@ import { ForexApiData } from '@/pages/api/forex';
 import { UpbitCandleApiData } from '@/pages/api/upbit/candles';
 import { BithumbCandleApiData } from '@/pages/api/bithumb/candles';
 import { UpbitTradeApiData } from '@/pages/api/upbit/trade';
+import kimkimAxios, { getKimKimApiSignature, kimkimApiKey, kimkimSecretKey } from '@/data/hooks/kimkimAxios';
 
 /**
  *
@@ -118,11 +124,16 @@ export const useFetchUpbitMarket = (refetchInterval: number | null) => {
   });
 };
 
-export const useFetchUpbitWalletStatus = (refetchInterval: number | null) => {
-  const queryKey = ['fetchUpbitWalletStatus'];
+export const useFetchUpbitNetwork = (refetchInterval: number | null) => {
+  const queryKey = ['useFetchUpbitNetwork'];
 
   return useQuery<AxiosResponse<readonly UpbitWalletStatusApiData[] | undefined>, AxiosError>({
-    queryFn: () => axios.get<readonly UpbitWalletStatusApiData[] | undefined>('/api/upbit/wallet'),
+    queryFn: async () => {
+      const signature = await getKimKimApiSignature(kimkimApiKey, kimkimSecretKey);
+      return kimkimAxios.get<readonly UpbitWalletStatusApiData[] | undefined>('/api/upbit/wallet', {
+        headers: { 'x-kimkim-signature': signature },
+      });
+    },
     queryKey,
     refetchInterval: refetchInterval ?? 0,
     enabled: refetchInterval !== null,

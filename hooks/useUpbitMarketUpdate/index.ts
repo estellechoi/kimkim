@@ -1,4 +1,4 @@
-import { useFetchUpbitMarket, useFetchUpbitWalletStatus } from '@/data/hooks';
+import { useFetchUpbitMarket } from '@/data/hooks';
 import { UpbitMarketApiData } from '@/pages/api/upbit/market';
 import { tokenKoreanNameMapAtom, upbitMarketDataAtom } from '@/store/states';
 import { useAtom } from 'jotai';
