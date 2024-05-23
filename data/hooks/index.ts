@@ -1,13 +1,18 @@
 import axios, { AxiosError, type AxiosResponse } from 'axios';
 import { useQuery } from '@tanstack/react-query';
-import type { BinanceMarketApiData, BinanceSystemStatusApiData, BinanceTickerApiData, ExchangeRateApiData } from './types';
+import type {
+  BinanceMarketApiData,
+  BinanceSystemStatusApiData,
+  BinanceTickerApiData,
+  ExchangeRateApiData,
+  UpbitWalletStatusApiData,
+} from './types';
 import type { UpbitTickerApiData } from '@/pages/api/upbit/ticker';
 import { UpbitMarketApiData } from '@/pages/api/upbit/market';
 import { CoinMarketCapMetadataApiData } from '@/pages/api/cmc/metadata';
 import { CMCResponse } from '@/pages/api/cmc';
 import { Fiats } from '@/constants/app';
 import { HtxApiResponse, HtxMarketApiData } from '@/pages/api/htx/tickers';
-import { UpbitWalletStatusApiData } from '@/pages/api/upbit/wallet';
 import { HtxWalletStatusApiData } from '@/pages/api/htx/wallet';
 import { BinanceWalletStatusApiData } from '@/pages/api/binance/wallet';
 import { CoinMarketCapQuoteLatestApiData } from '@/pages/api/cmc/quote';
@@ -122,7 +127,7 @@ export const useFetchUpbitNetwork = (refetchInterval: number | null) => {
   const queryKey = ['useFetchUpbitNetwork'];
 
   return useQuery<AxiosResponse<readonly UpbitWalletStatusApiData[] | undefined>, AxiosError>({
-    queryFn: () => axios.get<readonly UpbitWalletStatusApiData[] | undefined>('/api/upbit/network'),
+    queryFn: () => axios.get<readonly UpbitWalletStatusApiData[] | undefined>('https://kimkim.space/api/upbit/wallet'),
     queryKey,
     refetchInterval: refetchInterval ?? 0,
     enabled: refetchInterval !== null,

@@ -44,7 +44,7 @@ const ExchangeNetworkFeeLabel = ({ network, fundType, feeCurrencyPriceKrw }: Exc
 
       <StatusDot
         status={network.status && workingStatuses.includes(network.status) ? 'success' : 'error'}
-      // label={networks?.status}
+        // label={networks?.status}
       />
 
       {workingStatuses.includes(network.status) && network.withdrawFee !== undefined && (
@@ -82,18 +82,18 @@ const ExchangeNetworkLabel = ({ exchange, networks, fundType, feeCurrencyPriceKr
   const sortedNetworks = useMemo<readonly ExchangeWalletData[] | undefined>(() => {
     return networks
       ? [...networks].sort((a, b) => {
-        const compare = a.status.localeCompare(b.status);
+          const compare = a.status.localeCompare(b.status);
 
-        if (compare !== 0) return compare;
-        if (a.withdrawFee === undefined || b.withdrawFee === undefined) return compare;
+          if (compare !== 0) return compare;
+          if (a.withdrawFee === undefined || b.withdrawFee === undefined) return compare;
 
-        const aWithdrawFeeKrw = getWithdrawFeeKrw(a.withdrawFee);
-        const bWithdrawFeeKrw = getWithdrawFeeKrw(b.withdrawFee);
+          const aWithdrawFeeKrw = getWithdrawFeeKrw(a.withdrawFee);
+          const bWithdrawFeeKrw = getWithdrawFeeKrw(b.withdrawFee);
 
-        if (aWithdrawFeeKrw === undefined || bWithdrawFeeKrw === undefined) return compare;
+          if (aWithdrawFeeKrw === undefined || bWithdrawFeeKrw === undefined) return compare;
 
-        return aWithdrawFeeKrw.gt(bWithdrawFeeKrw) ? 1 : -1;
-      })
+          return aWithdrawFeeKrw.gt(bWithdrawFeeKrw) ? 1 : -1;
+        })
       : undefined;
   }, [networks, getWithdrawFeeKrw]);
 
